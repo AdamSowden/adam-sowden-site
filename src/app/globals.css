@@ -3,12 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #111111;
+  --accent: #188bf6;
+  --accent-hover: #0d78dc;
+  --surface: #f9fafb;
+  --border: rgba(17, 17, 17, 0.08);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
   --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
 }
 
 body {
@@ -16,4 +23,8 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.font-serif {
+  font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
 }
