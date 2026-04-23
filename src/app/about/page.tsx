@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
@@ -43,8 +44,15 @@ function Hero() {
           </p>
         </div>
         <div className="flex justify-center md:justify-end">
-          <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-[#F9FAFB] border border-black/5 flex items-center justify-center text-black/30 text-sm">
-            [Adam&apos;s photo]
+          <div className="relative w-72 h-[22rem] md:w-[22rem] md:h-[28rem] rounded-2xl overflow-hidden border border-black/5 shadow-sm">
+            <Image
+              src="/adam-about.jpg"
+              alt="Adam Sowden portrait"
+              fill
+              priority
+              sizes="(min-width: 768px) 352px, 288px"
+              className="object-cover object-[center_25%]"
+            />
           </div>
         </div>
       </div>

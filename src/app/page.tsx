@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
@@ -44,8 +44,15 @@ function Hero() {
           </div>
         </div>
         <div className="flex justify-center md:justify-end">
-          <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-[#F9FAFB] border border-black/5 flex items-center justify-center text-black/30 text-sm">
-            [Adam&apos;s photo]
+          <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border border-black/5 shadow-sm">
+            <Image
+              src="/adam-hero.jpg"
+              alt="Adam Sowden"
+              fill
+              priority
+              sizes="(min-width: 768px) 320px, 256px"
+              className="object-cover object-[center_20%]"
+            />
           </div>
         </div>
       </div>
