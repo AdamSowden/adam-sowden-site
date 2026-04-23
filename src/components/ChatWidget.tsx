@@ -25,7 +25,7 @@ type ArticleContext = {
 const BOOK_MARKER = "[BOOK_QUICK_CHAT]";
 
 const OPENING_ASSISTANT_MESSAGE =
-  "What's on your mind about building a business that runs without you? Ask me anything about this essay, or about where owner dependency is showing up in your business.";
+  "Where is your marketing still pulling time from you? Ask about this essay, or tell me which part of the marketing is still stuck on your plate.";
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);

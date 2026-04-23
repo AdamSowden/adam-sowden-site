@@ -13,7 +13,7 @@ export default function SiteNav() {
             width={1200}
             height={805}
             priority
-            className="h-14 w-auto"
+            className="h-20 w-auto"
           />
         </Link>
         <nav className="flex items-center gap-7 text-sm">
