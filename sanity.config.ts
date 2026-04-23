@@ -6,6 +6,7 @@ import { schemaTypes } from './sanity/schemas'
 export default defineConfig({
   name: 'adam-sowden-site',
   title: 'Adam Sowden',
+  basePath: '/studio',
 
   // Environment variables set in Vercel (Production, Preview, Development)
   // and locally in .env.local
