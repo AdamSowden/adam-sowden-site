@@ -113,7 +113,11 @@ export async function POST(req: NextRequest) {
             event.type === "content_block_delta" &&
             event.delta.type === "text_delta"
           ) {
-            controller.enqueue(encoder.encode(event.delta.text));
+            // Brand-voice backstop: em dashes are a hard no. Replace any
+            // that slip through the prompt with a comma before the chunk
+            // reaches the client.
+            const cleaned = event.delta.text.replace(/\s*—\s*/g, ", ");
+            controller.enqueue(encoder.encode(cleaned));
           }
         }
         controller.close();
