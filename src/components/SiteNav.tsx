@@ -1,15 +1,20 @@
 import Link from "next/link";
+import Image from "next/image";
 import { BOOKING_URL, NAV_LINKS } from "@/lib/site";
 
 export default function SiteNav() {
   return (
     <header className="bg-white border-b border-black/5 sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/85">
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-        <Link
-          href="/"
-          className="font-serif text-2xl tracking-tight text-[#111111]"
-        >
-          Adam Sowden
+        <Link href="/" aria-label="Adam Sowden — home" className="flex items-center">
+          <Image
+            src="/adam-sowden-logo.webp"
+            alt="Adam Sowden"
+            width={161}
+            height={38}
+            priority
+            className="h-9 w-auto"
+          />
         </Link>
         <nav className="flex items-center gap-7 text-sm">
           {NAV_LINKS.map((l) => (
