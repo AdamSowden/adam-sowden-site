@@ -28,3 +28,16 @@ body {
 .font-serif {
   font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
 }
+
+@keyframes chatDotPulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

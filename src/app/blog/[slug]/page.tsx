@@ -9,8 +9,10 @@ import type {
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import ChatWidget from "@/components/ChatWidget";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
+import { portableTextToPlain } from "@/lib/portable-text-plain";
 
 export const revalidate = 60;
 
@@ -268,7 +270,14 @@ export default async function BlogPostPage({
           {post.faqItems && post.faqItems.length > 0 && (
             <FAQ items={post.faqItems} />
           )}
-          <ParticipationLayer />
+          <ChatWidget
+            article={{
+              title: post.title,
+              articleSection: post.articleSection,
+              metaDescription: post.metaDescription,
+              bodyPlain: portableTextToPlain(post.body),
+            }}
+          />
           <PostCTA />
         </article>
       </main>
@@ -397,30 +406,6 @@ function FAQ({ items }: { items: FAQItem[] }) {
               </p>
             </details>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ParticipationLayer() {
-  return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-3xl px-6 py-14 md:py-16">
-        <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10">
-          <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-3">
-            The Participation Layer
-          </p>
-          <h2 className="font-serif text-2xl md:text-3xl tracking-tight leading-tight text-[#111111]">
-            Ask about this essay.
-          </h2>
-          <p className="mt-4 text-[#111111]/75 leading-relaxed">
-            A conversation trained on the full methodology and this article&apos;s
-            content. Coming soon — for now, book a Quick Chat directly.
-          </p>
-          <div className="mt-6">
-            <CTAButton>Book a Quick Chat</CTAButton>
-          </div>
         </div>
       </div>
     </section>
