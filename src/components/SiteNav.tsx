@@ -8,12 +8,12 @@ export default function SiteNav() {
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
         <Link href="/" aria-label="Adam Sowden — home" className="flex items-center">
           <Image
-            src="/adam-sowden-logo.webp"
+            src="/adam-sowden-logo.png"
             alt="Adam Sowden"
-            width={161}
-            height={38}
+            width={1200}
+            height={805}
             priority
-            className="h-9 w-auto"
+            className="h-14 w-auto"
           />
         </Link>
         <nav className="flex items-center gap-7 text-sm">

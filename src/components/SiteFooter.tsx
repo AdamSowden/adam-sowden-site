@@ -14,9 +14,9 @@ export default function SiteFooter() {
           <Image
             src="/adam-sowden-logo-stacked.png"
             alt="Adam Sowden"
-            width={84}
-            height={74}
-            className="h-16 w-auto"
+            width={800}
+            height={800}
+            className="h-20 w-auto"
           />
         </Link>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 text-sm text-black/60">
