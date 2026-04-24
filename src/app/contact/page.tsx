@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import CTAButton from "@/components/CTAButton";
+import SubscribeForm from "@/components/SubscribeForm";
 import { BOOKING_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -73,17 +73,19 @@ function Booking() {
 function Other() {
   return (
     <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-4xl px-6 py-20 md:py-24 text-center">
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          Prefer email first?
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          The weekly essay lands every Monday. One idea, deeply unpacked.
-          Subscribe and read a few before booking.
+      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+          Or read first
         </p>
-        <div className="mt-8 flex flex-wrap gap-3 justify-center">
-          <CTAButton href="/blog" variant="ghost">Read the essays</CTAButton>
-          <CTAButton>Book a Quick Chat</CTAButton>
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
+          Prefer to read a few essays first?
+        </h2>
+        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
+          Subscribe to the weekly Monday essay. One idea, deeply unpacked.
+          No pitches, no upsells, easy unsubscribe.
+        </p>
+        <div className="mt-8">
+          <SubscribeForm buttonLabel="Subscribe" />
         </div>
       </div>
     </section>

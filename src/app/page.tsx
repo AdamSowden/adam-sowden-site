@@ -2,6 +2,7 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import SubscribeForm from "@/components/SubscribeForm";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <TheProblem />
         <TheMethodology />
         <TheProducts />
+        <SubscribeStrip />
         <FinalCTA />
       </main>
       <SiteFooter />
@@ -230,6 +232,29 @@ function TheProducts() {
               <CTAButton variant="ghost">Explore the agents</CTAButton>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SubscribeStrip() {
+  return (
+    <section className="bg-white border-y border-black/5">
+      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+          Weekly essay
+        </p>
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
+          One short email each Monday. One idea. No filler.
+        </h2>
+        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
+          The Operator Trap, the Old Mindset, the Content Ecosystem. We write
+          one essay a week on building marketing that runs without us, then
+          send it on Monday morning.
+        </p>
+        <div className="mt-8">
+          <SubscribeForm buttonLabel="Subscribe" />
         </div>
       </div>
     </section>
