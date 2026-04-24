@@ -29,12 +29,12 @@ function Hero() {
             Zero-Dependency Business Systems
           </p>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight leading-[1.02] text-[#111111]">
-            Build a business that grows without you.
+            Build a business that grows without us.
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
             World-class marketing automation for less than the cost of a VA.
-            AI systems that write, publish, engage, and qualify — while
-            you do something else.
+            AI systems that write, publish, engage, and qualify, while we
+            do something else.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <CTAButton size="lg">Book a Quick Chat</CTAButton>
@@ -189,7 +189,7 @@ function TheProducts() {
           Two ways in
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Pick the system that fits where you are.
+          Pick the system that fits where we are.
         </h2>
 
         <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
@@ -202,10 +202,10 @@ function TheProducts() {
             </h3>
             <p className="mt-5 text-[#111111]/70 leading-relaxed">
               One core idea a week. The system writes it, publishes it,
-              distributes it, and converts it. An AI trained on your voice,
-              your proof, your methodology. An embedded Participation Layer
+              distributes it, and converts it. An AI trained on the owner&apos;s
+              voice, proof, and methodology. An embedded Participation Layer
               turns every reader into a conversation, at any hour, without
-              you.
+              the owner.
             </p>
             <div className="mt-8">
               <CTAButton>See if it fits</CTAButton>
@@ -221,9 +221,10 @@ function TheProducts() {
             </h3>
             <p className="mt-5 text-[#111111]/70 leading-relaxed">
               Need a specific capability without the full system build?
-              Trained AI agents that run autonomously — the Ad Copywriter,
-              the Market Disruptor, the Email Writer, and more. Each trained
-              on your business. Each runs without you.
+              Trained AI agents that run autonomously. The Ad Copywriter,
+              the Market Disruptor, the Email Writer, and more. Each
+              trained on the specific business. Each runs without the
+              owner.
             </p>
             <div className="mt-8">
               <CTAButton variant="ghost">Explore the agents</CTAButton>
@@ -240,13 +241,13 @@ function FinalCTA() {
     <section className="bg-[#F9FAFB]">
       <div className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          You don&apos;t need another AI tool.
+          We don&apos;t need another AI tool.
           <br />
-          You need a business that runs without you.
+          We need a business that runs without us.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
           A 20-minute Quick Chat. No pitch. We look at where owner dependency
-          is costing you growth and what becomes possible when it&apos;s
+          is costing us growth and what becomes possible when it&apos;s
           removed.
         </p>
         <div className="mt-10 inline-flex">

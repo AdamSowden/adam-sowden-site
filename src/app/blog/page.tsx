@@ -7,7 +7,7 @@ import { client } from "@/lib/sanity";
 export const metadata: Metadata = {
   title: "Blog — Adam Sowden",
   description:
-    "Essays on building a business that grows without you. Zero-dependency systems, AI architecture, and why The Old Mindset keeps most owners trapped.",
+    "Essays on building businesses that grow without us. Zero-dependency systems, AI architecture, and why The Old Mindset keeps so many owners trapped.",
 };
 
 type BlogPostSummary = {
@@ -62,7 +62,7 @@ function Header() {
           Essays
         </p>
         <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-[1.05] text-[#111111] max-w-3xl">
-          On building a business that grows without you.
+          On building businesses that grow without us.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
           Long-form deconstruction of owner dependency, The Old Mindset, and

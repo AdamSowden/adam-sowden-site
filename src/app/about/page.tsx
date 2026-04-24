@@ -68,7 +68,7 @@ function TheStory() {
           The Story
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          The business that grows without you is the only business worth
+          The business that grows without us is the only business worth
           building.
         </h2>
 
@@ -172,7 +172,7 @@ function FinalCTA() {
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
           A 20-minute Quick Chat. No pitch. We look at where owner
-          dependency is costing you growth and what becomes possible when
+          dependency is costing us growth and what becomes possible when
           it&apos;s removed.
         </p>
         <div className="mt-10 inline-flex">

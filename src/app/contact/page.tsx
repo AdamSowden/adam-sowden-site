@@ -7,7 +7,7 @@ import { BOOKING_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
   description:
-    "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing you growth and what becomes possible when it's removed.",
+    "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing us growth and what becomes possible when it's removed.",
 };
 
 export default function ContactPage() {
@@ -36,7 +36,7 @@ function Hero() {
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
           20 minutes. No pitch. We look at where owner dependency is costing
-          you growth and what becomes possible when it&apos;s removed.
+          us growth and what becomes possible when it&apos;s removed.
         </p>
       </div>
     </section>
