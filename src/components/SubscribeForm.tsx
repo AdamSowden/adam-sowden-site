@@ -8,8 +8,8 @@ export default function SubscribeForm({
   variant = "light",
   showName = false,
   buttonLabel = "Subscribe",
-  successMessage = "We are in. Watch our inbox each Monday.",
-  alreadyMessage = "We are already on the list.",
+  successMessage = "You're in. The first essay lands Monday.",
+  alreadyMessage = "You're already on the list.",
 }: {
   variant?: "light" | "card";
   showName?: boolean;
@@ -51,7 +51,7 @@ export default function SubscribeForm({
       } else {
         setStatus("error");
         setMessage(
-          data.error || "We could not save our details. Try again shortly."
+          data.error || "Could not save your details. Try again shortly."
         );
       }
     } catch {
