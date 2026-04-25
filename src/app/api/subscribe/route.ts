@@ -7,8 +7,13 @@ const GHL_LOCATION_ID = "dXsicmsnd5tcT6Q3Ul5Q";
 const GHL_TAG = "adam-sowden-newsletter";
 const GHL_SOURCE = "adamsowden.com";
 const GHL_API_VERSION = "2021-07-28";
+// Upsert endpoint creates new contacts AND updates existing ones,
+// re-applying the tag every call. This is critical for the GHL Workflow
+// "tag added" trigger to fire reliably even for returning subscribers
+// or for contacts that already exist in GHL from another source but
+// weren't previously tagged for the newsletter.
 const GHL_CONTACTS_ENDPOINT =
-  "https://services.leadconnectorhq.com/contacts/";
+  "https://services.leadconnectorhq.com/contacts/upsert";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -81,22 +86,24 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    // 200/201 = created. 422 (or 400) usually means the contact already
-    // exists — from the reader's perspective this is still a success
-    // (they're already on the list, the welcome workflow has already run).
+    // Upsert: GHL returns {new: true} if a new contact was created and
+    // {new: false} if an existing one was updated. Either way the tag
+    // is re-applied, which fires the GHL "tag added" workflow trigger.
     if (ghlRes.ok) {
-      return jsonResponse(200, { ok: true, alreadySubscribed: false });
-    }
-
-    if (ghlRes.status === 400 || ghlRes.status === 422) {
-      const text = await ghlRes.text();
-      if (/duplicate|already|exist/i.test(text)) {
-        return jsonResponse(200, { ok: true, alreadySubscribed: true });
+      let payload: { new?: boolean } = {};
+      try {
+        payload = (await ghlRes.json()) as { new?: boolean };
+      } catch {
+        // Response wasn't JSON, but the upsert succeeded. Treat as new.
       }
+      return jsonResponse(200, {
+        ok: true,
+        alreadySubscribed: payload.new === false,
+      });
     }
 
     const errText = await ghlRes.text();
-    console.error("GHL contact create failed:", ghlRes.status, errText);
+    console.error("GHL contact upsert failed:", ghlRes.status, errText);
     return jsonResponse(502, {
       error: "We could not save your details. Please try again in a minute.",
     });
