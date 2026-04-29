@@ -130,7 +130,7 @@ const components: PortableTextComponents = {
   },
   marks: {
     strong: ({ children }) => (
-      <strong className="font-semibold text-[#111111]">{children}</strong>
+      <strong className="font-semibold">{children}</strong>
     ),
     em: ({ children }) => <em>{children}</em>,
     link: ({ value, children }) => {
