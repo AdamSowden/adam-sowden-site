@@ -47,15 +47,29 @@ export default function ChatWidget({
     "idle"
   );
   const listEndRef = useRef<HTMLDivElement | null>(null);
+  const hasUserInteractedRef = useRef(false);
 
   useEffect(() => {
-    listEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    // Skip the mount effect (the seeded opening message). Without this
+    // guard, scrollIntoView fires on first render and pulls the whole
+    // page down to the chat widget — landing readers at the bottom of
+    // the blog post when they arrive from an email link.
+    if (!hasUserInteractedRef.current) return;
+    listEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
   }, [messages]);
 
   const sendMessage = useCallback(
     async (userText: string) => {
       const trimmed = userText.trim();
       if (!trimmed || status === "streaming") return;
+
+      // From this point on, autoscroll the chat container as new
+      // messages stream in. Suppressed before now so the page does
+      // not jump on initial mount.
+      hasUserInteractedRef.current = true;
 
       const userMessage: Message = {
         id: uid(),
