@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Blog — Adam Sowden",
   description:
     "Essays on building marketing that runs without us. Zero-dependency systems, AI architecture, and why The Four Bad Options trap so many owners.",
+  alternates: { canonical: "/blog" },
 };
 
 type BlogPostSummary = {

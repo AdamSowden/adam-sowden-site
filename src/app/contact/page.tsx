@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
   description:
     "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing us growth and what becomes possible when it's removed.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

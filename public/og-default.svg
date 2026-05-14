@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F9FAFB"/>
+  <rect x="0" y="0" width="12" height="630" fill="#188bf6"/>
+  <text x="96" y="170" fill="#188bf6" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="600" letter-spacing="3.5">ZERO-DEPENDENCY MARKETING SYSTEM</text>
+  <text x="96" y="305" fill="#111111" font-family="'Playfair Display', Georgia, serif" font-size="84" font-weight="500" letter-spacing="-1">Marketing Systems</text>
+  <text x="96" y="405" fill="#111111" font-family="'Playfair Display', Georgia, serif" font-size="84" font-weight="500" letter-spacing="-1">That Run Without You</text>
+  <line x1="96" y1="475" x2="240" y2="475" stroke="#188bf6" stroke-width="3"/>
+  <text x="96" y="525" fill="#111111" font-family="Inter, system-ui, sans-serif" font-size="26" opacity="0.7">World-class marketing automation</text>
+  <text x="96" y="560" fill="#111111" font-family="Inter, system-ui, sans-serif" font-size="26" opacity="0.7">for less than the cost of a VA.</text>
+  <text x="1104" y="595" fill="#188bf6" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="end">adamsowden.com</text>
+</svg>

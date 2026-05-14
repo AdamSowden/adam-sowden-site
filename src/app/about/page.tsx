@@ -4,11 +4,32 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About — Adam Sowden",
   description:
     "26 years of building businesses. One conclusion: the business that grows without the owner is the only business worth building.",
+  alternates: { canonical: "/about" },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Adam Sowden",
+  url: `${SITE_URL}/about`,
+  jobTitle: "Founder, AI Marketing Agents",
+  worksFor: {
+    "@type": "Organization",
+    name: "Adam Sowden",
+    url: SITE_URL,
+  },
+  knowsAbout: [
+    "AI marketing automation",
+    "Zero-dependency marketing systems",
+    "AI agent architecture",
+    "Content systems for service businesses",
+  ],
 };
 
 export default function AboutPage() {
@@ -22,6 +43,10 @@ export default function AboutPage() {
         <FinalCTA />
       </main>
       <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
     </>
   );
 }

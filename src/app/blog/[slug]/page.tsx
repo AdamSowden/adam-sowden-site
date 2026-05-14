@@ -14,6 +14,7 @@ import ChatWidget from "@/components/ChatWidget";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
 import { portableTextToPlain } from "@/lib/portable-text-plain";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 export const revalidate = 60;
 
@@ -39,8 +40,6 @@ type BlogPost = {
   faqItems?: FAQItem[];
   authorName?: string;
 };
-
-const SITE_URL = "https://adam-sowden-site.vercel.app";
 
 const postQuery = `*[_type == "blogPost" && slug.current == $slug && complianceApproved == true][0] {
   _id, title, slug, publishedAt, heroImage, midImage, socialImage,
@@ -211,6 +210,12 @@ export default async function BlogPostPage({
     { year: "numeric", month: "long", day: "numeric" }
   );
 
+  const plainBody = portableTextToPlain(post.body);
+  const wordCount = plainBody
+    ? plainBody.split(/\s+/).filter(Boolean).length
+    : undefined;
+  const postUrl = `${SITE_URL}/blog/${post.slug.current}`;
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -218,13 +223,15 @@ export default async function BlogPostPage({
     description: post.metaDescription,
     image: heroImageUrl ? [heroImageUrl] : undefined,
     datePublished: post.publishedAt,
+    inLanguage: "en",
+    wordCount,
     author: {
       "@type": "Person",
-      name: post.authorName || "Adam Sowden",
+      name: post.authorName || SITE_NAME,
     },
     publisher: {
       "@type": "Organization",
-      name: "Adam Sowden",
+      name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/adam-sowden-logo.png`,
@@ -232,7 +239,7 @@ export default async function BlogPostPage({
     },
     articleSection: post.articleSection,
     keywords: post.primaryKeyword,
-    mainEntityOfPage: `${SITE_URL}/blog/${post.slug.current}`,
+    mainEntityOfPage: postUrl,
   };
 
   const faqJsonLd =
@@ -247,6 +254,31 @@ export default async function BlogPostPage({
           })),
         }
       : null;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${SITE_URL}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: postUrl,
+      },
+    ],
+  };
 
   return (
     <>
@@ -276,7 +308,7 @@ export default async function BlogPostPage({
               title: post.title,
               articleSection: post.articleSection,
               metaDescription: post.metaDescription,
-              bodyPlain: portableTextToPlain(post.body),
+              bodyPlain: plainBody,
             }}
           />
           <PostCTA />
@@ -286,6 +318,10 @@ export default async function BlogPostPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {faqJsonLd && (
         <script
