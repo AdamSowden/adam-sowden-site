@@ -9,6 +9,7 @@ import type {
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import SubscribeForm from "@/components/SubscribeForm";
 import ChatWidget from "@/components/ChatWidget";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
@@ -415,17 +416,33 @@ function FAQ({ items }: { items: FAQItem[] }) {
 function PostCTA() {
   return (
     <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24 text-center">
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          Want this applied to your business?
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          A 20-minute Quick Chat. No pitch. We look at where owner
-          dependency is costing us growth and what becomes possible when
-          it&apos;s removed.
-        </p>
-        <div className="mt-8 inline-flex">
-          <CTAButton size="lg">Book a Quick Chat</CTAButton>
+      <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              Want this applied to your business?
+            </h3>
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              A 20-minute Quick Chat. No pitch. We look at where owner
+              dependency is costing growth and what becomes possible when
+              it&apos;s removed.
+            </p>
+            <div className="mt-6">
+              <CTAButton size="lg">Book a Quick Chat</CTAButton>
+            </div>
+          </div>
+          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              Want more like this?
+            </h3>
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              One short essay each Monday. One idea. No filler.
+              Unsubscribe anytime.
+            </p>
+            <div className="mt-6">
+              <SubscribeForm buttonLabel="Subscribe" />
+            </div>
+          </div>
         </div>
       </div>
     </section>

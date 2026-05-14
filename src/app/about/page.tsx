@@ -3,6 +3,7 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import SubscribeForm from "@/components/SubscribeForm";
 
 export const metadata: Metadata = {
   title: "About — Adam Sowden",
@@ -38,7 +39,7 @@ function Hero() {
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 leading-relaxed">
             I spent 26 years building businesses the hard way. I now build
-            them to run without me — and show other owners how to do the
+            them to run without me, and show other owners how to do the
             same, using AI as the architecture of the business, not as a
             tool to do more work faster.
           </p>
@@ -166,17 +167,33 @@ function Stat({ value, label }: { value: string; label: string }) {
 function FinalCTA() {
   return (
     <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          Want to see what this looks like for your business?
-        </h2>
-        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          A 20-minute Quick Chat. No pitch. We look at where owner
-          dependency is costing us growth and what becomes possible when
-          it&apos;s removed.
-        </p>
-        <div className="mt-10 inline-flex">
-          <CTAButton size="lg">Book a Quick Chat</CTAButton>
+      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              Want to see what this looks like for your business?
+            </h3>
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              A 20-minute Quick Chat. No pitch. We look at where owner
+              dependency is costing growth and what becomes possible when
+              it&apos;s removed.
+            </p>
+            <div className="mt-6">
+              <CTAButton size="lg">Book a Quick Chat</CTAButton>
+            </div>
+          </div>
+          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              Want to follow the work?
+            </h3>
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              One short essay each Monday. One idea. No filler.
+              Unsubscribe anytime.
+            </p>
+            <div className="mt-6">
+              <SubscribeForm buttonLabel="Subscribe" />
+            </div>
+          </div>
         </div>
       </div>
     </section>
