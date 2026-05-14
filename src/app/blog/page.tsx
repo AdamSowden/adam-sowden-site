@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import CTAButton from "@/components/CTAButton";
+import SubscribeForm from "@/components/SubscribeForm";
 import { client } from "@/lib/sanity";
 
 export const metadata: Metadata = {
   title: "Blog — Adam Sowden",
   description:
-    "Essays on building businesses that grow without us. Zero-dependency systems, AI architecture, and why The Old Mindset keeps so many owners trapped.",
+    "Essays on building marketing that runs without us. Zero-dependency systems, AI architecture, and why The Four Bad Options trap so many owners.",
 };
 
 type BlogPostSummary = {
@@ -62,11 +62,11 @@ function Header() {
           Essays
         </p>
         <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-[1.05] text-[#111111] max-w-3xl">
-          On building businesses that grow without us.
+          On building marketing that runs without us.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
-          Long-form deconstruction of owner dependency, The Old Mindset, and
-          the system that replaces both.
+          Long-form deconstruction of The Owner Trap, The Four Bad Options,
+          and the systems that replace them.
         </p>
       </div>
     </section>
@@ -89,8 +89,8 @@ function EmptyState() {
             written through the methodology, structured for search and AI
             answer engines, and ready for conversation the moment it lands.
           </p>
-          <div className="mt-8 inline-flex">
-            <CTAButton href="/contact">Get the first one in your inbox</CTAButton>
+          <div className="mt-8 max-w-xl mx-auto text-left">
+            <SubscribeForm buttonLabel="Get the first one" />
           </div>
         </div>
       </div>
@@ -143,8 +143,8 @@ function FinalCTA() {
         <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
           One short email a week. One idea. No filler.
         </p>
-        <div className="mt-8 inline-flex">
-          <CTAButton href="/contact">Subscribe</CTAButton>
+        <div className="mt-8 max-w-xl mx-auto text-left">
+          <SubscribeForm buttonLabel="Subscribe" />
         </div>
       </div>
     </section>

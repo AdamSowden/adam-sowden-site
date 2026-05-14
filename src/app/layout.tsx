@@ -15,9 +15,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Adam Sowden — Zero-Dependency Business Systems",
+  title: "Adam Sowden — Zero-Dependency Marketing System",
   description:
-    "Build a business that grows without you. World-class marketing automation for less than the cost of a VA.",
+    "Marketing systems that run without you. World-class marketing automation for less than the cost of a VA.",
 };
 
 export default function RootLayout({

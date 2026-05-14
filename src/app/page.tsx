@@ -28,10 +28,10 @@ function Hero() {
       <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-[1.3fr_1fr] gap-12 md:gap-16 items-center">
         <div>
           <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-6">
-            Zero-Dependency Business Systems
+            Zero-Dependency Marketing System
           </p>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight leading-[1.02] text-[#111111]">
-            Build a business that grows without us.
+            Marketing Systems That Run Without You
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
             World-class marketing automation for less than the cost of a VA.
@@ -97,7 +97,7 @@ function TheProblem() {
 
         <div className="mt-14 grid md:grid-cols-2 gap-10 md:gap-16">
           <div>
-            <h3 className="text-xl font-semibold mb-4">The Operator Trap</h3>
+            <h3 className="text-xl font-semibold mb-4">The Owner Trap</h3>
             <p className="text-[#111111]/70 leading-relaxed">
               Most business owners didn&apos;t set out to build a job. They
               built one anyway. Every new client, every campaign, every piece
@@ -107,12 +107,13 @@ function TheProblem() {
             </p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-4">The AI Paradox</h3>
+            <h3 className="text-xl font-semibold mb-4">Cheap Tools, Expensive Consequences</h3>
             <p className="text-[#111111]/70 leading-relaxed">
-              AI was supposed to solve this. For most owners, it made it
-              worse. They use AI to do more work faster, personally. They
-              feel productive. They are more trapped than before. The problem
-              is not the tool. It is the old mindset being applied to it.
+              AI marketing tools were supposed to fix this. They made it
+              worse. Off-the-shelf AI is not trained on the business that
+              uses it. The output sounds like every other business using
+              the same tool. The subscription is cheap. The positioning
+              loss is not.
             </p>
           </div>
         </div>
@@ -188,48 +189,69 @@ function TheProducts() {
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-          Two ways in
+          Three ways in
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Pick the system that fits where we are.
+          Three modular products. Buy one, two, or all three.
         </h2>
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+          Not a ladder. Each product solves a different part of the
+          marketing system. The methodology is shared. The standard is
+          the same.
+        </p>
 
-        <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-10">
+        <div className="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
             <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
-              The flagship
+              Self-serve
             </p>
-            <h3 className="font-serif text-3xl md:text-4xl tracking-tight text-[#111111]">
-              The Content Ecosystem
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              Marketing Agents
             </h3>
-            <p className="mt-5 text-[#111111]/70 leading-relaxed">
-              One core idea a week. The system writes it, publishes it,
-              distributes it, and converts it. An AI trained on the owner&apos;s
-              voice, proof, and methodology. An embedded Participation Layer
-              turns every reader into a conversation, at any hour, without
-              the owner.
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              Pre-built AI marketing workers. Buy one agent at a time.
+              The Ad Copywriter, the Email Sequence Writer, the
+              Newsletter Writer. Each trained on the business. Each runs
+              without the owner. No sales call required.
             </p>
-            <div className="mt-8">
-              <CTAButton>See if it fits</CTAButton>
+            <div className="mt-6">
+              <CTAButton variant="ghost">Start with one agent</CTAButton>
             </div>
           </div>
 
-          <div className="bg-white border border-black/10 rounded-2xl p-10">
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
             <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
-              Entry point
+              Inbound
             </p>
-            <h3 className="font-serif text-3xl md:text-4xl tracking-tight text-[#111111]">
-              The Agent Suite
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              The Content Ecosystem
             </h3>
-            <p className="mt-5 text-[#111111]/70 leading-relaxed">
-              Need a specific capability without the full system build?
-              Trained AI agents that run autonomously. The Ad Copywriter,
-              the Market Disruptor, the Email Writer, and more. Each
-              trained on the specific business. Each runs without the
-              owner.
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              The complete inbound infrastructure. A Living AI Website.
+              One core idea a week, written, published, broadcast.
+              Embedded across every page sits the Participation Layer.
+              Every reader becomes a conversation.
             </p>
-            <div className="mt-8">
-              <CTAButton variant="ghost">Explore the agents</CTAButton>
+            <div className="mt-6">
+              <CTAButton variant="ghost">See if it fits</CTAButton>
+            </div>
+          </div>
+
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
+            <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
+              Outbound
+            </p>
+            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              The Marketing Ecosystem
+            </h3>
+            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
+              The in-house marketing agency function, run as a system.
+              Paid acquisition across platforms, social distribution,
+              and broader marketing operations. Takes the content to
+              market without an agency or an owner in the loop.
+            </p>
+            <div className="mt-6">
+              <CTAButton variant="ghost">Talk to Adam</CTAButton>
             </div>
           </div>
         </div>
@@ -249,9 +271,9 @@ function SubscribeStrip() {
           One short email each Monday. One idea. No filler.
         </h2>
         <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          The Operator Trap, the Old Mindset, the Content Ecosystem. We write
-          one essay a week on building marketing that runs without us, then
-          send it on Monday morning.
+          The Owner Trap, The Four Bad Options, The Methodology Is the
+          Product. We write one essay a week on building marketing that
+          runs without us, then send it on Monday morning.
         </p>
         <div className="mt-8">
           <SubscribeForm buttonLabel="Subscribe" />
