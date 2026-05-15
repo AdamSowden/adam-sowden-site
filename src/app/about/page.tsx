@@ -16,19 +16,20 @@ export const metadata: Metadata = {
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${SITE_URL}/about#adam-sowden`,
   name: "Adam Sowden",
   url: `${SITE_URL}/about`,
   jobTitle: "Founder, AI Marketing Agents",
-  worksFor: {
-    "@type": "Organization",
-    name: "Adam Sowden",
-    url: SITE_URL,
-  },
+  worksFor: { "@id": `${SITE_URL}/#organization` },
   knowsAbout: [
     "AI marketing automation",
     "Zero-dependency marketing systems",
     "AI agent architecture",
     "Content systems for service businesses",
+  ],
+  sameAs: [
+    "https://www.linkedin.com/in/adam-sowden-5604148/",
+    "https://x.com/AdamPSowden",
   ],
 };
 

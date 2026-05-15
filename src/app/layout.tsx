@@ -47,22 +47,25 @@ export const metadata: Metadata = {
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
   url: SITE_URL,
   logo: `${SITE_URL}/adam-sowden-logo.png`,
+  founder: { "@id": `${SITE_URL}/about#adam-sowden` },
+  sameAs: [
+    "https://www.linkedin.com/in/adam-sowden-5604148/",
+    "https://x.com/AdamPSowden",
+  ],
 };
 
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
   name: SITE_NAME,
   url: SITE_URL,
   inLanguage: "en",
-  publisher: {
-    "@type": "Organization",
-    name: SITE_NAME,
-    url: SITE_URL,
-  },
+  publisher: { "@id": `${SITE_URL}/#organization` },
 };
 
 export default function RootLayout({

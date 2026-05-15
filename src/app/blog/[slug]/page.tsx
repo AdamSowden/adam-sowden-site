@@ -225,18 +225,8 @@ export default async function BlogPostPage({
     datePublished: post.publishedAt,
     inLanguage: "en",
     wordCount,
-    author: {
-      "@type": "Person",
-      name: post.authorName || SITE_NAME,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/adam-sowden-logo.png`,
-      },
-    },
+    author: { "@id": `${SITE_URL}/about#adam-sowden` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
     articleSection: post.articleSection,
     keywords: post.primaryKeyword,
     mainEntityOfPage: postUrl,
