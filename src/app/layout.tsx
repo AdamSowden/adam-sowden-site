@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import "./globals.css";
+
+const GTM_ID = "GTM-5TMDLDKZ";
+const IS_PRODUCTION = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -71,6 +75,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
+      {IS_PRODUCTION && <GoogleTagManager gtmId={GTM_ID} />}
       <body className="min-h-full flex flex-col bg-white text-[#111111]">
         {children}
         <script
