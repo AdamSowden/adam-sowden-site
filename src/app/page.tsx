@@ -9,6 +9,44 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const homeFaqItems = [
+  {
+    question: "What is a zero-dependency marketing system?",
+    answer:
+      "A marketing operation that runs without the owner. It produces, publishes, distributes, qualifies, and converts on autopilot. The standard is the Holiday Test: an owner should be able to leave their marketing for a year, come back, and find it has continued at the same level. If the marketing stops the moment the owner stops, it's not a system. It's a job.",
+  },
+  {
+    question: "Why don't AI marketing tools fix the problem?",
+    answer:
+      "Off-the-shelf AI is not trained on the specific business that uses it. The output sounds like every other business using the same tool. Cheap tools, expensive consequences. The subscription is low. The positioning loss is high. The fix is AI trained on the owner's voice, methodology, and proof points. A system, not a tool.",
+  },
+  {
+    question: "What are the three Adam Sowden products?",
+    answer:
+      "Three modular AI products that solve different parts of the marketing system. Marketing Agents are self-serve AI workers for specific marketing tasks (ad copywriter, email sequence writer, newsletter writer). The Content Ecosystem is the complete inbound infrastructure: Living AI Website, weekly content engine, Participation Layer. The Marketing Ecosystem is the outbound replacement: paid acquisition, social distribution, broader marketing operations run as a system. Buy one, two, or all three. Not a ladder.",
+  },
+  {
+    question: "What is The Owner Trap?",
+    answer:
+      "The structural condition that the owner is both operator and brand at the same time. When the owner runs the marketing, the brand becomes whatever the owner has time to produce. Rarely enough. Never consistent. The owner cannot scale the marketing without scaling themselves, and they cannot scale themselves. The fix is removing the owner from delivery, structurally and permanently.",
+  },
+  {
+    question: "How is this different from hiring a marketing agency?",
+    answer:
+      "An agency rents out the work. The strategy, templates, trained voice, and institutional knowledge live inside the agency, not inside the business. When the relationship ends, the asset leaves. The cost stays. The Marketing Ecosystem produces the same outbound work as an agency but the IP, voice, and methodology stay inside the business. You own the asset.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: homeFaqItems.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+
 export default function Home() {
   return (
     <>
@@ -20,9 +58,14 @@ export default function Home() {
         <TheMethodology />
         <TheProducts />
         <SubscribeStrip />
+        <HomeFAQ />
         <FinalCTA />
       </main>
       <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     </>
   );
 }
@@ -282,6 +325,41 @@ function SubscribeStrip() {
         </p>
         <div className="mt-8">
           <SubscribeForm buttonLabel="Subscribe" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeFAQ() {
+  return (
+    <section className="bg-[#F9FAFB] border-y border-black/5">
+      <div className="mx-auto max-w-3xl px-6 py-16 md:py-20">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+          Frequently asked
+        </p>
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-[#111111] mb-10">
+          Common questions about the system.
+        </h2>
+        <div className="space-y-4">
+          {homeFaqItems.map((f, i) => (
+            <details
+              key={i}
+              className="group bg-white border border-black/10 rounded-xl p-6 open:shadow-sm"
+            >
+              <summary className="cursor-pointer list-none flex items-start justify-between gap-4">
+                <h3 className="font-semibold text-lg text-[#111111] leading-snug">
+                  {f.question}
+                </h3>
+                <span className="mt-1 text-[#188bf6] text-xl select-none transition-transform group-open:rotate-45 leading-none">
+                  +
+                </span>
+              </summary>
+              <p className="mt-4 text-[#111111]/80 leading-relaxed whitespace-pre-line">
+                {f.answer}
+              </p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
