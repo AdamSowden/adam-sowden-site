@@ -11,8 +11,10 @@
 // constant block below is cache-controlled so the Anthropic API reuses
 // the parsed prompt across every message in every conversation.
 
-export const BOOKING_URL =
-  "https://api.leadconnectorhq.com/widget/booking/vvT3ua4em90YPymNy0Lf";
+// Routes through the branded /book page so chat widget bookings hit
+// the same confirmation + questionnaire flow as every other CTA on
+// the site. The /book page iframes the LeadConnector calendar widget.
+export const BOOKING_URL = "https://adamsowden.com/book";
 
 export const SYSTEM_PROMPT_CORE = `
 You are the Participation Layer on adamsowden.com. A reader has
