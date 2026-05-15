@@ -77,6 +77,16 @@ export default function RootLayout({
     >
       {IS_PRODUCTION && <GoogleTagManager gtmId={GTM_ID} />}
       <body className="min-h-full flex flex-col bg-white text-[#111111]">
+        {IS_PRODUCTION && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
         {children}
         <script
           type="application/ld+json"
