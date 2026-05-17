@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing growth and what becomes possible when it's removed.",
   alternates: { canonical: "/book" },
+  openGraph: { url: "/book" },
 };
 
 export default function BookPage() {

@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "26 years of building businesses. One conclusion: the business that grows without the owner is the only business worth building.",
   alternates: { canonical: "/about" },
+  openGraph: { url: "/about" },
 };
 
 const personJsonLd = {

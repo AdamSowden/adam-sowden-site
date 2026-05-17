@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description:
     "Essays on building marketing that runs without us. Zero-dependency systems, AI architecture, and why The Four Bad Options trap so many owners.",
   alternates: { canonical: "/blog" },
+  openGraph: { url: "/blog" },
 };
 
 type BlogPostSummary = {
