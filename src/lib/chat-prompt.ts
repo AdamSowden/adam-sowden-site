@@ -325,6 +325,14 @@ export function buildArticleContext(params: {
   bodyPlain?: string;
 }) {
   const { title, articleSection, metaDescription, bodyPlain } = params;
+
+  // Called from non-article pages (e.g. home) with no fields populated.
+  // Skip the "Current article" framing entirely so the system prompt
+  // doesn't include a misleading empty section.
+  if (!title && !articleSection && !metaDescription && !bodyPlain) {
+    return "## Reader landed on the home page\n\nNo article context. Greet the reader, ask what they're working on, and route to one of the three products or Quick Chat based on their answer.";
+  }
+
   const parts: string[] = [];
   parts.push("## Current article the reader is on");
   if (title) parts.push(`Title: ${title}`);

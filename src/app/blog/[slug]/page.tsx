@@ -11,6 +11,7 @@ import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
 import ChatWidget from "@/components/ChatWidget";
+import JumpToChat from "@/components/JumpToChat";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
 import { portableTextToPlain } from "@/lib/portable-text-plain";
@@ -282,6 +283,11 @@ export default async function BlogPostPage({
               alt={post.heroImage?.alt || post.title}
             />
           )}
+          {/* Top-of-article CTA that scrolls to the AI ChatWidget below.
+              See src/components/JumpToChat.tsx. */}
+          <div className="mx-auto max-w-3xl px-6 pt-8 pb-2 md:pt-10 md:pb-4">
+            <JumpToChat />
+          </div>
           <BodyContainer>
             {post.body && post.body.length > 0 && (
               <PortableText value={post.body} components={components} />
@@ -293,14 +299,18 @@ export default async function BlogPostPage({
           {post.faqItems && post.faqItems.length > 0 && (
             <FAQ items={post.faqItems} />
           )}
-          <ChatWidget
-            article={{
-              title: post.title,
-              articleSection: post.articleSection,
-              metaDescription: post.metaDescription,
-              bodyPlain: plainBody,
-            }}
-          />
+          {/* Anchor target for JumpToChat. scroll-mt-24 keeps the widget
+              clear of the sticky SiteNav when scrolled to via #ask-adam. */}
+          <section id="ask-adam" className="scroll-mt-24">
+            <ChatWidget
+              article={{
+                title: post.title,
+                articleSection: post.articleSection,
+                metaDescription: post.metaDescription,
+                bodyPlain: plainBody,
+              }}
+            />
+          </section>
           <PostCTA />
         </article>
       </main>

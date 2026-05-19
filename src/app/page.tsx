@@ -4,6 +4,8 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
+import ChatWidget from "@/components/ChatWidget";
+import JumpToChat from "@/components/JumpToChat";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -59,6 +61,7 @@ export default function Home() {
         <TheProducts />
         <SubscribeStrip />
         <HomeFAQ />
+        <AskAdamsAI />
         <FinalCTA />
       </main>
       <SiteFooter />
@@ -86,11 +89,12 @@ function Hero() {
             AI systems that write, publish, engage, and qualify, while we
             do something else.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-wrap gap-4 items-center">
             <CTAButton size="lg">Book a Quick Chat</CTAButton>
             <CTAButton href="/about" variant="ghost" size="lg">
               Read the methodology
             </CTAButton>
+            <JumpToChat />
           </div>
         </div>
         <div className="flex justify-center md:justify-end">
@@ -361,6 +365,41 @@ function HomeFAQ() {
             </details>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function AskAdamsAI() {
+  // Receiving section for the JumpToChat anchor (`#ask-adam`). Hosts the
+  // same Anthropic-backed ChatWidget that lives on every blog post, so a
+  // reader can engage the AI without first clicking through to a post.
+  // `scroll-mt-24` keeps the widget clear of the sticky SiteNav when
+  // scrolled to via the in-page anchor.
+  return (
+    <section
+      id="ask-adam"
+      className="scroll-mt-24 bg-white border-t border-black/5"
+    >
+      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
+        <div className="text-center mb-10">
+          <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-4">
+            Ask the AI
+          </p>
+          <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
+            Got a marketing question? Ask Adam&apos;s AI.
+          </h2>
+          <p className="mt-5 text-base md:text-lg text-[#111111]/70 max-w-xl mx-auto leading-relaxed">
+            Trained on Adam&apos;s methodology, voice, and proof points. Not a
+            generic chatbot. Ask anything about marketing systems, the three
+            products, or the Owner Trap.
+          </p>
+        </div>
+        {/* No article context on home — the widget supplies the
+            opening "What do you help with today?" prompt and the
+            server-side chat-prompt.ts gracefully handles a missing
+            article. */}
+        <ChatWidget article={{}} />
       </div>
     </section>
   );
