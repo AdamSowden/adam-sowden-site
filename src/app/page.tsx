@@ -90,10 +90,6 @@ function Hero() {
             do something else.
           </p>
           <div className="mt-10 flex flex-wrap gap-4 items-center">
-            <CTAButton size="lg">Book a Quick Chat</CTAButton>
-            <CTAButton href="/about" variant="ghost" size="lg">
-              Read the methodology
-            </CTAButton>
             <JumpToChat />
           </div>
         </div>
