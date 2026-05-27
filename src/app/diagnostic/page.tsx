@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description:
     "An 18-question AI-led diagnostic that identifies exactly where your marketing is owner-dependent and what it is costing you. Takes seven to ten minutes.",
   alternates: { canonical: "/diagnostic" },
-  robots: { index: false, follow: false },
 };
 
 export default function DiagnosticPage() {
