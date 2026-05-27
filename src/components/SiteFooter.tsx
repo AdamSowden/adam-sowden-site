@@ -50,6 +50,12 @@ export default function SiteFooter() {
                   {l.label}
                 </Link>
               ))}
+              <Link
+                href="/privacy"
+                className="hover:text-black transition"
+              >
+                Privacy Policy
+              </Link>
             </div>
           </div>
         </div>

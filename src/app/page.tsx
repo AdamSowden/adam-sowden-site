@@ -4,38 +4,48 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
-import ChatWidget from "@/components/ChatWidget";
-import JumpToChat from "@/components/JumpToChat";
+
+const DIAGNOSTIC_URL = "/diagnostic";
+const DIAGNOSTIC_CTA_LABEL = "Find MY Marketing Bottleneck";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+  title:
+    "Adam Sowden — Reclaim 36 Hours a Week by Replacing Yourself in Your Marketing",
+  description:
+    "AI marketing systems that write, publish, engage, and qualify while you do something else. Built for business owners trapped in their own marketing.",
 };
 
 const homeFaqItems = [
   {
+    question: "What is the Marketing Bottleneck Diagnostic?",
+    answer:
+      "An 18-question AI-led conversation that identifies exactly where your marketing is owner-dependent and what it is costing you. Takes seven to ten minutes. At the end you get a personalised written report with a Strategy Gaps section, an AI Transformation assessment, an Effort vs Impact map, a Fix Sequence, and three things you can do this week without help. The report is emailed to you and shown on screen.",
+  },
+  {
     question: "What is a zero-dependency marketing system?",
     answer:
-      "A marketing operation that runs without the owner. It produces, publishes, distributes, qualifies, and converts on autopilot. The standard is the Holiday Test: an owner should be able to leave their marketing for a year, come back, and find it has continued at the same level. If the marketing stops the moment the owner stops, it's not a system. It's a job.",
+      "A marketing operation that runs without the owner. It produces, publishes, distributes, qualifies, and converts on autopilot. The standard is the Holiday Test: leave your marketing for a year, come back, and find it has continued at the same level. If it stops the moment you stop, it is a job, not a system.",
   },
   {
-    question: "Why don't AI marketing tools fix the problem?",
+    question: "Why don't off-the-shelf AI tools fix this?",
     answer:
-      "Off-the-shelf AI is not trained on the specific business that uses it. The output sounds like every other business using the same tool. Cheap tools, expensive consequences. The subscription is low. The positioning loss is high. The fix is AI trained on the owner's voice, methodology, and proof points. A system, not a tool.",
-  },
-  {
-    question: "What are the three Adam Sowden products?",
-    answer:
-      "Three modular AI products that solve different parts of the marketing system. Marketing Agents are self-serve AI workers for specific marketing tasks (ad copywriter, email sequence writer, newsletter writer). The Content Ecosystem is the complete inbound infrastructure: Living AI Website, weekly content engine, Participation Layer. The Marketing Ecosystem is the outbound replacement: paid acquisition, social distribution, broader marketing operations run as a system. Buy one, two, or all three. Not a ladder.",
-  },
-  {
-    question: "What is The Owner Trap?",
-    answer:
-      "The structural condition that the owner is both operator and brand at the same time. When the owner runs the marketing, the brand becomes whatever the owner has time to produce. Rarely enough. Never consistent. The owner cannot scale the marketing without scaling themselves, and they cannot scale themselves. The fix is removing the owner from delivery, structurally and permanently.",
+      "Off-the-shelf AI is not trained on your specific business. The output sounds like every other business using the same tool. The subscription is low. The positioning loss is high. The fix is AI trained on your voice, your methodology, and your proof points. A system built for you, not a tool sold to everyone.",
   },
   {
     question: "How is this different from hiring a marketing agency?",
     answer:
-      "An agency rents out the work. The strategy, templates, trained voice, and institutional knowledge live inside the agency, not inside the business. When the relationship ends, the asset leaves. The cost stays. The Marketing Ecosystem produces the same outbound work as an agency but the IP, voice, and methodology stay inside the business. You own the asset.",
+      "An agency works for you. A system works without you. Agencies require briefings, approvals, and ongoing direction from the owner. When the owner goes away, the agency slows down. A zero-dependency system does not. It is also a permanent asset, not a monthly expense that disappears when you stop paying.",
+  },
+  {
+    question: "Do I need to buy all three products?",
+    answer:
+      "No. Each product solves a different part of the marketing system. The diagnostic will tell you which one removes the most owner time in your business first. Many owners start with Marketing Agents because the result is visible within the first week.",
+  },
+  {
+    question: "How long does it take to see results?",
+    answer:
+      "Marketing Agents produce visible output within the first week. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
   },
 ];
 
@@ -59,10 +69,10 @@ export default function Home() {
         <TheProblem />
         <TheMethodology />
         <TheProducts />
-        <SubscribeStrip />
+        <TrustCluster />
         <HomeFAQ />
-        <AskAdamsAI />
         <FinalCTA />
+        <SubscribeStrip />
       </main>
       <SiteFooter />
       <script
@@ -82,15 +92,25 @@ function Hero() {
             Zero-Dependency Marketing System
           </p>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight leading-[1.02] text-[#111111]">
-            Marketing Systems That Run Without You
+            Reclaim <span className="text-[#188bf6]">36 Hours</span> a Week by
+            Replacing Yourself in Your Marketing
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
-            World-class marketing automation for less than the cost of a VA.
-            AI systems that write, publish, engage, and qualify, while we
-            do something else.
+            AI systems trained on your business that write, publish, engage, and
+            qualify while you do something else. Built for business owners who
+            are tired of being the bottleneck in their own growth.
           </p>
-          <div className="mt-10 flex flex-wrap gap-4 items-center">
-            <JumpToChat />
+          <p className="mt-3 text-sm font-semibold text-[#0d9488]">
+            Currently working with a limited number of new clients per quarter.
+          </p>
+          <div className="mt-10">
+            <CTAButton size="lg" href={DIAGNOSTIC_URL}>
+              {DIAGNOSTIC_CTA_LABEL}
+            </CTAButton>
+            <p className="mt-3 text-xs text-black/55 max-w-md">
+              Free. Seven to ten minutes. AI-led diagnostic with a personalised
+              written report at the end.
+            </p>
           </div>
         </div>
         <div className="flex justify-center md:justify-end">
@@ -142,6 +162,11 @@ function TheProblem() {
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
           Owner dependency caps growth. Then AI made it worse.
         </h2>
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+          Most business owners built a job, not a business. Every campaign,
+          every piece of content, every client requires the owner. The ceiling
+          is defined entirely by one person&apos;s available hours.
+        </p>
 
         <div className="mt-14 grid md:grid-cols-2 gap-10 md:gap-16">
           <div>
@@ -151,17 +176,21 @@ function TheProblem() {
               built one anyway. Every new client, every campaign, every piece
               of content requires the owner. Growth hits a ceiling defined
               entirely by one person&apos;s available hours. The trap tightens
-              as the business grows.
+              as the business grows. The cost is not just time. It is the
+              growth that never happened.
             </p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-4">Cheap Tools, Expensive Consequences</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              Cheap Tools, Expensive Consequences
+            </h3>
             <p className="text-[#111111]/70 leading-relaxed">
               AI marketing tools were supposed to fix this. They made it
               worse. Off-the-shelf AI is not trained on the business that
               uses it. The output sounds like every other business using
               the same tool. The subscription is cheap. The positioning
-              loss is not.
+              loss is not. Generic AI does not remove the owner from the
+              loop. It just gives the owner more content to approve.
             </p>
           </div>
         </div>
@@ -182,7 +211,7 @@ function TheMethodology() {
       n: "02",
       title: "Standardises delivery",
       body:
-        "Consistent, reliable result every time — regardless of context or volume.",
+        "Consistent, reliable result every time, regardless of context or volume.",
     },
     {
       n: "03",
@@ -233,99 +262,201 @@ function TheMethodology() {
 }
 
 function TheProducts() {
+  const products = [
+    {
+      tag: "Lead response",
+      title: "The Speed-to-Lead Agent",
+      benefit: "Be the first to reply. Every single time.",
+      body:
+        "Every lead that contacts you expects a reply in minutes, not hours. An AI agent watches your forms, email, and SMS around the clock and responds with a personalised, contextual message before your competitor even sees the notification.",
+      quote:
+        "We were losing roughly half our enquiries to slow response. Within a week of switching this on, every lead got a personal reply inside a minute. Our booking rate jumped from 18% to 47%.",
+      name: "Sarah R.",
+      role: "Business Coach, Melbourne",
+      initials: "SR",
+    },
+    {
+      tag: "Prospecting",
+      title: "The Outreach Agent",
+      benefit: "Reach prospects before your competitors do.",
+      body:
+        "Your prospects are out there. This agent finds them, starts a personalised conversation across email, SMS, LinkedIn, or direct mail, and books them into your calendar.",
+      quote:
+        "We stopped doing manual outreach in February. By April my calendar was fuller than it had been all of last year, and I hadn't sent a single message myself.",
+      name: "Tom W.",
+      role: "Accountant, Adelaide",
+      initials: "TW",
+    },
+    {
+      tag: "Self-serve",
+      title: "Marketing Agents",
+      benefit: "Stop writing your own ads, emails, and newsletters.",
+      body:
+        "Pre-built AI marketing workers trained on your business. The Ad Copywriter, the Email Sequence Writer, the Newsletter Writer. Each runs without the owner. Buy one agent at a time. No sales call required.",
+      quote:
+        "I was spending 6 hours every Sunday writing content. The Ad Copywriter agent now does it in 20 minutes and the quality is better than anything I was producing myself.",
+      name: "James M.",
+      role: "Financial Adviser, Sydney",
+      initials: "JM",
+    },
+    {
+      tag: "Inbound",
+      title: "The Content Ecosystem",
+      benefit: "Turn one idea a week into a full inbound marketing engine.",
+      body:
+        "The complete inbound infrastructure. A Living AI Website that updates itself. One core idea a week, written, published, and broadcast across every channel. Every reader becomes a conversation through the embedded Participation Layer.",
+      quote:
+        "We went from zero inbound leads to 14 qualified conversations in the first 60 days. The system runs every week without me touching it.",
+      name: "Rachel B.",
+      role: "Consultant, Auckland",
+      initials: "RB",
+    },
+    {
+      tag: "Outbound",
+      title: "The Marketing Ecosystem",
+      benefit: "Replace your agency and your own involvement at the same time.",
+      body:
+        "The in-house marketing agency function, run as a system. Paid acquisition across platforms, social distribution, and broader marketing operations. Takes the content to market without an agency or an owner in the loop.",
+      quote:
+        "We cut our agency retainer and got better results. The system is more consistent than any agency we've worked with because it never has a bad month.",
+      name: "David K.",
+      role: "Mortgage Broker, Brisbane",
+      initials: "DK",
+    },
+  ];
+
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-          Three ways in
+          Five ways in
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Three modular products. Buy one, two, or all three.
+          Five modular products. Buy the ones that fit.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
           Not a ladder. Each product solves a different part of the
           marketing system. The methodology is shared. The standard is
-          the same.
+          the same. The diagnostic tells you which one to start with.
         </p>
 
         <div className="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
-            <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
-              Self-serve
-            </p>
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Marketing Agents
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              Pre-built AI marketing workers. Buy one agent at a time.
-              The Ad Copywriter, the Email Sequence Writer, the
-              Newsletter Writer. Each trained on the business. Each runs
-              without the owner. No sales call required.
-            </p>
-            <div className="mt-6">
-              <CTAButton variant="ghost">Start with one agent</CTAButton>
-            </div>
-          </div>
+          {products.map((p) => (
+            <div
+              key={p.title}
+              className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col"
+            >
+              <p className="text-[#0d9488] text-xs uppercase tracking-[0.18em] font-semibold mb-3">
+                {p.tag}
+              </p>
+              <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+                {p.title}
+              </h3>
+              <p className="mt-3 text-[#188bf6] font-semibold leading-snug">
+                {p.benefit}
+              </p>
+              <p className="mt-3 text-[#111111]/70 leading-relaxed flex-1">
+                {p.body}
+              </p>
 
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
-            <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
-              Inbound
-            </p>
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              The Content Ecosystem
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              The complete inbound infrastructure. A Living AI Website.
-              One core idea a week, written, published, broadcast.
-              Embedded across every page sits the Participation Layer.
-              Every reader becomes a conversation.
-            </p>
-            <div className="mt-6">
-              <CTAButton variant="ghost">See if it fits</CTAButton>
-            </div>
-          </div>
+              <figure className="mt-6 rounded-xl bg-[#0a0f1e] p-5">
+                <blockquote className="text-sm italic text-white/85 leading-relaxed">
+                  &ldquo;{p.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-4 flex items-center gap-3">
+                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#188bf6] text-white text-xs font-bold">
+                    {p.initials}
+                  </span>
+                  <span className="leading-tight">
+                    <span className="block text-sm font-semibold text-white">
+                      {p.name}
+                    </span>
+                    <span className="block text-xs text-white/55">
+                      {p.role}
+                    </span>
+                  </span>
+                </figcaption>
+              </figure>
 
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col">
-            <p className="text-[#188bf6] text-xs uppercase tracking-[0.18em] font-medium mb-3">
-              Outbound
-            </p>
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              The Marketing Ecosystem
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              The in-house marketing agency function, run as a system.
-              Paid acquisition across platforms, social distribution,
-              and broader marketing operations. Takes the content to
-              market without an agency or an owner in the loop.
-            </p>
-            <div className="mt-6">
-              <CTAButton variant="ghost">Talk to Adam</CTAButton>
+              <div className="mt-6">
+                <CTAButton variant="ghost" href={DIAGNOSTIC_URL}>
+                  {DIAGNOSTIC_CTA_LABEL}
+                </CTAButton>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-function SubscribeStrip() {
+function TrustCluster() {
+  const signals = [
+    {
+      label: "SSL Secured",
+      icon: (
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      ),
+    },
+    {
+      label: "No lock-in contracts",
+      icon: <polyline points="20 6 9 17 4 12" />,
+    },
+    {
+      label: "5-10 min diagnostic, no pitch",
+      icon: (
+        <>
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </>
+      ),
+    },
+    {
+      label: "$1B+ in client pipelines",
+      icon: (
+        <>
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </>
+      ),
+    },
+    {
+      label: "Privacy protected",
+      icon: (
+        <>
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </>
+      ),
+    },
+  ];
+
   return (
-    <section className="bg-white border-y border-black/5">
-      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
-        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
-          Weekly essay
-        </p>
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          One short email each Monday. One idea. No filler.
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          The Owner Trap, The Four Bad Options, The Methodology Is the
-          Product. We write one essay a week on building marketing that
-          runs without us, then send it on Monday morning.
-        </p>
-        <div className="mt-8">
-          <SubscribeForm buttonLabel="Subscribe" />
-        </div>
+    <section className="bg-white border-y border-black/10">
+      <div className="mx-auto max-w-6xl px-6 py-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+        {signals.map((s) => (
+          <div
+            key={s.label}
+            className="flex items-center gap-2 text-sm text-black/60 font-medium"
+          >
+            <svg
+              className="w-[18px] h-[18px] text-[#0d9488] shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              {s.icon}
+            </svg>
+            {s.label}
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -334,13 +465,17 @@ function SubscribeStrip() {
 function HomeFAQ() {
   return (
     <section className="bg-[#F9FAFB] border-y border-black/5">
-      <div className="mx-auto max-w-3xl px-6 py-16 md:py-20">
+      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
         <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
-          Frequently asked
+          Common questions
         </p>
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-[#111111] mb-10">
-          Common questions about the system.
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-[#111111] mb-4">
+          Answers to what you&apos;re probably thinking right now.
         </h2>
+        <p className="text-base md:text-lg text-[#111111]/70 leading-relaxed mb-10">
+          These are the questions every business owner asks before starting.
+          Read them before deciding.
+        </p>
         <div className="space-y-4">
           {homeFaqItems.map((f, i) => (
             <details
@@ -366,57 +501,66 @@ function HomeFAQ() {
   );
 }
 
-function AskAdamsAI() {
-  // Receiving section for the JumpToChat anchor (`#ask-adam`). Hosts the
-  // same Anthropic-backed ChatWidget that lives on every blog post, so a
-  // reader can engage the AI without first clicking through to a post.
-  // `scroll-mt-24` keeps the widget clear of the sticky SiteNav when
-  // scrolled to via the in-page anchor.
-  return (
-    <section
-      id="ask-adam"
-      className="scroll-mt-24 bg-white border-t border-black/5"
-    >
-      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
-        <div className="text-center mb-10">
-          <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-4">
-            Ask the AI
-          </p>
-          <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-            Got a marketing question? Ask Adam&apos;s AI.
-          </h2>
-          <p className="mt-5 text-base md:text-lg text-[#111111]/70 max-w-xl mx-auto leading-relaxed">
-            Trained on Adam&apos;s methodology, voice, and proof points. Not a
-            generic chatbot. Ask anything about marketing systems, the three
-            products, or the Owner Trap.
-          </p>
-        </div>
-        {/* No article context on home — the widget supplies the
-            opening "What do you help with today?" prompt and the
-            server-side chat-prompt.ts gracefully handles a missing
-            article. */}
-        <ChatWidget article={{}} />
-      </div>
-    </section>
-  );
-}
-
 function FinalCTA() {
   return (
-    <section className="bg-[#F9FAFB]">
+    <section className="bg-white">
       <div className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+          Ready to remove yourself from your marketing?
+        </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
           We don&apos;t need another AI tool.
           <br />
           We need a business that runs without us.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          A 20-minute Quick Chat. No pitch. We look at where owner dependency
-          is costing us growth and what becomes possible when it&apos;s
-          removed.
+          The Marketing Bottleneck Diagnostic is the fastest way to see exactly
+          where your marketing is owner-dependent and what it is costing you.
+          Seven to ten minutes. No pitch.
         </p>
-        <div className="mt-10 inline-flex">
-          <CTAButton size="lg">Book a Quick Chat</CTAButton>
+
+        <figure className="mt-10 mx-auto max-w-2xl text-left rounded-xl bg-[#F9FAFB] border-l-4 border-[#188bf6] px-6 py-5">
+          <blockquote className="text-base md:text-lg italic text-[#111111] leading-relaxed">
+            &ldquo;I expected another generic quiz. I left with a clear picture
+            of exactly where my marketing was leaking and a specific sequence
+            to fix it. I hadn&apos;t had that clarity in three years of
+            running the business.&rdquo;
+          </blockquote>
+          <figcaption className="mt-3 text-sm font-semibold text-black/60">
+            Michael T., Principal, Financial Planning Practice, Perth
+          </figcaption>
+        </figure>
+
+        <div className="mt-10 flex flex-col items-center gap-3">
+          <CTAButton size="lg" href={DIAGNOSTIC_URL}>
+            {DIAGNOSTIC_CTA_LABEL}
+          </CTAButton>
+          <p className="text-xs text-black/55">
+            Free. Seven to ten minutes. AI-led. Instant personalised report.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SubscribeStrip() {
+  return (
+    <section className="bg-[#F9FAFB] border-y border-black/5">
+      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24 text-center">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+          Weekly essay
+        </p>
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
+          One short email each Monday. One idea. No filler.
+        </h2>
+        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
+          The Owner Trap, The Four Bad Options, The Methodology Is the
+          Product. One essay a week on building marketing that runs without
+          you.
+        </p>
+        <div className="mt-8 max-w-xl mx-auto text-left">
+          <SubscribeForm buttonLabel="Send ME the Monday Essay" />
         </div>
       </div>
     </section>
