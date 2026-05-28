@@ -1,4 +1,4 @@
-// Resend-powered prospect email for the Marketing Bottleneck Diagnostic.
+// Resend-powered prospect email for the AI Marketing Diagnostic.
 //
 // Sends a styled HTML report to the prospect after they complete the
 // diagnostic. Owner notification email is NOT sent from here — it goes
@@ -77,7 +77,7 @@ function renderEmail({
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Marketing Bottleneck Report</title>
+  <title>Your AI Marketing Diagnostic Report</title>
 </head>
 <body style="margin:0; padding:0; background-color:#F9FAFB; font-family:'Inter', Arial, sans-serif;">
 
@@ -86,7 +86,7 @@ function renderEmail({
     <tr>
       <td align="center" style="padding:32px 24px;">
         <h1 style="margin:0; color:#ffffff; font-family:Georgia, serif; font-size:24px; font-weight:700; letter-spacing:-0.5px;">
-          Your Marketing Bottleneck Report
+          Your AI Marketing Diagnostic Report
         </h1>
         <p style="margin:8px 0 0; color:rgba(255,255,255,0.55); font-size:14px;">
           Prepared for ${safeName} by Adam Sowden
@@ -105,7 +105,7 @@ function renderEmail({
           <tr>
             <td style="padding-bottom:32px;">
               <p style="margin:0; color:#1a2332; font-size:16px; line-height:1.7;">
-                Hi ${safeName}, here is your personalised Marketing Bottleneck Report based on our diagnostic conversation.
+                Hi ${safeName}, here is your personalised AI Marketing Diagnostic Report based on our diagnostic conversation.
               </p>
             </td>
           </tr>
@@ -113,7 +113,7 @@ function renderEmail({
           <!-- Dependency Profile -->
           <tr>
             <td style="background-color:#0a0f1e; border-radius:8px; padding:24px;">
-              <h2 style="margin:0 0 12px; color:#ffffff; font-family:Georgia, serif; font-size:18px;">Your Bottleneck Profile</h2>
+              <h2 style="margin:0 0 12px; color:#ffffff; font-family:Georgia, serif; font-size:18px;">Your AI Marketing Opportunity</h2>
               <p style="margin:0; color:rgba(255,255,255,0.85); font-size:15px; line-height:1.8;">${profile}</p>
             </td>
           </tr>
@@ -187,7 +187,7 @@ function renderEmail({
             <td style="padding-top:40px;">
               <p style="margin:0; color:#6b7280; font-size:13px; line-height:1.6; border-top:1px solid #ddd; padding-top:20px;">
                 Adam Sowden &middot; adamsowden.com<br>
-                You received this because you completed the Marketing Bottleneck Diagnostic.
+                You received this because you completed the AI Marketing Diagnostic.
               </p>
             </td>
           </tr>
@@ -231,7 +231,7 @@ export async function sendProspectReportEmail(
     bookingUrl: args.bookingUrl,
   });
 
-  const subject = `${args.firstName}, your Marketing Bottleneck Report is ready`;
+  const subject = `${args.firstName}, your AI Marketing Diagnostic Report is ready`;
 
   const body: Record<string, unknown> = {
     from,

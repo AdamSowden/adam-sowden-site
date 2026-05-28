@@ -21,9 +21,9 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Adam Sowden — Zero-Dependency Marketing System",
+  title: "Adam Sowden — Autonomous AI Marketing Systems",
   description:
-    "Marketing systems that run without you. World-class marketing automation for less than the cost of a VA.",
+    "Autonomous AI marketing systems for service-business owners. Win more sales with marketing that runs while you direct the strategy.",
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         url: "/og-default.png",
         width: 1200,
         height: 630,
-        alt: "Adam Sowden — Marketing Systems That Run Without You",
+        alt: "Adam Sowden — Autonomous AI Marketing Systems",
       },
     ],
   },

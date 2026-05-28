@@ -6,9 +6,9 @@ import DiagnosticClient from "./DiagnosticClient";
 // inside the report at the end of a completed diagnostic.
 
 export const metadata: Metadata = {
-  title: "Marketing Bottleneck Diagnostic — Adam Sowden",
+  title: "AI Marketing Diagnostic — Adam Sowden",
   description:
-    "An 18-question AI-led diagnostic that identifies exactly where your marketing is owner-dependent and what it is costing you. Takes seven to ten minutes.",
+    "An 18-question AI-led diagnostic that identifies where AI marketing automation would have the biggest impact in your business right now. Get a personalised implementation plan in seven to ten minutes.",
   alternates: { canonical: "/diagnostic" },
 };
 

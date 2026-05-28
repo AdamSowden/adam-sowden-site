@@ -7,7 +7,7 @@ import { client } from "@/lib/sanity";
 export const metadata: Metadata = {
   title: "Blog — Adam Sowden",
   description:
-    "Essays on building marketing that runs without us. Zero-dependency systems, AI architecture, and why The Four Bad Options trap so many owners.",
+    "Essays on AI marketing automation. How autonomous marketing systems work, where off-the-shelf AI tools fail, and what to build instead.",
   alternates: { canonical: "/blog" },
   openGraph: { url: "/blog" },
 };
@@ -64,11 +64,11 @@ function Header() {
           Essays
         </p>
         <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-[1.05] text-[#111111] max-w-3xl">
-          On building marketing that runs without us.
+          On AI marketing automation that actually delivers.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
-          Long-form deconstruction of The Owner Trap, The Four Bad Options,
-          and the systems that replace them.
+          Long-form essays on autonomous marketing systems, where AI tools
+          fail, and how owners stay in control while AI does the work.
         </p>
       </div>
     </section>

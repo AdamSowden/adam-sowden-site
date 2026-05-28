@@ -1,4 +1,4 @@
-// GHL contact upsert for completed Marketing Bottleneck Diagnostics.
+// GHL contact upsert for completed AI Marketing Diagnostics.
 //
 // Follows the same pattern as src/app/api/subscribe/route.ts but tags the
 // contact `diagnostic-completed` and writes diagnostic-specific custom
@@ -69,13 +69,13 @@ function buildCustomFields(args: UpsertArgs): CustomField[] {
 // want to reference, as a fallback when custom-field IDs are not set.
 function buildNote(args: UpsertArgs): string {
   const lines = [
-    "Marketing Bottleneck Diagnostic completed.",
+    "AI Marketing Diagnostic completed.",
     "",
     `Business: ${args.businessName ?? "—"}`,
     `Location: ${args.location ?? "—"}`,
     `Industry: ${args.industry ?? "—"}`,
     "",
-    "Bottleneck Profile:",
+    "AI Marketing Opportunity:",
     args.dependencyProfile,
     "",
     "Personalised CTA line:",

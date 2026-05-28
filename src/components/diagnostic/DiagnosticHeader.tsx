@@ -1,6 +1,6 @@
 // Fixed header for the diagnostic page. Adam Sowden script logo on the
-// left (visual brand), "Marketing Bottleneck Diagnostic" sub-label so
-// the user knows where they are, progress indicator on the right. The
+// left (visual brand), "AI Marketing Diagnostic" sub-label so the user
+// knows where they are, progress indicator on the right. The
 // progress block hides once the report is complete (questionIndex >= 20)
 // so the report can breathe.
 //
@@ -38,7 +38,7 @@ export default function DiagnosticHeader({
               Diagnostic
             </p>
             <p className="font-serif text-[15px] font-semibold tracking-tight text-[#0a0f1e] mt-0.5">
-              Marketing Bottleneck
+              AI Marketing
             </p>
           </div>
         </div>

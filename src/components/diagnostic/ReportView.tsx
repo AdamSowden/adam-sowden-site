@@ -1,4 +1,4 @@
-// Marketing Bottleneck Report — rendered view.
+// AI Marketing Diagnostic Report — rendered view.
 //
 // Section order:
 //   1. Header (title + "Prepared for ...")
@@ -28,7 +28,7 @@ export default function ReportView({ report, firstName }: Props) {
       <div className="mx-auto max-w-[720px] px-4 sm:px-6 py-12 md:py-16">
         <header className="mb-10">
           <h1 className="font-serif text-3xl md:text-4xl tracking-tight text-[#111111] leading-tight">
-            Your Marketing Bottleneck Report
+            Your AI Marketing Diagnostic Report
           </h1>
           <p className="text-sm md:text-base text-black/55 mt-2">
             Prepared for {firstName}
@@ -70,7 +70,7 @@ function Section1({ dependencyProfile }: { dependencyProfile: string }) {
   return (
     <section className="mb-12 rounded-2xl bg-[#0a0f1e] text-white p-7 md:p-9">
       <h2 className="font-serif text-lg md:text-xl font-semibold mb-3">
-        Your Bottleneck Profile
+        Your AI Marketing Opportunity
       </h2>
       <p className="text-[15px] leading-[1.8] text-white/85">
         {dependencyProfile}

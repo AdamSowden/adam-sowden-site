@@ -1,6 +1,6 @@
 "use client";
 
-// Marketing Bottleneck Diagnostic — primary client component.
+// AI Marketing Diagnostic — primary client component.
 //
 // Manages: session bootstrap (start or recover), message send loop,
 // email-capture → report generation transition, and report rendering.

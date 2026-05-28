@@ -37,7 +37,7 @@ export default function PrivacyPage() {
               There is no third-party tracking on the diagnostic page.
             </P>
             <Bullet>
-              When you complete the Marketing Bottleneck Diagnostic, we collect
+              When you complete the AI Marketing Diagnostic, we collect
               your first name, the name of your business, your location,
               your industry, the answers you provide during the
               conversation, and your email address.

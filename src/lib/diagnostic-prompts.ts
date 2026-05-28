@@ -1,4 +1,4 @@
-// Prompts and tool definitions for the Marketing Bottleneck Diagnostic.
+// Prompts and tool definitions for the AI Marketing Diagnostic.
 //
 // Two LLM surfaces:
 //   1. The conversation (POST /api/diagnostic/message) — guides the
@@ -24,7 +24,7 @@ export const DIAGNOSTIC_REPORT_MODEL = "claude-opus-4-7";
 // ── Opening message (hardcoded, not LLM-generated) ──────────────────────
 
 export const OPENING_MESSAGE =
-  "Welcome. I am going to guide you through a short diagnostic conversation that will identify exactly where your marketing is owner-dependent and what it is costing you. It takes around seven to ten minutes. There are no right or wrong answers. Just be honest and I will do the rest. To get started, what is your first name?";
+  "Welcome. I am going to guide you through a short diagnostic that identifies where AI marketing automation would have the biggest impact in your business right now. It takes around seven to ten minutes. There are no right or wrong answers. Just be honest and I will do the rest. To get started, what is your first name?";
 
 // ── The 18 questions ────────────────────────────────────────────────────
 
@@ -54,7 +54,7 @@ export const DIAGNOSTIC_QUESTIONS = [
 export const CONVERSATION_SYSTEM_PROMPT = `
 ${BRAND_VOICE_PERSONA}
 
-You are conducting the Marketing Bottleneck Diagnostic. Your role is to guide
+You are conducting the AI Marketing Diagnostic. Your role is to guide
 a business owner through a structured diagnostic conversation. You ask
 one question at a time, in the exact order below. You may ask ONE
 optional follow-up if an answer is genuinely vague or too brief to be
@@ -67,7 +67,7 @@ IMPORTANT RULES:
 - Ask exactly one question at a time.
 - Acknowledge the answer briefly (one sentence maximum), then ask the next question.
 - Do not offer advice, solutions, or commentary during the conversation. Save all insights for the report.
-- After Q18, tell the user you are ready to generate their personalised Marketing Bottleneck Report, and ask for their email address so you can send it to them.
+- After Q18, tell the user you are ready to generate their personalised AI Marketing Diagnostic Report, and ask for their email address so you can send it to them.
 - Once you have their email, confirm it briefly and tell them you are generating the report now. Set isEmailCaptured to true in your tool response and set capturedEmail to the email address they gave.
 - Track which question you are on internally and return it in questionIndex.
 - When you extract first name (Q1), business name and location (Q2), or industry (Q3), populate extractedData accordingly. Keep extractedData fields null until they have been captured. Once captured, you can leave them as the captured value or null on subsequent turns — the server only updates fields that are still null.
@@ -76,7 +76,7 @@ THE 18 QUESTIONS (ask in this exact order):
 
 ${DIAGNOSTIC_QUESTIONS.join("\n\n")}
 
-After Q18, say: "Thank you. That gives me everything I need. I am going to generate your personalised Marketing Bottleneck Report now. It will cover your Strategy Gaps, your AI Transformation Status, and your Education Position. What email address should I send it to?"
+After Q18, say: "Thank you. That gives me everything I need. I am going to generate your personalised AI Marketing Diagnostic Report now. It will cover your Strategy Gaps, your AI Transformation Status, and your Education Position. What email address should I send it to?"
 
 After receiving the email, say: "Perfect. Generating your report now." and set isEmailCaptured to true in your tool response.
 
@@ -152,7 +152,7 @@ export function buildReportSystemPrompt(vars: ReportPromptVars): string {
   const industry = vars.industry || "their industry";
 
   return `
-You are writing a personalised Marketing Bottleneck Report for ${firstName}, the owner of ${businessName}, based in ${location}, operating in the ${industry} industry.
+You are writing a personalised AI Marketing Diagnostic Report for ${firstName}, the owner of ${businessName}, based in ${location}, operating in the ${industry} industry.
 
 ${BRAND_VOICE_PERSONA}
 
@@ -169,7 +169,7 @@ You may reference Adam's specific products where they are genuinely relevant to 
 
 Available offers and when to use them:
 
-"Marketing Agents" (Ad Copywriter, Email Sequence Writer, Newsletter Writer): use when content production is owner-dependent, inconsistent, or regularly skipped because the owner does not have time.
+"Marketing Agents" (Ad Copywriter, Email Sequence Writer, Newsletter Writer): use when content production is inconsistent, depends on the owner finding the time, or is regularly skipped because there is no system handling it.
 
 "Speed-to-Lead Agent": use when Q7, Q9, or Q10 reveal that enquiries are not being followed up immediately or at all. This AI agent watches forms, email, and SMS around the clock and replies to every new enquiry with a personalised, contextual message in seconds, before the competitor even sees the notification.
 
@@ -184,10 +184,10 @@ Education and AI implementation: reference in the Education Position section whe
 REPORT STRUCTURE:
 
 SECTION 1 — dependencyProfile
-Two to three sentences. Summarise where ${firstName}'s business currently sits on the owner-dependency spectrum. Be specific to their situation. Name the core pattern you see across their answers. Do not be generic. This is the first thing they read and it must feel like you were listening.
+Rendered as "Your AI Marketing Opportunity". Two to three sentences. Summarise where AI marketing automation would have the biggest, most concrete impact in ${firstName}'s business right now. Lead with the outcome (more sales, time back, a process running without them) rather than the gap. Be specific to their situation. Name the single most important shift you see across their answers. Do not be generic. This is the first thing they read and it must feel like you were listening.
 
 SECTION 2 — strategyGaps
-Three to four paragraphs. Identify the specific strategic gaps revealed by the conversation. A strategy gap is any place where the marketing system stops working the moment ${firstName} stops working. Name each gap clearly, explain how it showed up in their answers, and describe what it is costing them. Use their own words from the conversation where possible. Where relevant and earned, seed one offer from the list above.
+Three to four paragraphs. Identify the specific places in ${firstName}'s marketing where AI automation would deliver the biggest lift in sales. A gap is any place where marketing is not happening, is happening inconsistently, or is happening only when ${firstName} drives it personally. For each gap: name it clearly, show how it surfaced in their answers, and describe what fixing it with AI automation would deliver. Use their own words from the conversation where possible. Where relevant and earned, seed one offer from the list above. Frame the prospect's relationship with the system as: they direct, the AI executes.
 
 SECTION 3 — aiTransformationStatus
 Two to three paragraphs. Assess where ${firstName} currently sits on the AI transformation spectrum. Are they not started, patching AI in without a strategy, or genuinely building autonomous systems? Name what their answers revealed about their current AI usage, whether it is helping or creating complexity, and what the transformation from their current state to a fully integrated AI marketing system would look like for their specific business type. Where relevant, seed one offer from the list above.
@@ -233,14 +233,14 @@ You MUST respond by calling the submit_report tool. Never produce free-form text
 export const SUBMIT_REPORT_TOOL = {
   name: "submit_report",
   description:
-    "Submit the completed Marketing Bottleneck Report as structured JSON.",
+    "Submit the completed AI Marketing Diagnostic Report as structured JSON.",
   input_schema: {
     type: "object" as const,
     properties: {
       dependencyProfile: {
         type: "string",
         description:
-          "Section 1. Two to three sentences summarising the owner-dependency pattern. No section title in the value.",
+          "Section 1. Two to three sentences naming the single biggest AI marketing opportunity for this business. Lead with outcome (more sales, time back, a process running without them). No section title in the value.",
       },
       strategyGaps: {
         type: "string",

@@ -6,41 +6,41 @@ import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
 
 const DIAGNOSTIC_URL = "/diagnostic";
-const DIAGNOSTIC_CTA_LABEL = "Find MY Marketing Bottleneck";
+const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title:
-    "Adam Sowden — Reclaim 36 Hours a Week by Replacing Yourself in Your Marketing",
+    "Adam Sowden — Autonomous AI Marketing Systems for Business Owners",
   description:
-    "AI marketing systems that write, publish, engage, and qualify while you do something else. Built for business owners trapped in their own marketing.",
+    "Win more sales with autonomous AI marketing systems you actually control. AI marketing automation that writes, publishes, follows up, and books prospects for service-business owners.",
 };
 
 const homeFaqItems = [
   {
-    question: "What is the Marketing Bottleneck Diagnostic?",
+    question: "What is the AI Marketing Diagnostic?",
     answer:
-      "An 18-question AI-led conversation that identifies exactly where your marketing is owner-dependent and what it is costing you. Takes seven to ten minutes. At the end you get a personalised written report with a Strategy Gaps section, an AI Transformation assessment, an Effort vs Impact map, a Fix Sequence, and three things you can do this week without help. The report is emailed to you and shown on screen.",
+      "An 18-question AI-led conversation that identifies where AI marketing automation will have the biggest impact in your business right now. Takes seven to ten minutes. At the end you get a personalised written implementation plan covering where AI fits first, an Effort vs Impact map, a three-action Fix Sequence, and three micro-actions you can take this week without help. The report is shown on screen and emailed to you.",
   },
   {
-    question: "What is a zero-dependency marketing system?",
+    question: "What is an autonomous AI marketing system?",
     answer:
-      "A marketing operation that runs without the owner. It produces, publishes, distributes, qualifies, and converts on autopilot. The standard is the Holiday Test: leave your marketing for a year, come back, and find it has continued at the same level. If it stops the moment you stop, it is a job, not a system.",
+      "Software that handles your marketing for you, around the clock, trained specifically on your business. It writes content, publishes it, follows up with prospects, qualifies leads, and books meetings. You set the strategy and approve direction. The system handles every detail of implementation. You stay in control. You stop doing the work.",
   },
   {
     question: "Why don't off-the-shelf AI tools fix this?",
     answer:
-      "Off-the-shelf AI is not trained on your specific business. The output sounds like every other business using the same tool. The subscription is low. The positioning loss is high. The fix is AI trained on your voice, your methodology, and your proof points. A system built for you, not a tool sold to everyone.",
+      "Off-the-shelf AI is not trained on your specific business. The output sounds like every other business using the same tool. Your positioning gets lost in the noise. The subscription is low. The lost sales are not. The fix is AI trained on your voice, your offers, and your methodology. A system built for you, not a tool sold to everyone.",
   },
   {
     question: "How is this different from hiring a marketing agency?",
     answer:
-      "An agency works for you. A system works without you. Agencies require briefings, approvals, and ongoing direction from the owner. When the owner goes away, the agency slows down. A zero-dependency system does not. It is also a permanent asset, not a monthly expense that disappears when you stop paying.",
+      "An agency works for you. A system works without you. Agencies require briefings, approvals, and ongoing direction from the owner. When the owner goes away, the agency slows down. An autonomous AI marketing system does not. It is also a permanent asset that compounds, not a monthly expense that disappears the moment you stop paying.",
   },
   {
-    question: "Do I need to buy all three products?",
+    question: "Do I need to buy all five automations?",
     answer:
-      "No. Each product solves a different part of the marketing system. The diagnostic will tell you which one removes the most owner time in your business first. Many owners start with Marketing Agents because the result is visible within the first week.",
+      "No. Each automation handles a different part of the marketing job. Start with the one that will move your sales fastest. The AI Marketing Diagnostic tells you which one that is for your specific business.",
   },
   {
     question: "How long does it take to see results?",
@@ -89,16 +89,18 @@ function Hero() {
       <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-[1.3fr_1fr] gap-12 md:gap-16 items-center">
         <div>
           <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-6">
-            Zero-Dependency Marketing System
+            AI marketing that works while you sleep
           </p>
           <h1 className="font-serif text-5xl md:text-7xl tracking-tight leading-[1.02] text-[#111111]">
-            Reclaim <span className="text-[#188bf6]">36 Hours</span> a Week by
-            Replacing Yourself in Your Marketing
+            Win <span className="text-[#188bf6]">More Sales</span> with
+            Autonomous AI Marketing Systems You Actually Control
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-2xl leading-relaxed">
-            AI systems trained on your business that write, publish, engage, and
-            qualify while you do something else. Built for business owners who
-            are tired of being the bottleneck in their own growth.
+            AI marketing automation trained on your specific business. It
+            writes, publishes, follows up, and books prospects, automatically.
+            You direct the strategy. The system handles every detail. Built for
+            business owners who want results without becoming a marketing
+            department.
           </p>
           <p className="mt-3 text-sm font-semibold text-[#0d9488]">
             Currently working with a limited number of new clients per quarter.
@@ -108,8 +110,8 @@ function Hero() {
               {DIAGNOSTIC_CTA_LABEL}
             </CTAButton>
             <p className="mt-3 text-xs text-black/55 max-w-md">
-              Free. Seven to ten minutes. AI-led diagnostic with a personalised
-              written report at the end.
+              Free. Seven to ten minutes. AI Marketing Diagnostic with a
+              personalised implementation plan at the end.
             </p>
           </div>
         </div>
@@ -160,24 +162,25 @@ function TheProblem() {
           The Problem
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Owner dependency caps growth. Then AI made it worse.
+          Most AI marketing tools make the problem worse, not better.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
-          Most business owners built a job, not a business. Every campaign,
-          every piece of content, every client requires the owner. The ceiling
-          is defined entirely by one person&apos;s available hours.
+          You bought AI tools to get more sales without more work. They
+          delivered more work to approve, not more sales. The real fix is not
+          a tool. It is a system that runs your marketing for you, with you
+          directing the strategy.
         </p>
 
         <div className="mt-14 grid md:grid-cols-2 gap-10 md:gap-16">
           <div>
-            <h3 className="text-xl font-semibold mb-4">The Owner Trap</h3>
+            <h3 className="text-xl font-semibold mb-4">The Time Trap</h3>
             <p className="text-[#111111]/70 leading-relaxed">
-              Most business owners didn&apos;t set out to build a job. They
-              built one anyway. Every new client, every campaign, every piece
-              of content requires the owner. Growth hits a ceiling defined
-              entirely by one person&apos;s available hours. The trap tightens
-              as the business grows. The cost is not just time. It is the
-              growth that never happened.
+              You bought AI tools to save time. They generated more content
+              for you to approve, more copy for you to brand, more outputs
+              for you to sign off. Every piece still needs your attention.
+              You are still the bottleneck, now with extra steps. The sales
+              you wanted have not materialised. The hours you wanted back are
+              gone.
             </p>
           </div>
           <div>
@@ -185,12 +188,12 @@ function TheProblem() {
               Cheap Tools, Expensive Consequences
             </h3>
             <p className="text-[#111111]/70 leading-relaxed">
-              AI marketing tools were supposed to fix this. They made it
-              worse. Off-the-shelf AI is not trained on the business that
-              uses it. The output sounds like every other business using
-              the same tool. The subscription is cheap. The positioning
-              loss is not. Generic AI does not remove the owner from the
-              loop. It just gives the owner more content to approve.
+              Off-the-shelf AI is not trained on your specific business. The
+              output sounds like every other business using the same tool.
+              Your positioning gets lost in the noise. The subscription is
+              cheap. The lost positioning, the missed sales, and the wasted
+              hours are not. Generic AI is a tool. You need a system that
+              actually delivers results.
             </p>
           </div>
         </div>
@@ -215,9 +218,9 @@ function TheMethodology() {
     },
     {
       n: "03",
-      title: "Eliminates owner dependency",
+      title: "Runs without the owner",
       body:
-        "Runs without the owner being present. No initiation, no supervision, no approval.",
+        "The system executes without you needing to be present. You direct the strategy, you do not run the implementation. No initiation, no supervision, no approval loops.",
     },
     {
       n: "04",
@@ -290,7 +293,7 @@ function TheProducts() {
     {
       tag: "Self-serve",
       title: "Marketing Agents",
-      benefit: "Stop writing your own ads, emails, and newsletters.",
+      benefit: "AI writes your ads, emails, and newsletters. You approve. It ships.",
       body:
         "Pre-built AI marketing workers trained on your business. The Ad Copywriter, the Email Sequence Writer, the Newsletter Writer. Each runs without the owner. Buy one agent at a time. No sales call required.",
       quote:
@@ -314,7 +317,7 @@ function TheProducts() {
     {
       tag: "Outbound",
       title: "The Marketing Ecosystem",
-      benefit: "Replace your agency and your own involvement at the same time.",
+      benefit: "AI replaces your agency. Better results, lower cost, more consistency.",
       body:
         "The in-house marketing agency function, run as a system. Paid acquisition across platforms, social distribution, and broader marketing operations. Takes the content to market without an agency or an owner in the loop.",
       quote:
@@ -329,15 +332,16 @@ function TheProducts() {
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-          Five ways in
+          AI marketing automations
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Five modular products. Buy the ones that fit.
+          Five AI marketing automations. Buy the ones that fit.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
-          Not a ladder. Each product solves a different part of the
-          marketing system. The methodology is shared. The standard is
-          the same. The diagnostic tells you which one to start with.
+          Not a ladder. Each automation handles a different part of the
+          marketing job. The architecture is shared. The standard is the
+          same. The AI Marketing Diagnostic tells you which one will move
+          your sales fastest.
         </p>
 
         <div className="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
@@ -404,7 +408,7 @@ function TrustCluster() {
       icon: <polyline points="20 6 9 17 4 12" />,
     },
     {
-      label: "5-10 min diagnostic, no pitch",
+      label: "7-10 min AI Marketing Diagnostic, no pitch",
       icon: (
         <>
           <circle cx="12" cy="12" r="10" />
@@ -506,25 +510,26 @@ function FinalCTA() {
     <section className="bg-white">
       <div className="mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
         <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
-          Ready to remove yourself from your marketing?
+          Ready to put your marketing on autopilot?
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          We don&apos;t need another AI tool.
+          Stop building marketing.
           <br />
-          We need a business that runs without us.
+          Start running it.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          The Marketing Bottleneck Diagnostic is the fastest way to see exactly
-          where your marketing is owner-dependent and what it is costing you.
-          Seven to ten minutes. No pitch.
+          The AI Marketing Diagnostic is the fastest way to see where AI could
+          be running your marketing right now, where it would deliver the
+          biggest lift in sales, and where to start. Seven to ten minutes. No
+          pitch.
         </p>
 
         <figure className="mt-10 mx-auto max-w-2xl text-left rounded-xl bg-[#F9FAFB] border-l-4 border-[#188bf6] px-6 py-5">
           <blockquote className="text-base md:text-lg italic text-[#111111] leading-relaxed">
             &ldquo;I expected another generic quiz. I left with a clear picture
-            of exactly where my marketing was leaking and a specific sequence
-            to fix it. I hadn&apos;t had that clarity in three years of
-            running the business.&rdquo;
+            of exactly where AI should be running my marketing, what it would
+            do for sales, and the specific sequence to ship it. I hadn&apos;t
+            had that clarity in three years of running the business.&rdquo;
           </blockquote>
           <figcaption className="mt-3 text-sm font-semibold text-black/60">
             Michael T., Principal, Financial Planning Practice, Perth
@@ -536,7 +541,8 @@ function FinalCTA() {
             {DIAGNOSTIC_CTA_LABEL}
           </CTAButton>
           <p className="text-xs text-black/55">
-            Free. Seven to ten minutes. AI-led. Instant personalised report.
+            Free. Seven to ten minutes. AI Marketing Diagnostic. Instant
+            personalised implementation plan.
           </p>
         </div>
       </div>
@@ -555,9 +561,9 @@ function SubscribeStrip() {
           One short email each Monday. One idea. No filler.
         </h2>
         <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          The Owner Trap, The Four Bad Options, The Methodology Is the
-          Product. One essay a week on building marketing that runs without
-          you.
+          How autonomous AI marketing systems work, where off-the-shelf
+          tools fail, and the architecture behind marketing that runs without
+          you. One essay a week.
         </p>
         <div className="mt-8 max-w-xl mx-auto text-left">
           <SubscribeForm buttonLabel="Send ME the Monday Essay" />

@@ -7,7 +7,7 @@ import { CALENDAR_WIDGET_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Book a Quick Chat — Adam Sowden",
   description:
-    "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing growth and what becomes possible when it's removed.",
+    "Book a 20-minute Quick Chat. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
   alternates: { canonical: "/book" },
   openGraph: { url: "/book" },
 };
@@ -40,9 +40,9 @@ function Hero() {
           A 20-minute conversation about your marketing.
         </h1>
         <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          No pitch. We look at where owner dependency is costing growth
-          and what becomes possible when it&apos;s removed. Pick a time
-          that works for you.
+          No pitch. We look at where AI marketing automation would deliver
+          the biggest lift in your sales right now and what it would take to
+          ship it. Pick a time that works for you.
         </p>
       </div>
     </section>

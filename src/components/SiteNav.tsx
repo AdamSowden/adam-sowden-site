@@ -36,7 +36,7 @@ export default function SiteNav() {
             href="/diagnostic"
             className="ml-1 md:ml-2 inline-flex items-center rounded-full bg-[#188bf6] text-white px-4 py-2 text-xs sm:text-sm font-medium hover:bg-[#0d78dc] transition whitespace-nowrap"
           >
-            Find MY Marketing Bottleneck
+            Get MY AI Marketing Plan
           </Link>
         </nav>
       </div>

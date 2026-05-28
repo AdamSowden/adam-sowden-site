@@ -1,4 +1,4 @@
-// Upstash Redis wrapper for Marketing Bottleneck Diagnostic sessions.
+// Upstash Redis wrapper for AI Marketing Diagnostic sessions.
 //
 // Why Upstash (or Vercel KV — same product): sessions are ephemeral.
 // A diagnostic runs for 7-10 minutes then either completes or gets

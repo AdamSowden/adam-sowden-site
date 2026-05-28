@@ -7,7 +7,7 @@ import { BOOKING_URL } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
   description:
-    "Book a 20-minute Quick Chat. No pitch. A conversation about where owner dependency is costing us growth and what becomes possible when it's removed.",
+    "Book a 20-minute Quick Chat. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
   alternates: { canonical: "/contact" },
   openGraph: { url: "/contact" },
 };
@@ -37,8 +37,9 @@ function Hero() {
           Book a Quick Chat.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          20 minutes. No pitch. We look at where owner dependency is costing
-          us growth and what becomes possible when it&apos;s removed.
+          20 minutes. No pitch. We look at where AI marketing automation
+          would deliver the biggest lift in your sales right now and what it
+          would take to ship it.
         </p>
       </div>
     </section>
