@@ -56,6 +56,12 @@ export default function SiteFooter() {
               >
                 Privacy Policy
               </Link>
+              <Link
+                href="/terms"
+                className="hover:text-black transition"
+              >
+                Terms
+              </Link>
             </div>
           </div>
         </div>

@@ -60,6 +60,20 @@ export default function PrivacyPage() {
               service providers listed below.
             </P>
 
+            <H2>Phone numbers and SMS</H2>
+            <P>
+              If you give us your phone number, for example through our chat
+              widget, a booking, or by replying to a message, we use it to
+              contact you by SMS about your enquiry, your booking, and relevant
+              follow-up. We do not sell or share your phone number with third
+              parties for their own marketing.
+            </P>
+            <P>
+              You can opt out of SMS at any time by replying STOP. Message and
+              data rates may apply. SMS is handled through our CRM provider,
+              GoHighLevel, and the carriers it connects to.
+            </P>
+
             <H2>Where it is stored</H2>
             <P>
               We use a small number of established service providers to run
