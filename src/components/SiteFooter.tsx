@@ -44,6 +44,14 @@ export default function SiteFooter() {
               <div className="mt-1 text-black/45">
                 2539 Lake Meadow Drive, Lafayette, CO 80026, USA
               </div>
+              <div className="text-black/45">
+                <a
+                  href="tel:+17207061459"
+                  className="hover:text-black transition"
+                >
+                  (720) 706-1459
+                </a>
+              </div>
             </div>
             <div className="flex items-center gap-6">
               {NAV_LINKS.map((l) => (
