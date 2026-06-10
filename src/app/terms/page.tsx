@@ -102,9 +102,9 @@ export default function TermsPage() {
 
             <H2>Governing law</H2>
             <P>
-              These terms are governed by the laws of Australia. Any dispute
-              will be handled in the courts of Adam Sowden&apos;s home
-              jurisdiction in Australia.
+              These terms are governed by the laws of the State of Colorado,
+              United States. Any dispute will be handled in the courts located
+              in Colorado.
             </P>
 
             <H2>Changes to these terms</H2>

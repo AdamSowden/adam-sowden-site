@@ -38,7 +38,12 @@ export default function SiteFooter() {
           </Link>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 text-sm text-black/60">
             <div>
-              © {new Date().getFullYear()} Adam Sowden. All rights reserved.
+              <div>
+                © {new Date().getFullYear()} Adam Sowden. All rights reserved.
+              </div>
+              <div className="mt-1 text-black/45">
+                2539 Lake Meadow Drive, Lafayette, CO 80026, USA
+              </div>
             </div>
             <div className="flex items-center gap-6">
               {NAV_LINKS.map((l) => (
