@@ -27,6 +27,7 @@ import {
   isExpired,
   type ConversationTurn,
 } from "@/lib/diagnostic-store";
+import { captureSpeedToLead } from "@/lib/speed-to-lead-ghl";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -196,6 +197,27 @@ export async function POST(req: NextRequest) {
       { error: "Could not save your message. Please try again." },
       { status: 503 }
     );
+  }
+
+  // Speed-to-Lead: the first turn we capture the lead's email, register
+  // them in GHL tagged `sl-lead` so the instant-response + follow-up
+  // workflows can engage even if they abandon the diagnostic. `session` is
+  // the pre-update snapshot, so this fires only once. Best-effort: it must
+  // never break the diagnostic flow.
+  if (!session.email && acceptedEmail) {
+    try {
+      const result = await captureSpeedToLead({
+        email: acceptedEmail,
+        firstName: patch.firstName ?? session.firstName ?? null,
+        source: "diagnostic",
+        stateTag: "sl-diagnostic-started",
+      });
+      if (!result.ok) {
+        console.error("[speed-to-lead] capture not ok:", result.error);
+      }
+    } catch (err) {
+      console.error("[speed-to-lead] capture failed (non-fatal):", err);
+    }
   }
 
   return Response.json({
