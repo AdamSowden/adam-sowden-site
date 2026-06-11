@@ -117,6 +117,17 @@ export default function PrivacyPage() {
               unsubscribe.
             </P>
 
+            <H2>How we protect your data</H2>
+            <P>
+              We take reasonable measures to protect your personal
+              information. Data is sent over encrypted connections (HTTPS) and
+              stored with established service providers that maintain their own
+              security controls. Access is limited to the people and systems
+              that need it to deliver the service. No method of transmission or
+              storage is completely secure, but we review our practices and
+              work to keep your information safe.
+            </P>
+
             <H2>Your rights</H2>
             <P>
               You can request access to the personal information we hold

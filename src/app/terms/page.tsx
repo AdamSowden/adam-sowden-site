@@ -72,6 +72,11 @@ export default function TermsPage() {
               </a>{" "}
               for how we handle your information.
             </P>
+            <P>
+              You must be 18 years or older to use our SMS messaging and to
+              opt in to receive messages from us. Carriers are not liable for
+              delayed or undelivered messages.
+            </P>
 
             <H2>Intellectual property</H2>
             <P>
