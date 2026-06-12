@@ -216,6 +216,16 @@ export async function sendProspectReportEmail(
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
   const replyTo = process.env.RESEND_REPLY_TO;
+  // Comma-separated list of addresses to blind-copy on every prospect
+  // report email. Defaults to the configured reply-to address (Adam)
+  // so Adam keeps a copy of every report by default. Set to an empty
+  // string in env to disable.
+  const bccRaw =
+    process.env.DIAGNOSTIC_BCC ?? process.env.RESEND_REPLY_TO ?? "";
+  const bcc = bccRaw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 
   if (!apiKey || !from) {
     return {
@@ -240,6 +250,7 @@ export async function sendProspectReportEmail(
     html,
   };
   if (replyTo) body.reply_to = replyTo;
+  if (bcc.length > 0) body.bcc = bcc;
 
   try {
     const res = await fetch(`${RESEND_API_BASE}/emails`, {
