@@ -4,6 +4,7 @@ import {
   SYSTEM_PROMPT_CORE,
   buildArticleContext,
 } from "@/lib/chat-prompt";
+import { getClientConfig } from "@/lib/clients/registry";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,6 +41,10 @@ type ChatRequestBody = {
     metaDescription?: string;
     bodyPlain?: string;
   };
+  /** Per-client config slug. Falls back to Adam's default chat config
+   *  if absent or not registered. Sent by the widget loader when its
+   *  script tag carries a data-client attribute. */
+  client?: string;
 };
 
 function sanitizeMessages(raw: unknown): ChatMessage[] {
@@ -113,6 +118,15 @@ export async function POST(req: NextRequest) {
 
   const articleContext = buildArticleContext(body.article ?? {});
 
+  // Per-client config swap. If the request carries a registered client
+  // slug (sent by the widget's data-client attribute), use that client's
+  // systemPrompt. Otherwise fall back to Adam's default
+  // (SYSTEM_PROMPT_CORE) for backward compatibility with existing embeds.
+  const clientConfig = getClientConfig(body.client);
+  const systemPromptText = clientConfig
+    ? clientConfig.systemPrompt
+    : SYSTEM_PROMPT_CORE;
+
   const client = new Anthropic({ apiKey });
 
   const encoder = new TextEncoder();
@@ -125,7 +139,7 @@ export async function POST(req: NextRequest) {
           system: [
             {
               type: "text",
-              text: SYSTEM_PROMPT_CORE,
+              text: systemPromptText,
               cache_control: { type: "ephemeral" },
             },
             {

@@ -25,20 +25,41 @@
     document.currentScript ||
     document.querySelector('script[src*="/widget/v1.js"]');
   var origin = "https://adamsowden.com";
-  if (currentScript && currentScript.src) {
-    try {
-      origin = new URL(currentScript.src).origin;
-    } catch (e) {
-      /* fall back to hardcoded origin */
+  var clientSlug = null;
+  if (currentScript) {
+    if (currentScript.src) {
+      try {
+        origin = new URL(currentScript.src).origin;
+      } catch (e) {
+        /* fall back to hardcoded origin */
+      }
+    }
+    // data-client="virtus" → "virtus". Sent on every chat request so
+    // the server loads the matching per-client config. Without a
+    // data-client attribute, the chat falls back to Adam's default.
+    if (currentScript.dataset && currentScript.dataset.client) {
+      clientSlug = currentScript.dataset.client;
     }
   }
   var API_URL = origin + "/api/chat";
+  var WIDGET_CONFIG_URL = clientSlug
+    ? origin + "/api/widget-config?client=" + encodeURIComponent(clientSlug)
+    : null;
   var BOOK_MARKER = "[BOOK_QUICK_CHAT]";
-  // BOOKING_URL is not loaded from server config in this MVP. Hardcoded
-  // here matches what the production /book page resolves to.
-  var BOOKING_URL = origin + "/book";
 
-  var OPENING_MESSAGE = "What do you help with today?";
+  // Defaults if no per-client config is loaded. Per-client overrides
+  // come from /api/widget-config and patch this object before the
+  // panel renders.
+  var config = {
+    eyebrow: "ASK THE AI",
+    title: "Got a marketing question?",
+    description:
+      "Trained on Adam Sowden's methodology, voice, and proof points. Ask anything about marketing systems or the Owner Trap.",
+    openingMessage: "What do you help with today?",
+    accentColor: "#188bf6",
+    accentColorHover: "#0d78dc",
+    bookingUrl: origin + "/book",
+  };
 
   // ── DOM scaffolding ───────────────────────────────────────────────────
 
@@ -51,16 +72,18 @@
   var shadow = host.attachShadow({ mode: "open" });
 
   // All widget CSS lives inside the shadow root, scoped away from the
-  // host site. Brand palette matches adamsowden.com.
+  // host site. Accent color is driven by CSS variables so per-client
+  // configs can override without regenerating the stylesheet.
   var style = document.createElement("style");
   style.textContent =
+    ":host{--ah-accent:#188bf6;--ah-accent-hover:#0d78dc;}" +
     "*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;}" +
-    ".bubble{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:9999px;background:#188bf6;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;}" +
-    ".bubble:hover{background:#0d78dc;transform:translateY(-1px);}" +
+    ".bubble{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:9999px;background:var(--ah-accent);color:#fff;border:none;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;}" +
+    ".bubble:hover{background:var(--ah-accent-hover);transform:translateY(-1px);}" +
     ".bubble svg{width:26px;height:26px;}" +
     ".panel{position:fixed;bottom:96px;right:24px;width:380px;max-width:calc(100vw - 32px);height:560px;max-height:calc(100vh - 128px);background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,0.18);display:flex;flex-direction:column;overflow:hidden;}" +
     ".header{padding:18px 20px 14px;border-bottom:1px solid rgba(0,0,0,0.06);background:#F9FAFB;}" +
-    ".eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#188bf6;margin:0 0 6px;}" +
+    ".eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ah-accent);margin:0 0 6px;}" +
     ".title{font-family:Georgia,serif;font-size:18px;color:#111;margin:0;font-weight:600;}" +
     ".sub{font-size:13px;color:rgba(0,0,0,0.6);margin:6px 0 0;line-height:1.4;}" +
     ".close{position:absolute;top:14px;right:14px;background:transparent;border:none;cursor:pointer;color:rgba(0,0,0,0.4);width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;}" +
@@ -70,11 +93,11 @@
     ".row.user{justify-content:flex-end;}" +
     ".row.assistant{justify-content:flex-start;}" +
     ".bubble-msg{max-width:85%;padding:10px 14px;font-size:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word;}" +
-    ".user .bubble-msg{background:#188bf6;color:#fff;border-radius:16px 4px 16px 16px;}" +
+    ".user .bubble-msg{background:var(--ah-accent);color:#fff;border-radius:16px 4px 16px 16px;}" +
     ".assistant .bubble-msg{background:#F9FAFB;color:#111;border:1px solid rgba(0,0,0,0.08);border-radius:4px 16px 16px 16px;}" +
     ".cta-row{display:flex;justify-content:flex-start;margin-top:6px;}" +
-    ".cta{display:inline-flex;align-items:center;background:#188bf6;color:#fff;border-radius:9999px;padding:8px 16px;font-size:13px;font-weight:600;text-decoration:none;transition:background .15s;}" +
-    ".cta:hover{background:#0d78dc;}" +
+    ".cta{display:inline-flex;align-items:center;background:var(--ah-accent);color:#fff;border-radius:9999px;padding:8px 16px;font-size:13px;font-weight:600;text-decoration:none;transition:background .15s;}" +
+    ".cta:hover{background:var(--ah-accent-hover);}" +
     ".dots{display:inline-flex;gap:4px;align-items:center;}" +
     ".dot{width:5px;height:5px;border-radius:50%;background:rgba(0,0,0,0.3);animation:dotPulse 1.1s ease-in-out infinite;}" +
     ".dot:nth-child(2){animation-delay:.15s;}" +
@@ -82,10 +105,10 @@
     "@keyframes dotPulse{0%,80%,100%{opacity:.25;transform:scale(.85);}40%{opacity:1;transform:scale(1);}}" +
     ".form{display:flex;gap:8px;padding:12px 14px;border-top:1px solid rgba(0,0,0,0.06);background:#fff;}" +
     ".input{flex:1;border:1px solid rgba(0,0,0,0.15);border-radius:9999px;padding:9px 16px;font-size:14px;outline:none;transition:border-color .15s;}" +
-    ".input:focus{border-color:#188bf6;}" +
+    ".input:focus{border-color:var(--ah-accent);}" +
     ".input:disabled{opacity:.6;}" +
-    ".send{background:#188bf6;color:#fff;border:none;border-radius:9999px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;}" +
-    ".send:hover{background:#0d78dc;}" +
+    ".send{background:var(--ah-accent);color:#fff;border:none;border-radius:9999px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;}" +
+    ".send:hover{background:var(--ah-accent-hover);}" +
     ".send:disabled{opacity:.5;cursor:not-allowed;}" +
     ".hidden{display:none !important;}" +
     "@media (max-width:480px){.panel{right:8px;bottom:80px;width:calc(100vw - 16px);height:calc(100vh - 100px);}.bubble{bottom:16px;right:16px;}}";
@@ -105,9 +128,9 @@
     '<button class="close" aria-label="Close chat">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
     "</button>" +
-    '<p class="eyebrow">Ask the AI</p>' +
-    '<h3 class="title">Got a marketing question?</h3>' +
-    '<p class="sub">Trained on Adam Sowden\'s methodology, voice, and proof points. Ask anything about marketing systems or the Owner Trap.</p>' +
+    '<p class="eyebrow" id="ahEyebrow"></p>' +
+    '<h3 class="title" id="ahTitle"></h3>' +
+    '<p class="sub" id="ahSub"></p>' +
     "</div>" +
     '<div class="messages" id="msgs"></div>' +
     '<form class="form" id="form">' +
@@ -121,14 +144,69 @@
   var inputEl = panel.querySelector("#input");
   var sendBtn = panel.querySelector("#send");
   var closeBtn = panel.querySelector(".close");
+  var eyebrowEl = panel.querySelector("#ahEyebrow");
+  var titleEl = panel.querySelector("#ahTitle");
+  var subEl = panel.querySelector("#ahSub");
+
+  // Apply config to the panel DOM + CSS variables. Called once initially
+  // with defaults, then again if per-client config arrives from the
+  // server.
+  function applyConfig() {
+    eyebrowEl.textContent = config.eyebrow;
+    titleEl.textContent = config.title;
+    subEl.textContent = config.description;
+    if (config.accentColor) {
+      host.style.setProperty("--ah-accent", config.accentColor);
+      // Hover defaults to same colour at 90% lightness, unless explicit
+      host.style.setProperty(
+        "--ah-accent-hover",
+        config.accentColorHover || config.accentColor
+      );
+    }
+  }
+  applyConfig();
 
   // ── State ─────────────────────────────────────────────────────────────
 
   var history = [
-    { id: "opening", role: "assistant", content: OPENING_MESSAGE },
+    { id: "opening", role: "assistant", content: config.openingMessage },
   ];
   var streaming = false;
   var hasUserInteracted = false;
+
+  // ── Per-client config fetch ───────────────────────────────────────────
+  // If data-client="<slug>" is set on the script tag, pull overrides for
+  // panel copy + accent color. Non-blocking — if it fails, the widget
+  // still works with defaults and the chat backend's per-client config
+  // (loaded from the slug at /api/chat) still kicks in.
+  if (WIDGET_CONFIG_URL) {
+    fetch(WIDGET_CONFIG_URL)
+      .then(function (r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function (data) {
+        if (!data) return;
+        if (data.eyebrow) config.eyebrow = data.eyebrow;
+        if (data.title) config.title = data.title;
+        if (data.description) config.description = data.description;
+        if (data.openingMessage) {
+          config.openingMessage = data.openingMessage;
+          // Update the seeded opening message if the panel hasn't been
+          // used yet (no user messages exchanged).
+          if (history.length === 1 && history[0].id === "opening") {
+            history[0].content = data.openingMessage;
+          }
+        }
+        if (data.accentColor) config.accentColor = data.accentColor;
+        if (data.bookingUrl) config.bookingUrl = data.bookingUrl;
+        applyConfig();
+        // If panel is already open, re-render so the change is visible
+        if (!panel.classList.contains("hidden")) render();
+      })
+      .catch(function (err) {
+        console.warn("[adam-sowden-chat] widget config fetch failed:", err);
+      });
+  }
 
   // ── Render ────────────────────────────────────────────────────────────
 
@@ -150,10 +228,10 @@
         ctaRow.className = "cta-row";
         var cta = document.createElement("a");
         cta.className = "cta";
-        cta.href = BOOKING_URL;
+        cta.href = config.bookingUrl;
         cta.target = "_blank";
         cta.rel = "noopener";
-        cta.textContent = "Book a Quick Chat with Adam";
+        cta.textContent = "Book a chat";
         ctaRow.appendChild(cta);
         msgsEl.appendChild(ctaRow);
       }
@@ -198,10 +276,13 @@
         return { role: m.role, content: m.content };
       });
 
+    var requestBody = { messages: apiMessages, article: {} };
+    if (clientSlug) requestBody.client = clientSlug;
+
     fetch(API_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ messages: apiMessages, article: {} }),
+      body: JSON.stringify(requestBody),
     })
       .then(function (res) {
         if (!res.ok || !res.body) {

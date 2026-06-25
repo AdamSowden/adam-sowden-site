@@ -6,6 +6,10 @@ import Script from "next/script";
 // Tailwind classes that the widget might collide with. If the widget works
 // here, it will work on a third-party site (e.g. GHL).
 //
+// Pass ?client=<slug> in the URL to test a per-client config:
+//   /embed-test          → Adam's default chat (no data-client)
+//   /embed-test?client=virtus → loads Virtus's voice, panel copy, color
+//
 // Internal use only. noindex.
 
 export const metadata: Metadata = {
@@ -13,7 +17,19 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function EmbedTestPage() {
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+export default async function EmbedTestPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const rawClient = params.client;
+  const client =
+    typeof rawClient === "string" && /^[a-z0-9-]{1,40}$/.test(rawClient)
+      ? rawClient
+      : null;
   return (
     <main
       style={{
@@ -45,6 +61,25 @@ export default function EmbedTestPage() {
           third-party hosting platform.
         </p>
 
+        <p
+          style={{
+            fontSize: 13,
+            color: "#666",
+            margin: "16px 0 0",
+            padding: "8px 12px",
+            background: "#fffbea",
+            border: "1px solid #f5e6a3",
+            borderRadius: 6,
+          }}
+        >
+          Currently testing:{" "}
+          <strong>{client ? `?client=${client}` : "no client (Adam's default)"}</strong>.
+          Try{" "}
+          <a href="/embed-test">/embed-test</a> for Adam,{" "}
+          <a href="/embed-test?client=virtus">/embed-test?client=virtus</a> for
+          Virtus.
+        </p>
+
         <h2
           style={{
             fontFamily: "Georgia, serif",
@@ -64,7 +99,9 @@ export default function EmbedTestPage() {
             overflowX: "auto",
           }}
         >
-          {`<script src="https://adamsowden.com/widget/v1.js" async></script>`}
+          {client
+            ? `<script src="https://adamsowden.com/widget/v1.js" data-client="${client}" async></script>`
+            : `<script src="https://adamsowden.com/widget/v1.js" async></script>`}
         </pre>
 
         <h2
@@ -97,11 +134,13 @@ export default function EmbedTestPage() {
         </ul>
       </div>
 
-      {/* The actual embed under test. This is exactly what would go on
-          a GHL site, just with strategy="afterInteractive" so Next.js
-          loads it cleanly. On a static GHL page it would be a plain
-          <script> tag in the custom code section. */}
-      <Script src="/widget/v1.js" strategy="afterInteractive" />
+      {/* The actual embed under test. On a static GHL page it would be
+          a plain <script> tag in the custom code section. */}
+      <Script
+        src="/widget/v1.js"
+        data-client={client ?? undefined}
+        strategy="afterInteractive"
+      />
     </main>
   );
 }
