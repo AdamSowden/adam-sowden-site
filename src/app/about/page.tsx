@@ -20,11 +20,11 @@ const personJsonLd = {
   "@id": `${SITE_URL}/about#adam-sowden`,
   name: "Adam Sowden",
   url: `${SITE_URL}/about`,
-  jobTitle: "Founder, AI Marketing Agents",
+  jobTitle: "Founder, Autonomous AI Marketing Systems",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   knowsAbout: [
     "AI marketing automation",
-    "Zero-dependency marketing systems",
+    "Autonomous AI marketing systems",
     "AI agent architecture",
     "Content systems for service businesses",
   ],
@@ -112,9 +112,10 @@ function TheStory() {
           <p>
             When AI arrived, I watched business owners do the predictable
             thing. They used it to do the same work faster. They were more
-            productive and more trapped simultaneously. I named this The Old
-            Mindset. It is the one enemy. Every specific problem keeping
-            owners stuck is a version of it.
+            productive and more trapped simultaneously. The tools changed.
+            The trap did not. Every specific problem keeping owners stuck
+            turned out to be a version of the same one: the owner was still
+            the system, and the system stopped when they did.
           </p>
           <p>
             I built something different. A Content Ecosystem that produces

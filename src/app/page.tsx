@@ -45,7 +45,7 @@ const homeFaqItems = [
   {
     question: "How long does it take to see results?",
     answer:
-      "Marketing Agents produce visible output within the first week. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
+      "Your Own AI Marketing Department produces visible output within the first week. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
   },
 ];
 
@@ -279,25 +279,25 @@ function TheProducts() {
       initials: "SR",
     },
     {
-      tag: "Prospecting",
+      tag: "Engagement",
       title: "The Outreach Agent",
-      benefit: "Reach prospects before your competitors do.",
+      benefit: "Turn audience engagement into real conversations.",
       body:
-        "Your prospects are out there. This agent finds them, starts a personalised conversation across email, SMS, LinkedIn, or direct mail, and books them into your calendar.",
+        "People comment on your posts, reply to your emails, react on social. Most of those signals go nowhere because you don't have time. This agent picks them up and continues the conversation in the right channel, building relationships with people who already raised their hand.",
       quote:
-        "We stopped doing manual outreach in February. By April my calendar was fuller than it had been all of last year, and I hadn't sent a single message myself.",
+        "I had hundreds of engagement signals every month I was missing. Within six weeks of switching this on, half of them turned into real conversations. Three turned into clients.",
       name: "Tom W.",
       role: "Accountant, Adelaide",
       initials: "TW",
     },
     {
       tag: "Self-serve",
-      title: "Marketing Agents",
-      benefit: "AI writes your ads, emails, and newsletters. You approve. It ships.",
+      title: "Your Own AI Marketing Department",
+      benefit: "AI writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. It ships.",
       body:
-        "Pre-built AI marketing workers trained on your business. The Ad Copywriter, the Email Sequence Writer, the Newsletter Writer. Each runs without the owner. Buy one agent at a time. No sales call required.",
+        "Pre-built AI marketing workers trained on your business voice, methodology, and ideal customer. Ad copywriter, email sequence writer, newsletter writer, LinkedIn post writer, script writers, and more. Each runs without the owner. Buy one worker at a time. No sales call required.",
       quote:
-        "I was spending 6 hours every Sunday writing content. The Ad Copywriter agent now does it in 20 minutes and the quality is better than anything I was producing myself.",
+        "I was spending 6 hours every Sunday writing content. The Ad Copywriter now does it in 20 minutes and the quality is better than anything I was producing myself.",
       name: "James M.",
       role: "Financial Adviser, Sydney",
       initials: "JM",
@@ -307,7 +307,7 @@ function TheProducts() {
       title: "The Content Ecosystem",
       benefit: "Turn one idea a week into a full inbound marketing engine.",
       body:
-        "The complete inbound infrastructure. A Living AI Website that updates itself. One core idea a week, written, published, and broadcast across every channel. Every reader becomes a conversation through the embedded Participation Layer.",
+        "The complete inbound infrastructure. Four pieces: a Living AI Website that updates itself, the Weekly Content Engine that produces one core idea a week, the Participation Layer that turns every reader into a conversation, and the Diagnostic Tool that captures intent and qualifies before the first human conversation.",
       quote:
         "We went from zero inbound leads to 14 qualified conversations in the first 60 days. The system runs every week without me touching it.",
       name: "Rachel B.",
@@ -344,19 +344,19 @@ function TheProducts() {
           your sales fastest.
         </p>
 
-        <div className="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
+        <div className="mt-14 flex flex-wrap justify-center gap-6 md:gap-8">
           {products.map((p) => (
             <div
               key={p.title}
-              className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col"
+              className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 flex flex-col w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]"
             >
               <p className="text-[#0d9488] text-xs uppercase tracking-[0.18em] font-semibold mb-3">
                 {p.tag}
               </p>
-              <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+              <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111] leading-tight md:min-h-[3.25rem] lg:min-h-[4rem]">
                 {p.title}
               </h3>
-              <p className="mt-3 text-[#188bf6] font-semibold leading-snug">
+              <p className="mt-3 text-[#188bf6] font-semibold leading-snug md:min-h-[3rem]">
                 {p.benefit}
               </p>
               <p className="mt-3 text-[#111111]/70 leading-relaxed flex-1">

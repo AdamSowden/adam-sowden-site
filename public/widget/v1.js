@@ -54,7 +54,7 @@
     eyebrow: "ASK THE AI",
     title: "Got a marketing question?",
     description:
-      "Trained on Adam Sowden's methodology, voice, and proof points. Ask anything about marketing systems or the Owner Trap.",
+      "Trained on Adam Sowden's methodology, voice, and proof points. Ask anything about autonomous AI marketing systems that run without you.",
     openingMessage: "What do you help with today?",
     accentColor: "#188bf6",
     accentColorHover: "#0d78dc",

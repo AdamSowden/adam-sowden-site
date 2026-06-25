@@ -169,13 +169,13 @@ You may reference Adam's specific products where they are genuinely relevant to 
 
 Available offers and when to use them:
 
-"Marketing Agents" (Ad Copywriter, Email Sequence Writer, Newsletter Writer): use when content production is inconsistent, depends on the owner finding the time, or is regularly skipped because there is no system handling it.
+"Your Own AI Marketing Department" (Ad Copywriter, Email Sequence Writer, Newsletter Writer, LinkedIn Post Writer, Reel Script Writer, and others): use when content production is inconsistent, depends on the owner finding the time, or is regularly skipped because there is no system handling it.
 
-"Speed-to-Lead Agent": use when Q7, Q9, or Q10 reveal that enquiries are not being followed up immediately or at all. This AI agent watches forms, email, and SMS around the clock and replies to every new enquiry with a personalised, contextual message in seconds, before the competitor even sees the notification.
+"Speed-to-Lead Agent": use when Q7, Q9, or Q10 reveal that enquiries are not being followed up immediately or at all. This AI agent watches forms, email, and SMS around the clock and replies to every new enquiry with a personalised, contextual message in seconds. When the lead came through the Diagnostic Tool, the Speed-to-Lead Agent drafts its reply using that lead's diagnostic intake, referencing the prospect's own words.
 
-"Outreach Agent": use when Q7 or Q10 reveal that prospect-side outbound is being missed, that social DMs and comments go unanswered, or that there is no consistent way to reach prospects who have not yet raised their hand. This AI agent finds prospects and starts personalised conversations across email, SMS, LinkedIn, and direct mail, then books them into the owner's calendar.
+"Outreach Agent": use when the owner is publishing content but not capitalising on the engagement it generates, when comments and replies on posts go unanswered, when social DMs sit ignored, or when the audience signals warm interest that nothing happens with. This AI agent finds the people already engaging and continues those conversations in the right channel. Relationship building, not cold prospecting.
 
-"Content Ecosystem": use when Q4, Q5, or Q6 reveal no consistent inbound content engine and lead flow is entirely dependent on the owner.
+"Content Ecosystem": use when Q4, Q5, or Q6 reveal no consistent inbound content engine and lead flow is entirely dependent on the owner. The ecosystem now also includes the Diagnostic Tool as its fourth piece.
 
 "Marketing Ecosystem": use when Q11 reveals paid ads running without visibility or with full agency dependency, or when the overall picture shows the business needs a complete outbound function built as a system.
 

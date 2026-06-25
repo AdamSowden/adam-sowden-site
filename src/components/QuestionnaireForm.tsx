@@ -35,11 +35,13 @@ const PLATFORM_OPTIONS = [
 ];
 
 const PRODUCT_FIT_OPTIONS = [
-  "Self-serve AI agents (Marketing Agents)",
+  "Instant lead response (Speed-to-Lead Agent)",
+  "Turning audience engagement into conversations (Outreach Agent)",
+  "Self-serve AI workers (Your Own AI Marketing Department)",
   "A complete inbound system (Content Ecosystem)",
   "Outbound and Paid Ads (Marketing Ecosystem)",
   "Not sure yet",
-  "Some combination of the three",
+  "Some combination of these",
 ];
 
 export default function QuestionnaireForm() {
