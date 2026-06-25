@@ -38,14 +38,14 @@ const homeFaqItems = [
       "An agency works for you. A system works without you. Agencies require briefings, approvals, and ongoing direction from the owner. When the owner goes away, the agency slows down. An autonomous AI marketing system does not. It is also a permanent asset that compounds, not a monthly expense that disappears the moment you stop paying.",
   },
   {
-    question: "Do I need to buy all five automations?",
+    question: "Do I need to buy all six automations?",
     answer:
       "No. Each automation handles a different part of the marketing job. Start with the one that will move your sales fastest. The AI Marketing Diagnostic tells you which one that is for your specific business.",
   },
   {
     question: "How long does it take to see results?",
     answer:
-      "Your Own AI Marketing Department produces visible output within the first week. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
+      "Your Own AI Marketing Department produces visible output within the first week. The Site Conversation Agent starts qualifying visitors within hours of going live. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
   },
 ];
 
@@ -291,6 +291,18 @@ function TheProducts() {
       initials: "TW",
     },
     {
+      tag: "Site conversion",
+      title: "The Site Conversation Agent",
+      benefit: "Turn every visitor into a real conversation. No more contact forms.",
+      body:
+        "An AI chat embedded on every page that engages every visitor in a real conversation about their situation, qualifies them, educates them on the offer, and books appointments directly into your calendar. Replaces static contact forms, low-quality chatbots, manual FAQs, and sales pages that don't convert. Embeds into any platform.",
+      quote:
+        "Visitors used to hit our contact form and vanish. Now they have a real conversation the moment they land, and qualified calls land in my calendar while I sleep. Booked meetings doubled in the first month.",
+      name: "Priya N.",
+      role: "Financial Adviser, Perth",
+      initials: "PN",
+    },
+    {
       tag: "Self-serve",
       title: "Your Own AI Marketing Department",
       benefit: "AI writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. It ships.",
@@ -307,7 +319,7 @@ function TheProducts() {
       title: "The Content Ecosystem",
       benefit: "Turn one idea a week into a full inbound marketing engine.",
       body:
-        "The complete inbound infrastructure. Four pieces: a Living AI Website that updates itself, the Weekly Content Engine that produces one core idea a week, the Participation Layer that turns every reader into a conversation, and the Diagnostic Tool that captures intent and qualifies before the first human conversation.",
+        "The complete inbound infrastructure. Three pieces: a Living AI Website that updates itself, the Weekly Content Engine that produces one core idea a week, and the Diagnostic Tool that captures intent and qualifies before the first human conversation. Composes with the Site Conversation Agent: the ecosystem produces the content, the agent turns every reader into a conversation.",
       quote:
         "We went from zero inbound leads to 14 qualified conversations in the first 60 days. The system runs every week without me touching it.",
       name: "Rachel B.",
@@ -335,7 +347,7 @@ function TheProducts() {
           AI marketing automations
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
-          Five AI marketing automations. Buy the ones that fit.
+          Six AI marketing automations. Buy the ones that fit.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
           Not a ladder. Each automation handles a different part of the

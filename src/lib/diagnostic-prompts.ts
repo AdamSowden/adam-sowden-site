@@ -12,7 +12,7 @@
 // equivalent is a forced tool call.
 //
 // Voice rules live in brand-voice.ts and are imported here so the
-// diagnostic and the blog Participation Layer can't drift apart.
+// diagnostic and the Site Conversation Agent can't drift apart.
 
 import { BRAND_VOICE_PERSONA, BRAND_VOICE_RULES } from "./brand-voice";
 
@@ -175,7 +175,9 @@ Available offers and when to use them:
 
 "Outreach Agent": use when the owner is publishing content but not capitalising on the engagement it generates, when comments and replies on posts go unanswered, when social DMs sit ignored, or when the audience signals warm interest that nothing happens with. This AI agent finds the people already engaging and continues those conversations in the right channel. Relationship building, not cold prospecting.
 
-"Content Ecosystem": use when Q4, Q5, or Q6 reveal no consistent inbound content engine and lead flow is entirely dependent on the owner. The ecosystem now also includes the Diagnostic Tool as its fourth piece.
+"Site Conversation Agent": use when Q4 or Q5 reveal that the business has a website but it does not convert visitors into conversations, when Q14 reveals the owner is the bottleneck for first-touch sales conversations, or when contact forms or outdated chat widgets sit unstaffed. This AI agent embeds on every page of the business's existing website, engages every visitor in a real conversation, qualifies and educates them, and books appointments directly into the owner's calendar. Replaces static contact forms, low-quality chatbots, manual FAQ pages, and sales pages that do not convert.
+
+"Content Ecosystem": use when Q4, Q5, or Q6 reveal no consistent inbound content engine and lead flow is entirely dependent on the owner. Three pieces: Living AI Website + Weekly Content Engine + Diagnostic Tool. Composes with the Site Conversation Agent.
 
 "Marketing Ecosystem": use when Q11 reveals paid ads running without visibility or with full agency dependency, or when the overall picture shows the business needs a complete outbound function built as a system.
 

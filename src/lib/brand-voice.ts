@@ -1,5 +1,5 @@
 // Shared brand-voice rules for every LLM-driven surface on adamsowden.com.
-// Imported by chat-prompt.ts (the blog Participation Layer) and by
+// Imported by chat-prompt.ts (the Site Conversation Agent) and by
 // diagnostic-prompts.ts (the AI Marketing Diagnostic). When these
 // rules change, edit this file and redeploy — drift across prompts is the
 // single most common cause of voice inconsistency at scale.

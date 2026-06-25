@@ -153,7 +153,7 @@ export default function ChatWidget({
         <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden">
           <div className="px-6 md:px-8 pt-8 pb-2">
             <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-3">
-              The Participation Layer
+              Chat with our AI
             </p>
             <h2 className="font-serif text-2xl md:text-3xl tracking-tight leading-tight text-[#111111]">
               Ask about this essay.

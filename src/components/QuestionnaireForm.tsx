@@ -37,6 +37,7 @@ const PLATFORM_OPTIONS = [
 const PRODUCT_FIT_OPTIONS = [
   "Instant lead response (Speed-to-Lead Agent)",
   "Turning audience engagement into conversations (Outreach Agent)",
+  "Turning website visitors into conversations (Site Conversation Agent)",
   "Self-serve AI workers (Your Own AI Marketing Department)",
   "A complete inbound system (Content Ecosystem)",
   "Outbound and Paid Ads (Marketing Ecosystem)",

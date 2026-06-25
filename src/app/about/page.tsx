@@ -120,8 +120,9 @@ function TheStory() {
           <p>
             I built something different. A Content Ecosystem that produces
             the content, publishes it, distributes it, and converts it —
-            without me. An embedded Participation Layer that turns every
-            reader into a conversation. A suite of AI agents that execute
+            without me. An embedded AI that holds a real conversation with
+            every visitor and turns each one into a qualified lead. A suite
+            of AI agents that execute
             cognitive work my team used to do, at a quality higher than a
             human practitioner could produce alone.
           </p>
