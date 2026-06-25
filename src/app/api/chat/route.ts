@@ -11,6 +11,22 @@ export const dynamic = "force-dynamic";
 const MAX_MESSAGES = 20;
 const MAX_USER_MESSAGE_CHARS = 2000;
 
+// CORS for the embeddable widget (public/widget/v1.js). The widget can
+// be loaded onto any third-party site (GHL, WordPress, raw HTML) and
+// posts back here from a different origin. Wide-open during the pilot;
+// tighten to an allow-list of customer domains once the productised
+// version ships and we know which origins are paying for it.
+const CORS_HEADERS = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "POST, OPTIONS",
+  "access-control-allow-headers": "content-type",
+  "access-control-max-age": "86400",
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: CORS_HEADERS });
+}
+
 type ChatMessage = {
   role: "user" | "assistant";
   content: string;
@@ -53,7 +69,10 @@ export async function POST(req: NextRequest) {
   if (!apiKey) {
     return new Response(
       JSON.stringify({ error: "Chat is not configured." }),
-      { status: 503, headers: { "content-type": "application/json" } }
+      {
+        status: 503,
+        headers: { "content-type": "application/json", ...CORS_HEADERS },
+      }
     );
   }
 
@@ -63,7 +82,10 @@ export async function POST(req: NextRequest) {
   } catch {
     return new Response(
       JSON.stringify({ error: "Invalid JSON body." }),
-      { status: 400, headers: { "content-type": "application/json" } }
+      {
+        status: 400,
+        headers: { "content-type": "application/json", ...CORS_HEADERS },
+      }
     );
   }
 
@@ -71,7 +93,10 @@ export async function POST(req: NextRequest) {
   if (messages.length === 0) {
     return new Response(
       JSON.stringify({ error: "No messages provided." }),
-      { status: 400, headers: { "content-type": "application/json" } }
+      {
+        status: 400,
+        headers: { "content-type": "application/json", ...CORS_HEADERS },
+      }
     );
   }
   if (messages[messages.length - 1].role !== "user") {
@@ -79,7 +104,10 @@ export async function POST(req: NextRequest) {
       JSON.stringify({
         error: "Last message must be from the user.",
       }),
-      { status: 400, headers: { "content-type": "application/json" } }
+      {
+        status: 400,
+        headers: { "content-type": "application/json", ...CORS_HEADERS },
+      }
     );
   }
 
@@ -138,6 +166,7 @@ export async function POST(req: NextRequest) {
       "content-type": "text/plain; charset=utf-8",
       "cache-control": "no-store, no-transform",
       "x-accel-buffering": "no",
+      ...CORS_HEADERS,
     },
   });
 }
