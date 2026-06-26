@@ -265,6 +265,9 @@ function TheMethodology() {
 }
 
 function TheProducts() {
+  // Testimonials removed pending real, attributable client quotes.
+  // When they arrive, re-add a `quote`/`name`/`role`/`initials` field per
+  // product and restore the testimonial <figure> in the card render below.
   const products = [
     {
       tag: "Lead response",
@@ -272,11 +275,6 @@ function TheProducts() {
       benefit: "Be the first to reply. Every single time.",
       body:
         "Every lead that contacts you expects a reply in minutes, not hours. An AI agent watches your forms, email, and SMS around the clock and responds with a personalised, contextual message before your competitor even sees the notification.",
-      quote:
-        "We were losing roughly half our enquiries to slow response. Within a week of switching this on, every lead got a personal reply inside a minute. Our booking rate jumped from 18% to 47%.",
-      name: "Sarah R.",
-      role: "Business Coach, Melbourne",
-      initials: "SR",
     },
     {
       tag: "Engagement",
@@ -284,11 +282,6 @@ function TheProducts() {
       benefit: "Turn audience engagement into real conversations.",
       body:
         "People comment on your posts, reply to your emails, react on social. Most of those signals go nowhere because you don't have time. This agent picks them up and continues the conversation in the right channel, building relationships with people who already raised their hand.",
-      quote:
-        "I had hundreds of engagement signals every month I was missing. Within six weeks of switching this on, half of them turned into real conversations. Three turned into clients.",
-      name: "Tom W.",
-      role: "Accountant, Adelaide",
-      initials: "TW",
     },
     {
       tag: "Site conversion",
@@ -296,11 +289,6 @@ function TheProducts() {
       benefit: "Turn every visitor into a real conversation. No more contact forms.",
       body:
         "An AI chat embedded on every page that engages every visitor in a real conversation about their situation, qualifies them, educates them on the offer, and books appointments directly into your calendar. Replaces static contact forms, low-quality chatbots, manual FAQs, and sales pages that don't convert. Embeds into any platform.",
-      quote:
-        "Visitors used to hit our contact form and vanish. Now they have a real conversation the moment they land, and qualified calls land in my calendar while I sleep. Booked meetings doubled in the first month.",
-      name: "Priya N.",
-      role: "Financial Adviser, Perth",
-      initials: "PN",
     },
     {
       tag: "Self-serve",
@@ -308,11 +296,6 @@ function TheProducts() {
       benefit: "AI writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. It ships.",
       body:
         "Pre-built AI marketing workers trained on your business voice, methodology, and ideal customer. Ad copywriter, email sequence writer, newsletter writer, LinkedIn post writer, script writers, and more. Each runs without the owner. Buy one worker at a time. No sales call required.",
-      quote:
-        "I was spending 6 hours every Sunday writing content. The Ad Copywriter now does it in 20 minutes and the quality is better than anything I was producing myself.",
-      name: "James M.",
-      role: "Financial Adviser, Sydney",
-      initials: "JM",
     },
     {
       tag: "Inbound",
@@ -320,11 +303,6 @@ function TheProducts() {
       benefit: "Turn one idea a week into a full inbound marketing engine.",
       body:
         "The complete inbound infrastructure. Three pieces: a Living AI Website that updates itself, the Weekly Content Engine that produces one core idea a week, and the Diagnostic Tool that captures intent and qualifies before the first human conversation. Composes with the Site Conversation Agent: the ecosystem produces the content, the agent turns every reader into a conversation.",
-      quote:
-        "We went from zero inbound leads to 14 qualified conversations in the first 60 days. The system runs every week without me touching it.",
-      name: "Rachel B.",
-      role: "Consultant, Auckland",
-      initials: "RB",
     },
     {
       tag: "Outbound",
@@ -332,11 +310,6 @@ function TheProducts() {
       benefit: "AI replaces your agency. Better results, lower cost, more consistency.",
       body:
         "The in-house marketing agency function, run as a system. Paid acquisition across platforms, social distribution, and broader marketing operations. Takes the content to market without an agency or an owner in the loop.",
-      quote:
-        "We cut our agency retainer and got better results. The system is more consistent than any agency we've worked with because it never has a bad month.",
-      name: "David K.",
-      role: "Mortgage Broker, Brisbane",
-      initials: "DK",
     },
   ];
 
@@ -375,27 +348,8 @@ function TheProducts() {
                 {p.body}
               </p>
 
-              <figure className="mt-6 rounded-xl bg-[#0a0f1e] p-5">
-                <blockquote className="text-sm italic text-white/85 leading-relaxed">
-                  &ldquo;{p.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-4 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#188bf6] text-white text-xs font-bold">
-                    {p.initials}
-                  </span>
-                  <span className="leading-tight">
-                    <span className="block text-sm font-semibold text-white">
-                      {p.name}
-                    </span>
-                    <span className="block text-xs text-white/55">
-                      {p.role}
-                    </span>
-                  </span>
-                </figcaption>
-              </figure>
-
-              <div className="mt-6">
-                <CTAButton variant="ghost" href={DIAGNOSTIC_URL}>
+              <div className="mt-8">
+                <CTAButton variant="ghost" href={DIAGNOSTIC_URL} fullWidth>
                   {DIAGNOSTIC_CTA_LABEL}
                 </CTAButton>
               </div>
@@ -535,18 +489,6 @@ function FinalCTA() {
           biggest lift in sales, and where to start. Seven to ten minutes. No
           pitch.
         </p>
-
-        <figure className="mt-10 mx-auto max-w-2xl text-left rounded-xl bg-[#F9FAFB] border-l-4 border-[#188bf6] px-6 py-5">
-          <blockquote className="text-base md:text-lg italic text-[#111111] leading-relaxed">
-            &ldquo;I expected another generic quiz. I left with a clear picture
-            of exactly where AI should be running my marketing, what it would
-            do for sales, and the specific sequence to ship it. I hadn&apos;t
-            had that clarity in three years of running the business.&rdquo;
-          </blockquote>
-          <figcaption className="mt-3 text-sm font-semibold text-black/60">
-            Michael T., Principal, Financial Planning Practice, Perth
-          </figcaption>
-        </figure>
 
         <div className="mt-10 flex flex-col items-center gap-3">
           <CTAButton size="lg" href={DIAGNOSTIC_URL}>

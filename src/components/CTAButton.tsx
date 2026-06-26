@@ -7,14 +7,19 @@ export default function CTAButton({
   variant = "primary",
   href = BOOKING_URL,
   size = "md",
+  fullWidth = false,
 }: {
   children?: React.ReactNode;
   variant?: Variant;
   href?: string;
   size?: "md" | "lg";
+  fullWidth?: boolean;
 }) {
-  const base =
-    "inline-flex items-center justify-center rounded-full font-medium transition whitespace-nowrap";
+  // fullWidth fills the container and lets a long label wrap (used inside
+  // narrow cards). Default stays nowrap for inline buttons in wide layouts.
+  const base = `inline-flex items-center justify-center rounded-full font-medium transition ${
+    fullWidth ? "w-full text-center whitespace-normal" : "whitespace-nowrap"
+  }`;
   const sizeClasses =
     size === "lg" ? "px-7 py-3.5 text-base" : "px-6 py-3 text-sm";
   const variants: Record<Variant, string> = {
