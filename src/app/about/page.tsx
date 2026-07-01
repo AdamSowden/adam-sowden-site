@@ -6,10 +6,13 @@ import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
 import { SITE_URL } from "@/lib/site";
 
+const DIAGNOSTIC_URL = "/diagnostic";
+const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
+
 export const metadata: Metadata = {
-  title: "About — Adam Sowden",
+  title: "About Adam Sowden: Billion-Dollar Marketing, Built Into AI",
   description:
-    "26 years of building businesses. One conclusion: the business that grows without the owner is the only business worth building.",
+    "Adam Sowden builds AI marketing agents and systems for specialist, high-end offers. A recent campaign generated appointments totalling over $1 billion in asset value for a financial advisor client.",
   alternates: { canonical: "/about" },
   openGraph: { url: "/about" },
 };
@@ -21,12 +24,17 @@ const personJsonLd = {
   name: "Adam Sowden",
   url: `${SITE_URL}/about`,
   jobTitle: "Founder, Autonomous AI Marketing Systems",
+  description:
+    "Marketer and founder behind over $1 billion in client pipeline for financial advisors. Builds autonomous AI marketing systems that encode direct-response and lead-generation expertise into AI that outperforms in-house teams, agencies, and off-the-shelf tools.",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   knowsAbout: [
+    "Direct response marketing",
+    "Lead generation",
+    "Marketing funnels",
+    "Financial advisor marketing",
     "AI marketing automation",
     "Autonomous AI marketing systems",
     "AI agent architecture",
-    "Content systems for service businesses",
   ],
   sameAs: [
     "https://www.linkedin.com/in/adam-sowden-5604148/",
@@ -40,8 +48,9 @@ export default function AboutPage() {
       <SiteNav />
       <main className="flex-1">
         <Hero />
-        <TheStory />
-        <TheReclaim />
+        <TrackRecord />
+        <TheShift />
+        <TheDemo />
         <FinalCTA />
       </main>
       <SiteFooter />
@@ -56,26 +65,29 @@ export default function AboutPage() {
 function Hero() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-6xl px-6 pt-16 pb-14 md:pt-24 md:pb-20 grid md:grid-cols-[1fr_1fr] gap-12 md:gap-16 items-center">
+      <div className="mx-auto max-w-6xl px-6 pt-16 pb-14 md:pt-24 md:pb-20 grid md:grid-cols-[1.15fr_1fr] gap-12 md:gap-16 items-center">
         <div>
           <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-6">
-            About
+            About Adam Sowden
           </p>
-          <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-[1.05] text-[#111111]">
-            Hi, I&apos;m Adam Sowden.
+          <h1 className="font-serif text-4xl md:text-6xl tracking-tight leading-[1.05] text-[#111111]">
+            I&apos;ve built billion-dollar funnels. Now I build the AI that
+            runs them.
           </h1>
           <p className="mt-7 text-lg md:text-xl text-[#111111]/75 leading-relaxed">
-            I spent 26 years building businesses the hard way. I now build
-            them to run without me, and show other owners how to do the
-            same, using AI as the architecture of the business, not as a
-            tool to do more work faster.
+            For more than 26 years I have run marketing for specialist,
+            high-end offers. A recent campaign generated appointments for a
+            financial advisor client totalling over $1 billion in asset
+            value. Today I build that same expertise into AI agents and
+            systems that produce those results without the team, the agency,
+            or the owner doing the work.
           </p>
         </div>
         <div className="flex justify-center md:justify-end">
           <div className="relative w-72 h-[22rem] md:w-[22rem] md:h-[28rem] rounded-2xl overflow-hidden border border-black/5 shadow-sm">
             <Image
               src="/adam-about.jpg"
-              alt="Adam Sowden portrait"
+              alt="Adam Sowden"
               fill
               priority
               sizes="(min-width: 768px) 352px, 288px"
@@ -88,50 +100,142 @@ function Hero() {
   );
 }
 
-function TheStory() {
+function TrackRecord() {
+  const proofs = [
+    {
+      metric: "$1 billion+",
+      detail:
+        "in prospect assets placed into one client's pipeline through a single campaign.",
+    },
+    {
+      metric: "10x",
+      detail:
+        "lift in average lead value for a financial advisor client, from around $1M to around $10M.",
+    },
+    {
+      metric: "$100M+",
+      detail:
+        "in assets held by multiple prospects the system booked appointments with. The prior record was a single $42M lead.",
+    },
+    {
+      metric: "30 to 50%",
+      detail:
+        "lower cost per lead, at the same time lead quality rose.",
+    },
+    {
+      metric: "8 sales",
+      detail:
+        "in a single month for one client, each worth at least $50,000.",
+    },
+    {
+      metric: "Every client",
+      detail:
+        "who has put this to work has improved the quality of the leads they attract.",
+    },
+    {
+      metric: "Agencies replaced",
+      detail:
+        "clients now run marketing that used to sit with an outside agency, and keep the IP inside the business.",
+    },
+    {
+      metric: "36 hrs / week",
+      detail:
+        "of marketing work removed from my own business while revenue grew.",
+    },
+    {
+      metric: "Days to instant",
+      detail:
+        "website changes that once took days now happen on command, and contracted developer costs all but disappeared.",
+    },
+    {
+      metric: "Every week",
+      detail:
+        "clients publish across blog, email, and social without writing a word of it themselves.",
+    },
+    {
+      metric: "The 10x engine",
+      detail:
+        "an embedded model of each business's ideal customer, rewriting its marketing in the language that customer actually uses.",
+    },
+    {
+      metric: "Owner-free",
+      detail:
+        "my own marketing now runs end to end on the system, without me.",
+    },
+  ];
+
   return (
     <section className="bg-[#F9FAFB]">
+      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+          The Proof
+        </p>
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
+          The track record, in results.
+        </h2>
+
+        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-9">
+          {proofs.map((p) => (
+            <div
+              key={p.metric}
+              className="border-t border-black/10 pt-5"
+            >
+              <div className="font-serif text-2xl md:text-3xl tracking-tight text-[#188bf6] leading-tight">
+                {p.metric}
+              </div>
+              <p className="mt-2.5 text-[#111111]/75 leading-relaxed">
+                {p.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-16 max-w-3xl mx-auto text-center font-serif text-2xl md:text-3xl tracking-tight text-[#111111] leading-snug">
+          When top marketers have a campaign that has to land, they call me.
+          This is the work behind that.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function TheShift() {
+  return (
+    <section className="bg-white">
       <div className="mx-auto max-w-3xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-          The Story
+          The Shift
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          The business that grows without us is the only business worth
-          building.
+          The best marketing was never about the tool. It was about the
+          method.
         </h2>
 
         <div className="mt-10 space-y-6 text-lg text-[#111111]/80 leading-relaxed">
           <p>
-            For 26 years I ran businesses the same way most owners do. I was
-            the bottleneck for every decision, every campaign, every client
-            delivery. The harder I pushed on growth, the more the business
-            demanded from me. The trap tightened. Revenue was capped by the
-            hours I could work. Time was capped by what the business
-            required.
+            I have spent my career on one thing: marketing that actually
+            produces. Not activity. Results. The channels change and the
+            tactics change, but the discipline underneath does not.
           </p>
           <p>
-            When AI arrived, I watched business owners do the predictable
-            thing. They used it to do the same work faster. They were more
-            productive and more trapped simultaneously. The tools changed.
-            The trap did not. Every specific problem keeping owners stuck
-            turned out to be a version of the same one: the owner was still
-            the system, and the system stopped when they did.
+            When AI arrived, most people used it to do the same generic work
+            faster. Faster sameness. Output that sounds like every other
+            business using the same tool. I saw something different. AI had
+            finally become good enough to carry a real marketing methodology
+            at the point of execution.
           </p>
           <p>
-            I built something different. A Content Ecosystem that produces
-            the content, publishes it, distributes it, and converts it —
-            without me. An embedded AI that holds a real conversation with
-            every visitor and turns each one into a qualified lead. A suite
-            of AI agents that execute
-            cognitive work my team used to do, at a quality higher than a
-            human practitioner could produce alone.
+            So I stopped treating AI as a tool and started treating it as the
+            workforce, with the methodology encoded into it. The AI handles
+            the execution. The method is what makes the output world-class.
+            The AI is what makes the methodology scale. The methodology is
+            what makes the AI worth anything at all.
           </p>
           <p>
-            I tested it on my own business first. Then I proved it with
-            clients — financial advisors operating in one of the most
-            heavily regulated markets in the world. The result was over
-            $1 billion in client pipelines, generated by a system that
-            runs while the advisor sleeps.
+            The result is systems that outperform an in-house team, an agency,
+            and every off-the-shelf tool. Those produce generic work. These
+            produce marketing that could only have come from the specific
+            business it was built for.
           </p>
         </div>
       </div>
@@ -139,85 +243,60 @@ function TheStory() {
   );
 }
 
-function TheReclaim() {
+function TheDemo() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <div className="grid md:grid-cols-[1fr_1.2fr] gap-12 md:gap-20 items-start">
-          <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-              The Proof
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-              The 36-Hour Reclaim.
-            </h2>
-          </div>
-          <div className="space-y-6 text-lg text-[#111111]/80 leading-relaxed">
-            <p>
-              By applying the Four-Filter Rule to my own business, I
-              eliminated 36 hours a week of personal time dependency while
-              revenue increased. The tasks removed: blog writing, email
-              writing, ad copy, image creation, content posting, ad
-              performance analysis.
-            </p>
-            <p>
-              The system executes all of these without me. I did not hire
-              a team to do them. I did not outsource them to an agency. I
-              built the architecture. The business runs. I do something
-              else.
-            </p>
-            <p className="text-[#111111] font-medium">
-              That is the baseline. Anything less is still a job.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-16 grid sm:grid-cols-3 gap-8 border-t border-black/10 pt-12">
-          <Stat value="26 yrs" label="building businesses" />
-          <Stat value="$1B+" label="in client pipelines" />
-          <Stat value="10x" label="lead quality improvement" />
+    <section className="bg-[#0a0f1e]">
+      <div className="mx-auto max-w-3xl px-6 py-24 md:py-32">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+          Proof you are standing in
+        </p>
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-white">
+          You are looking at the product.
+        </h2>
+        <div className="mt-10 space-y-6 text-lg text-white/75 leading-relaxed">
+          <p>
+            Everything on this site was produced by the system I build. The
+            essays. The images. The AI you can talk to on any post. This is
+            not a description of what the system can do. It is the system,
+            running.
+          </p>
+          <p className="text-white font-medium">
+            If the question is whether AI can produce marketing at a standard
+            you would put your own name on, you are reading the answer.
+          </p>
         </div>
       </div>
     </section>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <div className="font-serif text-4xl md:text-5xl tracking-tight text-[#111111]">
-        {value}
-      </div>
-      <div className="mt-2 text-sm text-black/60">{label}</div>
-    </div>
   );
 }
 
 function FinalCTA() {
   return (
-    <section className="bg-[#F9FAFB]">
+    <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
             <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Want to see what this looks like for your business?
+              See where AI fits in your marketing.
             </h3>
             <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              A 20-minute Quick Chat. No pitch. We look at where owner
-              dependency is costing growth and what becomes possible when
-              it&apos;s removed.
+              The AI Marketing Diagnostic. Seven to ten minutes, no call. You
+              get a written plan showing where AI would move your sales
+              fastest, and where to start.
             </p>
             <div className="mt-6">
-              <CTAButton size="lg">Book a Quick Chat</CTAButton>
+              <CTAButton size="lg" href={DIAGNOSTIC_URL} fullWidth>
+                {DIAGNOSTIC_CTA_LABEL}
+              </CTAButton>
             </div>
           </div>
-          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
             <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Want to follow the work?
+              Follow the work.
             </h3>
             <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              One short essay each Monday. One idea. No filler.
-              Unsubscribe anytime.
+              One short essay each Monday. One idea, no filler. Unsubscribe
+              anytime.
             </p>
             <div className="mt-6">
               <SubscribeForm buttonLabel="Subscribe" />
