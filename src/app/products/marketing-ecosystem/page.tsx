@@ -10,9 +10,9 @@ const CTA_LABEL = "Join the Waiting List";
 const CTA_HREF = WAITLIST_URL;
 
 export const metadata: Metadata = {
-  title: "The Marketing Ecosystem | A High-End Marketing Team, Owned as a System",
+  title: "The Marketing Ecosystem | High-End Marketing, Owned as a System",
   description:
-    "Run your paid acquisition and distribution as a system built on your methodology and owned by your business. One campaign placed over $1B in a client's pipeline.",
+    "Run your paid acquisition and distribution as a system built on your methodology and owned by your business. One campaign: over $1B in a client's pipeline.",
   alternates: { canonical: PAGE_PATH },
   openGraph: { url: PAGE_PATH, title: "The Marketing Ecosystem" },
 };

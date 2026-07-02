@@ -10,7 +10,7 @@ const PAGE_PATH = "/products/site-conversation-agent";
 const CTA_LABEL = "Book the Setup Session";
 
 export const metadata: Metadata = {
-  title: "The Site Conversation Agent | Turn Website Visitors Into Booked Calls",
+  title: "The Site Conversation Agent | Turn Visitors Into Booked Calls",
   description:
     "A conversational AI that engages, qualifies, and books your visitors in real time, in your voice. Not a chatbot. Embeds on any platform. Try it on this page.",
   alternates: { canonical: PAGE_PATH },
