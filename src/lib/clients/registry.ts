@@ -11,9 +11,11 @@
 
 import type { ClientConfig } from "./types";
 import { virtusConfig } from "./virtus";
+import { foundersEdgeConfig } from "./founders-edge";
 
 const registry: Record<string, ClientConfig> = {
   [virtusConfig.slug]: virtusConfig,
+  [foundersEdgeConfig.slug]: foundersEdgeConfig,
 };
 
 export function getClientConfig(

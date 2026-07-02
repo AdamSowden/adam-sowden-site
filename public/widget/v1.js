@@ -45,11 +45,16 @@
   var WIDGET_CONFIG_URL = clientSlug
     ? origin + "/api/widget-config?client=" + encodeURIComponent(clientSlug)
     : null;
-  var BOOK_MARKER = "[BOOK_QUICK_CHAT]";
 
   // Defaults if no per-client config is loaded. Per-client overrides
   // come from /api/widget-config and patch this object before the
   // panel renders.
+  //
+  // CTA defaults reproduce the original behaviour: the model emits
+  // [BOOK_QUICK_CHAT], the button reads "Book a chat", and clicking it
+  // opens bookingUrl in a new tab. A per-client `cta` override can change
+  // the marker + label and, if `ctaScrollToId` is set, scroll the host
+  // page to that element instead of navigating away.
   var config = {
     eyebrow: "ASK THE AI",
     title: "Got a marketing question?",
@@ -59,6 +64,9 @@
     accentColor: "#188bf6",
     accentColorHover: "#0d78dc",
     bookingUrl: origin + "/book",
+    ctaMarker: "[BOOK_QUICK_CHAT]",
+    ctaLabel: "Book a chat",
+    ctaScrollToId: null,
   };
 
   // ── DOM scaffolding ───────────────────────────────────────────────────
@@ -199,6 +207,11 @@
         }
         if (data.accentColor) config.accentColor = data.accentColor;
         if (data.bookingUrl) config.bookingUrl = data.bookingUrl;
+        if (data.cta) {
+          if (data.cta.marker) config.ctaMarker = data.cta.marker;
+          if (data.cta.label) config.ctaLabel = data.cta.label;
+          if (data.cta.scrollToId) config.ctaScrollToId = data.cta.scrollToId;
+        }
         applyConfig();
         // If panel is already open, re-render so the change is visible
         if (!panel.classList.contains("hidden")) render();
@@ -217,21 +230,37 @@
       row.className = "row " + m.role;
       var bubble = document.createElement("div");
       bubble.className = "bubble-msg";
-      var hasBookCta =
-        m.role === "assistant" && m.content.indexOf(BOOK_MARKER) !== -1;
-      var cleanContent = m.content.replace(BOOK_MARKER, "").trim();
+      var hasCta =
+        m.role === "assistant" && m.content.indexOf(config.ctaMarker) !== -1;
+      var cleanContent = m.content.replace(config.ctaMarker, "").trim();
       bubble.textContent = cleanContent || "…";
       row.appendChild(bubble);
       msgsEl.appendChild(row);
-      if (hasBookCta) {
+      if (hasCta) {
         var ctaRow = document.createElement("div");
         ctaRow.className = "cta-row";
         var cta = document.createElement("a");
         cta.className = "cta";
+        cta.textContent = config.ctaLabel;
+        // Default: open bookingUrl in a new tab (original behaviour, and
+        // the fallback when a scroll target isn't present).
         cta.href = config.bookingUrl;
         cta.target = "_blank";
         cta.rel = "noopener";
-        cta.textContent = "Book a chat";
+        if (config.ctaScrollToId) {
+          // Prefer scrolling the HOST page to the target element (e.g. the
+          // opt-in form). Works across the shadow DOM boundary because we
+          // query the parent document. Falls through to bookingUrl if the
+          // element isn't on this page.
+          cta.addEventListener("click", function (e) {
+            var target = document.getElementById(config.ctaScrollToId);
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              panel.classList.add("hidden");
+            }
+          });
+        }
         ctaRow.appendChild(cta);
         msgsEl.appendChild(ctaRow);
       }
@@ -319,8 +348,8 @@
             ? {
                 ...m,
                 content:
-                  "Something went wrong with the conversation. Please try again, or book a Quick Chat directly.\n\n" +
-                  BOOK_MARKER,
+                  "Something went wrong just then. Please try again.\n\n" +
+                  config.ctaMarker,
               }
             : m;
         });
