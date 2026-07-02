@@ -18,8 +18,40 @@ const staticRoutes: Array<{
 }> = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
   { path: "/about", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/products", changeFrequency: "monthly", priority: 0.9 },
+  {
+    path: "/products/speed-to-lead-agent",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    path: "/products/outreach-agent",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    path: "/products/ai-marketing-team",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    path: "/products/site-conversation-agent",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    path: "/products/marketing-ecosystem",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
+  {
+    path: "/products/content-ecosystem",
+    changeFrequency: "monthly",
+    priority: 0.8,
+  },
   { path: "/blog", changeFrequency: "weekly", priority: 0.9 },
   { path: "/book", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/waitlist", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.6 },
 ];
 

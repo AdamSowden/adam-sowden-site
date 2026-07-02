@@ -8,7 +8,7 @@ import DiagnosticClient from "./DiagnosticClient";
 export const metadata: Metadata = {
   title: "AI Marketing Diagnostic — Adam Sowden",
   description:
-    "An 18-question AI-led diagnostic that identifies where AI marketing automation would have the biggest impact in your business right now. Get a personalised implementation plan in seven to ten minutes.",
+    "An AI-led diagnostic that finds where AI marketing automation will move your sales fastest. Get your personalised implementation plan in under ten minutes.",
   alternates: { canonical: "/diagnostic" },
 };
 

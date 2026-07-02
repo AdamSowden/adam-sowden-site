@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title:
     "Adam Sowden — Autonomous AI Marketing Systems for Business Owners",
   description:
-    "Win more sales with autonomous AI marketing systems you actually control. AI marketing automation that writes, publishes, follows up, and books prospects for service-business owners.",
+    "Win more sales with autonomous AI marketing systems you actually control. They write, publish, follow up, and book prospects for service businesses.",
 };
 
 const homeFaqItems = [
@@ -45,7 +45,7 @@ const homeFaqItems = [
   {
     question: "How long does it take to see results?",
     answer:
-      "Your Own AI Marketing Department produces visible output within the first week. The Site Conversation Agent starts qualifying visitors within hours of going live. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
+      "Your Own AI Marketing Team produces visible output within the first week. The Site Conversation Agent starts qualifying visitors within hours of going live. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
   },
 ];
 
@@ -292,7 +292,7 @@ function TheProducts() {
     },
     {
       tag: "Self-serve",
-      title: "Your Own AI Marketing Department",
+      title: "Your Own AI Marketing Team",
       benefit: "AI writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. It ships.",
       body:
         "Pre-built AI marketing workers trained on your business voice, methodology, and ideal customer. Ad copywriter, email sequence writer, newsletter writer, LinkedIn post writer, script writers, and more. Each runs without the owner. Buy one worker at a time. No sales call required.",

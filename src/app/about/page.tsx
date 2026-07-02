@@ -12,7 +12,7 @@ const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
 export const metadata: Metadata = {
   title: "About Adam Sowden: Billion-Dollar Marketing, Built Into AI",
   description:
-    "Adam Sowden builds AI marketing agents and systems for specialist, high-end offers. A recent campaign generated appointments totalling over $1 billion in asset value for a financial advisor client.",
+    "Adam Sowden builds AI marketing agents for specialist, high-end offers. One campaign booked appointments totalling over $1 billion in advisor assets.",
   alternates: { canonical: "/about" },
   openGraph: { url: "/about" },
 };

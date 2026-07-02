@@ -32,8 +32,22 @@ function uid() {
 
 export default function ChatWidget({
   article,
+  eyebrow = "Chat with our AI",
+  heading = "Ask about this essay.",
+  intro = "A conversation trained on the full methodology and this essay's content. Not a pitch. A discussion.",
+  sectionId,
+  wide = false,
+  bare = false,
+  chips = [],
 }: {
   article: ArticleContext;
+  eyebrow?: string;
+  heading?: string;
+  intro?: string;
+  sectionId?: string;
+  wide?: boolean;
+  bare?: boolean;
+  chips?: string[];
 }) {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -147,55 +161,83 @@ export default function ChatWidget({
     sendMessage(input);
   };
 
-  return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-3xl px-6 py-14 md:py-16">
-        <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden">
-          <div className="px-6 md:px-8 pt-8 pb-2">
-            <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-3">
-              Chat with our AI
-            </p>
-            <h2 className="font-serif text-2xl md:text-3xl tracking-tight leading-tight text-[#111111]">
-              Ask about this essay.
-            </h2>
-            <p className="mt-3 text-[#111111]/70 leading-relaxed">
-              A conversation trained on the full methodology and this
-              essay&apos;s content. Not a pitch. A discussion.
-            </p>
-          </div>
-          <div className="px-4 md:px-6 py-6 space-y-4">
-            {messages.map((m) => (
-              <ChatBubble key={m.id} message={m} />
-            ))}
-            {status === "streaming" &&
-              messages[messages.length - 1]?.role === "assistant" &&
-              messages[messages.length - 1]?.content === "" && (
-                <TypingDots />
-              )}
-            <div ref={listEndRef} />
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="px-4 md:px-6 pb-6 pt-2 flex gap-2 border-t border-black/5 bg-white"
-          >
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a question..."
-              disabled={status === "streaming"}
-              maxLength={1800}
-              className="flex-1 rounded-full border border-black/15 bg-white px-5 py-3 text-[15px] focus:outline-none focus:border-[#188bf6] transition disabled:opacity-60"
-            />
+  const card = (
+    <div
+      className={`bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden ${
+        wide && !bare ? "max-w-3xl" : ""
+      }`}
+    >
+      <div className="px-6 md:px-8 pt-8 pb-2">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-3">
+          {eyebrow}
+        </p>
+        <h2 className="font-serif text-2xl md:text-3xl tracking-tight leading-tight text-[#111111]">
+          {heading}
+        </h2>
+        <p className="mt-3 text-[#111111]/70 leading-relaxed">{intro}</p>
+      </div>
+      {chips.length > 0 && !messages.some((m) => m.role === "user") && (
+        <div className="px-4 md:px-6 pt-3 flex flex-wrap gap-2">
+          {chips.map((chip) => (
             <button
-              type="submit"
-              disabled={status === "streaming" || !input.trim()}
-              className="rounded-full bg-[#188bf6] text-white px-5 py-3 text-sm font-medium hover:bg-[#0d78dc] transition disabled:opacity-50 disabled:cursor-not-allowed"
+              key={chip}
+              type="button"
+              onClick={() => sendMessage(chip)}
+              disabled={status === "streaming"}
+              className="rounded-full border border-[#188bf6]/30 bg-white text-[#188bf6] px-4 py-2 text-sm font-medium text-left hover:bg-[#188bf6]/5 hover:border-[#188bf6]/60 transition disabled:opacity-50"
             >
-              Send
+              {chip}
             </button>
-          </form>
+          ))}
         </div>
+      )}
+      <div
+        className={`px-4 md:px-6 py-6 space-y-4 ${
+          bare ? "max-h-[360px] md:max-h-[400px] overflow-y-auto" : ""
+        }`}
+      >
+        {messages.map((m) => (
+          <ChatBubble key={m.id} message={m} />
+        ))}
+        {status === "streaming" &&
+          messages[messages.length - 1]?.role === "assistant" &&
+          messages[messages.length - 1]?.content === "" && <TypingDots />}
+        <div ref={listEndRef} />
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="px-4 md:px-6 pb-6 pt-2 flex gap-2 border-t border-black/5 bg-white"
+      >
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a question..."
+          disabled={status === "streaming"}
+          maxLength={1800}
+          className="flex-1 rounded-full border border-black/15 bg-white px-5 py-3 text-[15px] focus:outline-none focus:border-[#188bf6] transition disabled:opacity-60"
+        />
+        <button
+          type="submit"
+          disabled={status === "streaming" || !input.trim()}
+          className="rounded-full bg-[#188bf6] text-white px-5 py-3 text-sm font-medium hover:bg-[#0d78dc] transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  );
+
+  if (bare) return card;
+
+  return (
+    <section id={sectionId} className="bg-white scroll-mt-24">
+      <div
+        className={`mx-auto px-6 py-14 md:py-16 ${
+          wide ? "max-w-6xl" : "max-w-3xl"
+        }`}
+      >
+        {card}
       </div>
     </section>
   );
