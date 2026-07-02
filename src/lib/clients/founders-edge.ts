@@ -119,8 +119,8 @@ export const foundersEdgeConfig: ClientConfig = {
       "A quick chat about your business and whether the free Profit Fast-Track Workshop is worth your time. Trained on Ryll's methodology and her real client results.",
     openingMessage:
       "Great to have you here. What kind of business are you running?",
-    // TODO: replace with Founder's Edge's real brand hex before launch.
-    accentColor: "#0f2a4a",
+    // Founder's Edge brand maroon.
+    accentColor: "#862620",
   },
   // Per-client CTA: watch-the-workshop. Opens the live workshop link
   // (bookingUrl, above) in a new tab. Scroll-to-form is supported by the
