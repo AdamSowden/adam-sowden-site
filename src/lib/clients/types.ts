@@ -25,4 +25,23 @@ export type ClientConfig = {
     /** Hex colour (#RRGGBB) for the chat bubble + send button. */
     accentColor?: string;
   };
+  /**
+   * Optional per-client CTA override. When absent, the widget uses its
+   * defaults: marker "[BOOK_QUICK_CHAT]", label "Book a chat", and opens
+   * `bookingUrl` in a new tab. Set this to change the marker the model
+   * emits, the button label, and/or to scroll the host page to an element
+   * instead of navigating away.
+   */
+  cta?: {
+    /** The marker the model emits and the widget strips + renders a button for. */
+    marker?: string;
+    /** Button label text. */
+    label?: string;
+    /**
+     * If set, the CTA scrolls the host page to the element with this id
+     * (smooth) instead of opening `bookingUrl`. Falls back to `bookingUrl`
+     * if no such element exists on the page.
+     */
+    scrollToId?: string;
+  };
 };

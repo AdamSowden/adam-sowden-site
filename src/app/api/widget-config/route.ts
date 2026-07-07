@@ -50,6 +50,9 @@ export async function GET(req: NextRequest) {
       openingMessage: widget.openingMessage,
       accentColor: widget.accentColor,
       bookingUrl: config.bookingUrl,
+      // Optional per-client CTA override (marker/label/scroll target).
+      // Omitted from the payload when the client has no override.
+      cta: config.cta,
     }),
     {
       status: 200,
