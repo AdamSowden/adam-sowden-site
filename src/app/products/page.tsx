@@ -10,7 +10,7 @@ const PAGE_PATH = "/products";
 export const metadata: Metadata = {
   title: "Products | Six AI Marketing Systems That Run Without You",
   description:
-    "Six modular AI marketing systems from Adam Sowden. Buy the ones that fit: lead response, warm outreach, on-site conversation, and your own AI marketing team.",
+    "World-class marketing that runs without you: six modular AI systems for lead response, outreach, on-site conversation, your own AI marketing team, and more.",
   alternates: { canonical: PAGE_PATH },
   openGraph: { url: PAGE_PATH, title: "Products — Adam Sowden" },
 };
@@ -97,12 +97,12 @@ export default function ProductsPage() {
               Products
             </p>
             <h1 className="font-serif text-4xl md:text-6xl tracking-tight leading-[1.04] text-[#111111] max-w-4xl mx-auto">
-              Six AI marketing systems. Buy the ones that fit.
+              World-class marketing that runs without you.
             </h1>
             <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-3xl mx-auto leading-relaxed">
-              Each one removes a different point of owner dependency. There is
-              no required order and no required bundle. The AI Marketing
-              Diagnostic tells you which one will move your sales fastest.
+              Six modular systems, each running a different part of your
+              marketing without you. Start with the one you need first, and the
+              AI Marketing Diagnostic tells you which moves your sales fastest.
             </p>
           </div>
         </section>
