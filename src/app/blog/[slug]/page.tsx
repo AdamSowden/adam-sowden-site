@@ -82,7 +82,7 @@ export async function generateMetadata({
     ? urlFor(post.socialImage).width(1200).height(630).url()
     : post.heroImage
     ? urlFor(post.heroImage).width(1200).height(630).url()
-    : undefined;
+    : `${SITE_URL}/og-default.png`;
 
   return {
     title,
