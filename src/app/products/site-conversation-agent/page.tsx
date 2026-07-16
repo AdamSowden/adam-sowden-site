@@ -155,7 +155,7 @@ export default function SiteConversationAgentPage() {
         <FAQ />
         <FinalCTA />
       </main>
-      <SiteFooter showAiToolHuntBadge />
+      <SiteFooter showAiToolHuntBadge showToolPilotBadge />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
