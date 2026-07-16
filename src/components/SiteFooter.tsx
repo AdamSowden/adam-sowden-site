@@ -5,8 +5,10 @@ import { NAV_LINKS } from "@/lib/site";
 
 export default function SiteFooter({
   showAiToolHuntBadge = false,
+  showToolPilotBadge = false,
 }: {
   showAiToolHuntBadge?: boolean;
+  showToolPilotBadge?: boolean;
 }) {
   return (
     <footer className="border-t border-black/10">
@@ -82,22 +84,39 @@ export default function SiteFooter({
             </div>
           </div>
         </div>
-        {showAiToolHuntBadge && (
+        {(showAiToolHuntBadge || showToolPilotBadge) && (
           <div className="mx-auto max-w-6xl px-6 pb-14">
-            <div className="border-t border-black/10 pt-8 flex justify-center md:justify-start">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <a
-                href="https://aitoolhunt.co/item/site-conversation-agent"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Listed on AIToolHunt"
-              >
-                <img
-                  src="https://aitoolhunt.co/badge-listed-light.svg"
-                  alt="Listed on AIToolHunt"
-                  style={{ height: "58px", width: "auto" }}
-                />
-              </a>
+            <div className="border-t border-black/10 pt-8 flex flex-wrap items-center justify-center md:justify-start gap-6">
+              {showAiToolHuntBadge && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <a
+                  href="https://aitoolhunt.co/item/site-conversation-agent"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Listed on AIToolHunt"
+                >
+                  <img
+                    src="https://aitoolhunt.co/badge-listed-light.svg"
+                    alt="Listed on AIToolHunt"
+                    style={{ height: "58px", width: "auto" }}
+                  />
+                </a>
+              )}
+              {showToolPilotBadge && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <a
+                  href="https://www.toolpilot.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Featured on ToolPilot"
+                >
+                  <img
+                    src="https://www.toolpilot.ai/cdn/shop/files/f-w_690x151_crop_center.png"
+                    alt="Featured on ToolPilot"
+                    style={{ height: "58px", width: "auto" }}
+                  />
+                </a>
+              )}
             </div>
           </div>
         )}
