@@ -3,7 +3,11 @@ import Image from "next/image";
 import SubscribeForm from "@/components/SubscribeForm";
 import { NAV_LINKS } from "@/lib/site";
 
-export default function SiteFooter() {
+export default function SiteFooter({
+  showAiToolHuntBadge = false,
+}: {
+  showAiToolHuntBadge?: boolean;
+}) {
   return (
     <footer className="border-t border-black/10">
       <div className="bg-[#F9FAFB] border-b border-black/10">
@@ -78,6 +82,25 @@ export default function SiteFooter() {
             </div>
           </div>
         </div>
+        {showAiToolHuntBadge && (
+          <div className="mx-auto max-w-6xl px-6 pb-14">
+            <div className="border-t border-black/10 pt-8 flex justify-center md:justify-start">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <a
+                href="https://aitoolhunt.co/item/site-conversation-agent"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Listed on AIToolHunt"
+              >
+                <img
+                  src="https://aitoolhunt.co/badge-listed-light.svg"
+                  alt="Listed on AIToolHunt"
+                  style={{ height: "58px", width: "auto" }}
+                />
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </footer>
   );
