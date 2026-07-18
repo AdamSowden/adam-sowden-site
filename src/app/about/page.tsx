@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import SubscribeForm from "@/components/SubscribeForm";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const DIAGNOSTIC_URL = "/diagnostic";
 const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "Adam Sowden builds AI marketing agents for specialist, high-end offers. One campaign booked appointments totalling over $1 billion in advisor assets.",
   alternates: { canonical: "/about" },
-  openGraph: { url: "/about" },
+  openGraph: { ...OG_DEFAULTS, url: "/about" },
 };
 
 const personJsonLd = {

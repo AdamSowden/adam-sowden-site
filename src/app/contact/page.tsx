@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeForm from "@/components/SubscribeForm";
-import { BOOKING_URL } from "@/lib/site";
+import { BOOKING_URL, OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
   description:
     "Book a 20-minute Quick Chat. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
   alternates: { canonical: "/contact" },
-  openGraph: { url: "/contact" },
+  openGraph: { ...OG_DEFAULTS, url: "/contact" },
 };
 
 export default function ContactPage() {

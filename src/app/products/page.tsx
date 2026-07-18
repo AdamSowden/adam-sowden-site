@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "World-class marketing that runs without you: six modular AI systems for lead response, outreach, on-site conversation, your own AI marketing team, and more.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "Products — Adam Sowden" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "Products — Adam Sowden" },
 };
 
 const products = [

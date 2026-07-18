@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL, WAITLIST_URL } from "@/lib/site";
+import { SITE_URL, WAITLIST_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products/marketing-ecosystem";
 const CTA_LABEL = "Join the Waiting List";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "Run your paid acquisition and distribution as a system built on your methodology and owned by your business. One campaign: over $1B in a client's pipeline.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "The Marketing Ecosystem" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "The Marketing Ecosystem" },
 };
 
 // AEO: self-contained, extractable definition of the entity.

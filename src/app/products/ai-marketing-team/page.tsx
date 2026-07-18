@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products/ai-marketing-team";
 const CTA_LABEL = "Book the Setup Session";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "An AI marketing team trained on your methodology, voice, and proof points. It plans the week and drafts the content while you are away. You approve, it ships.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "Your Own AI Marketing Team" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "Your Own AI Marketing Team" },
 };
 
 // AEO: this is the self-contained, extractable definition of the entity.

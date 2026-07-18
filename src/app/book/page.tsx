@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import { CALENDAR_WIDGET_URL } from "@/lib/site";
+import { CALENDAR_WIDGET_URL, OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Book a Quick Chat — Adam Sowden",
   description:
     "Book a 20-minute Quick Chat. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
   alternates: { canonical: "/book" },
-  openGraph: { url: "/book" },
+  openGraph: { ...OG_DEFAULTS, url: "/book" },
 };
 
 export default function BookPage() {

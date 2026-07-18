@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL, WAITLIST_URL } from "@/lib/site";
+import { SITE_URL, WAITLIST_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products/outreach-agent";
 const CTA_LABEL = "Join the Waiting List";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "The Outreach Agent continues every comment, reply, and reaction your content earns, in your voice, while the interest is warm. It never contacts anyone cold.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "The Outreach Agent" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "The Outreach Agent" },
 };
 
 // AEO: self-contained, extractable definition of the entity.

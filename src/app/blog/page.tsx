@@ -3,13 +3,14 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeForm from "@/components/SubscribeForm";
 import { client } from "@/lib/sanity";
+import { OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Blog — Adam Sowden",
   description:
     "Essays on AI marketing automation. How autonomous marketing systems work, where off-the-shelf AI tools fail, and what to build instead.",
   alternates: { canonical: "/blog" },
-  openGraph: { url: "/blog" },
+  openGraph: { ...OG_DEFAULTS, url: "/blog" },
 };
 
 type BlogPostSummary = {

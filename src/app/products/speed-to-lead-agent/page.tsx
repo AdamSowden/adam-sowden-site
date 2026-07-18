@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products/speed-to-lead-agent";
 const CTA_LABEL = "Book the Setup Session";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "The Speed-to-Lead Agent watches your forms, email, and SMS around the clock and replies to every new enquiry in seconds, in your voice. Not an auto-responder.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "The Speed-to-Lead Agent" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "The Speed-to-Lead Agent" },
 };
 
 // AEO: self-contained, extractable definition of the entity.

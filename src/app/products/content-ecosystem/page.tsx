@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import ChatWidget from "@/components/ChatWidget";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/products/content-ecosystem";
 const CTA_LABEL = "Book the Strategy Session";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "The complete inbound system: a Living AI Website, a weekly content engine, and a diagnostic that qualifies visitors. It publishes every week without you.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH, title: "The Content Ecosystem" },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "The Content Ecosystem" },
 };
 
 // AEO: self-contained, extractable definition of the entity.

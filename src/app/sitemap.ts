@@ -50,6 +50,7 @@ const staticRoutes: Array<{
     priority: 0.8,
   },
   { path: "/blog", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/diagnostic", changeFrequency: "monthly", priority: 0.8 },
   { path: "/book", changeFrequency: "monthly", priority: 0.7 },
   { path: "/waitlist", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.6 },
@@ -64,7 +65,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((r) => ({
-    url: `${SITE_URL}${r.path}`,
+    // Root emits the bare origin (no trailing slash) to match the homepage's
+    // self-referencing canonical (<link rel="canonical" href={SITE_URL}>).
+    url: r.path === "/" ? SITE_URL : `${SITE_URL}${r.path}`,
     lastModified: now,
     changeFrequency: r.changeFrequency,
     priority: r.priority,

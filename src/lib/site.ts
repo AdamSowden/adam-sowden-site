@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 // Public booking URL — used everywhere "Book a Quick Chat" CTAs point.
 // Routes through the branded /book page (which embeds the LeadConnector
 // calendar in an iframe) so every booking funnels through the same
@@ -28,6 +30,26 @@ export const SITE_URL = (
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "Adam Sowden";
+
+// Shared Open Graph defaults. Next.js merges metadata shallowly, so any page
+// that defines its own `openGraph` object REPLACES the layout's `openGraph`
+// entirely — dropping `type`, `siteName`, `locale`, and `images`. Pages that
+// set an og url/title must spread this first so the default share image and
+// type survive: `openGraph: { ...OG_DEFAULTS, url, title }`.
+// See node_modules/next/dist/docs/.../generate-metadata.md ("Merging").
+export const OG_DEFAULTS = {
+  type: "website",
+  siteName: SITE_NAME,
+  locale: "en_US",
+  images: [
+    {
+      url: "/og-default.png",
+      width: 1200,
+      height: 630,
+      alt: "Adam Sowden — Autonomous AI Marketing Systems",
+    },
+  ],
+} satisfies NonNullable<Metadata["openGraph"]>;
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },

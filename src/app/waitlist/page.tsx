@@ -3,7 +3,7 @@ import Script from "next/script";
 import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import { WAITLIST_FORM_URL } from "@/lib/site";
+import { WAITLIST_FORM_URL, OG_DEFAULTS } from "@/lib/site";
 
 const PAGE_PATH = "/waitlist";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Join the waiting list for the Outreach Agent and the Marketing Ecosystem. You will be first in line when a build slot opens, with the case studies as they land.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { url: PAGE_PATH },
+  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH },
 };
 
 export default function WaitlistPage() {

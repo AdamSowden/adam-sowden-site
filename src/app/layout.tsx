@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, OG_DEFAULTS } from "@/lib/site";
 import "./globals.css";
 
 const GTM_ID = "GTM-5TMDLDKZ";
@@ -25,18 +25,8 @@ export const metadata: Metadata = {
   description:
     "Autonomous AI marketing systems for service-business owners. Win more sales with marketing that runs while you direct the strategy.",
   openGraph: {
-    type: "website",
-    siteName: SITE_NAME,
-    locale: "en_US",
+    ...OG_DEFAULTS,
     url: SITE_URL,
-    images: [
-      {
-        url: "/og-default.png",
-        width: 1200,
-        height: 630,
-        alt: "Adam Sowden — Autonomous AI Marketing Systems",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
