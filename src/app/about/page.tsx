@@ -23,6 +23,7 @@ const personJsonLd = {
   "@id": `${SITE_URL}/about#adam-sowden`,
   name: "Adam Sowden",
   url: `${SITE_URL}/about`,
+  image: `${SITE_URL}/adam-about.jpg`,
   jobTitle: "Founder, Autonomous AI Marketing Systems",
   description:
     "Marketer and founder behind over $1 billion in client pipeline for financial advisors. Builds autonomous AI marketing systems that encode direct-response and lead-generation expertise into AI that outperforms in-house teams, agencies, and off-the-shelf tools.",
