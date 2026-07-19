@@ -2,6 +2,11 @@ import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity";
 import { SITE_URL } from "@/lib/site";
 
+// Without this the sitemap is cached at build time, so posts published in
+// Sanity never reach it until someone redeploys. Matches the ISR cadence
+// used by the blog routes (src/app/blog/page.tsx).
+export const revalidate = 60;
+
 type ChangeFreq =
   | "always"
   | "hourly"
