@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
@@ -129,9 +130,8 @@ export default function AiMarketingTeamPage() {
         <Hero />
         <TheProblem />
         <WhatSheIs />
-        {/* TODO: <ChatPreview /> goes here. Awaiting real web-UI screenshots
-            from Adam. Not shipping a placeholder box on a sales page. */}
         <WhatSheProduces />
+        <SkillsScreen />
         <WhyDifferent />
         <TheWeek />
         <TheHolidayTest />
@@ -389,6 +389,40 @@ function WhatSheProduces() {
           her directly. Ad copy for Google, Meta, and LinkedIn, or show notes
           and pull-quotes from a podcast episode, all come back the same way.
         </p>
+      </div>
+    </section>
+  );
+}
+
+// Real capture of the Skills screen. Cropped above the app header on purpose:
+// the platform name is still being decided, so it stays off the sales page.
+// Re-crop from public/irene-shot-4.png if the header should reappear.
+function SkillsScreen() {
+  return (
+    <section className="bg-white">
+      <div className="mx-auto max-w-5xl px-6 py-24 md:py-32">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
+          Inside
+        </p>
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
+          You pick the job. She already knows the business.
+        </h2>
+        <figure className="mt-14">
+          <div className="rounded-2xl overflow-hidden border border-black/10 shadow-sm bg-white">
+            <Image
+              src="/irene-skills.png"
+              alt="Irene's Skills screen, showing the Draft, Package and Research groups with skills including LinkedIn post, newsletter, reel or short script, YouTube script, promotional email, repurpose content and YouTube packaging."
+              width={1031}
+              height={671}
+              sizes="(min-width: 1024px) 960px, 100vw"
+              className="w-full h-auto"
+            />
+          </div>
+          <figcaption className="mt-4 text-sm text-[#111111]/55 text-center">
+            Irene&apos;s Skills screen. Every skill runs against your voice and
+            your methodology, so nothing starts from a blank page.
+          </figcaption>
+        </figure>
       </div>
     </section>
   );
