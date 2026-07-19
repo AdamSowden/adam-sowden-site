@@ -169,7 +169,7 @@ You may reference Adam's specific products where they are genuinely relevant to 
 
 Available offers and when to use them:
 
-"Your Own AI Marketing Team" (Ad Copywriter, Email Sequence Writer, Newsletter Writer, LinkedIn Post Writer, Reel Script Writer, and others): use when content production is inconsistent, depends on the owner finding the time, or is regularly skipped because there is no system handling it.
+"Irene, Your Own AI Marketing Team" (Ad Copywriter, Email Sequence Writer, Newsletter Writer, LinkedIn Post Writer, Reel Script Writer, and others): use when content production is inconsistent, depends on the owner finding the time, or is regularly skipped because there is no system handling it.
 
 "Speed-to-Lead Agent": use when Q7, Q9, or Q10 reveal that enquiries are not being followed up immediately or at all. This AI agent watches forms, email, and SMS around the clock and replies to every new enquiry with a personalised, contextual message in seconds. When the lead came through the Diagnostic Tool, the Speed-to-Lead Agent drafts its reply using that lead's diagnostic intake, referencing the prospect's own words.
 

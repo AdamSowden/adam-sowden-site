@@ -45,7 +45,7 @@ const homeFaqItems = [
   {
     question: "How long does it take to see results?",
     answer:
-      "Your Own AI Marketing Team produces visible output within the first week. The Site Conversation Agent starts qualifying visitors within hours of going live. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
+      "Irene, the AI marketing department, produces visible output within the first week. The Site Conversation Agent starts qualifying visitors within hours of going live. The Content Ecosystem typically generates inbound conversations within 30 to 60 days. The Marketing Ecosystem takes 60 to 90 days to reach full operational independence. All timelines are documented before work begins.",
   },
 ];
 
@@ -292,10 +292,10 @@ function TheProducts() {
     },
     {
       tag: "Self-serve",
-      title: "Your Own AI Marketing Team",
-      benefit: "AI writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. It ships.",
+      title: "Irene, Your Own AI Marketing Team",
+      benefit: "Irene writes your ads, emails, newsletters, LinkedIn posts, scripts. You approve. She ships.",
       body:
-        "Pre-built AI marketing workers trained on your business voice, methodology, and ideal customer. Ad copywriter, email sequence writer, newsletter writer, LinkedIn post writer, script writers, and more. Each runs without the owner. Buy one worker at a time. No sales call required.",
+        "A single marketing operator trained on your business voice, methodology, and ideal customer. She owns an agreed weekly plan, researches the market, drafts the week's content ahead of time, and queues it for your approval. Start her on one task and expand as each proves out. No sales call required.",
     },
     {
       tag: "Inbound",

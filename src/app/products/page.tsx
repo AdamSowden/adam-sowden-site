@@ -39,9 +39,9 @@ const products = [
   },
   {
     tag: "Self-serve",
-    title: "Your Own AI Marketing Team",
-    benefit: "One AI. The output of a whole team.",
-    body: "Trained on your voice and methodology, it plans the week and drafts the content while you are away. You approve, it ships.",
+    title: "Irene, Your Own AI Marketing Team",
+    benefit: "One operator. The output of a whole team.",
+    body: "Trained on your voice and methodology, she plans the week and drafts the content while you are away. You approve, she ships.",
     href: "/products/ai-marketing-team",
   },
   {

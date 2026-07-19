@@ -5,26 +5,48 @@ import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
+// Canonical URL stays /products/ai-marketing-team: it carries the searchable
+// term, sits inside the /products hub and breadcrumbs, and holds whatever
+// equity the page has. /irene is a 308 vanity redirect here (see next.config.ts).
 const PAGE_PATH = "/products/ai-marketing-team";
 const CTA_LABEL = "Book the Setup Session";
 
 export const metadata: Metadata = {
-  title: "Your Own AI Marketing Team | Trained On You, Runs Without You",
+  title: "Irene, Your Own AI Marketing Team | Trained On You, Runs Without You",
   description:
-    "An AI marketing team trained on your methodology, voice, and proof points. It plans the week and drafts the content while you are away. You approve, it ships.",
+    "Irene is an AI marketing team trained on your methodology, voice, and proof points. She plans the week and drafts content in your voice. You approve, she ships.",
   alternates: { canonical: PAGE_PATH },
-  openGraph: { ...OG_DEFAULTS, url: PAGE_PATH, title: "Your Own AI Marketing Team" },
+  openGraph: {
+    ...OG_DEFAULTS,
+    url: PAGE_PATH,
+    title: "Irene, Your Own AI Marketing Team",
+  },
 };
 
 // AEO: this is the self-contained, extractable definition of the entity.
 const ANSWER_FIRST =
-  "Your Own AI Marketing Team is a single AI, trained on your methodology, voice, and proof points, that owns an agreed weekly marketing plan and keeps it moving without you managing it. It researches the market, drafts the week's content ahead of time, queues it for your approval, and tracks what is outstanding. You set the strategy and approve the work. It handles the execution.";
+  "Irene is a personal AI marketing department: a single AI marketing operator trained on one business's methodology, voice, proof points, and ideal customer. She owns an agreed weekly content plan, researches the market, drafts the week's content in the owner's voice, and queues it for approval. The owner directs the strategy and approves every piece. Irene handles the planning, the drafting, and the follow-through.";
 
 const faqItems = [
   {
-    question: "Will the content sound like me?",
+    question: "How do I know it will sound like me?",
     answer:
-      "Yes. Generic AI tools sound robotic because they are trained on everything. Yours is trained exclusively on your methodology, your voice, and your past content. It learns how you speak, what phrases you use, and what angles you prefer.",
+      "Because she is built from you. Your voice files, your brand-voice rules, your anti-slop patterns, and the history of every correction you have made are what she draws from, rather than a generic style guide. Generic AI tools sound average because they were trained on everything. Irene is trained on your methodology, your voice, and your past content.",
+  },
+  {
+    question: "Isn't this just ChatGPT with a prompt?",
+    answer:
+      "No. ChatGPT is trained on the internet and starts from a blank page every time you open it. Irene is trained on your business. The methodology, the voice, the proof points, and the ideal customer are all specific to you, so what comes out is content only you could have written. She also produces against an agreed plan on schedule instead of waiting to be prompted.",
+  },
+  {
+    question: "Won't my brand get diluted if AI writes for me?",
+    answer:
+      "Irene is a drafter, not a decider. Every piece is owner-approved before it goes anywhere, so your judgement gates every send. Nothing publishes on its own.",
+  },
+  {
+    question: "What if the market shifts and my methodology needs to change?",
+    answer:
+      "You update the methodology files and Irene follows. She is not baked in. She reads her instructions at the start of every conversation, so a change you make today applies to the next draft she writes.",
   },
   {
     question: "What does it cost?",
@@ -34,34 +56,24 @@ const faqItems = [
   {
     question: "Can I start with just one task?",
     answer:
-      "Yes, and most people should. If the newsletter is the task eating your week, the weekly plan can be the newsletter and nothing else. Once that runs without you, add the next thing. The team takes on as much or as little of the plan as you hand it.",
-  },
-  {
-    question: "What if I want to change a draft?",
-    answer:
-      "You talk to it exactly like you would a human staff member. If a draft needs adjusting, you tell it what to change. It rewrites immediately based on your feedback, learning your preferences for next time.",
+      "Yes, and most people should. If the newsletter is the task eating your week, the weekly plan can be the newsletter and nothing else. Once that runs without you, add the next thing. Irene takes on as much or as little of the plan as you hand her.",
   },
   {
     question: "What happens to my materials?",
     answer:
-      "Everything you give it during setup, and everything it produces, belongs to your business. Your methodology is the asset the whole system is built on, and it stays yours.",
-  },
-  {
-    question: "How is this different from the ChatGPT subscription I already have?",
-    answer:
-      "ChatGPT starts from zero every time you open it: a blank page, generic training, and output that sounds like everyone else paying for the same subscription. This starts from your methodology and an agreed weekly plan, produces on schedule without being prompted, and improves from your approvals and edits. Your role shifts from operator to editor.",
+      "Everything you give her during setup, and everything she produces, belongs to your business. Your methodology is the asset the whole system is built on, and it stays yours.",
   },
   {
     question: "How long does it take to see results?",
     answer:
-      "It will produce visible, high-quality output within the first week of setup. The compound effect of consistent, methodology-driven content typically generates inbound conversations within 30 to 60 days.",
+      "She produces visible, high-quality output within the first week of setup. The compound effect of consistent, methodology-driven content typically generates inbound conversations within 30 to 60 days.",
   },
 ];
 
 const productJsonLd = {
   "@context": "https://schema.org",
   "@type": "Product",
-  name: "Your Own AI Marketing Team",
+  name: "Irene, Your Own AI Marketing Team",
   description: ANSWER_FIRST,
   category: "AI marketing software",
   brand: { "@type": "Brand", name: "Adam Sowden" },
@@ -103,7 +115,7 @@ const breadcrumbJsonLd = {
     {
       "@type": "ListItem",
       position: 3,
-      name: "Your Own AI Marketing Team",
+      name: "Irene, Your Own AI Marketing Team",
       item: `${SITE_URL}${PAGE_PATH}`,
     },
   ],
@@ -116,8 +128,12 @@ export default function AiMarketingTeamPage() {
       <main className="flex-1">
         <Hero />
         <TheProblem />
-        <WhatItIs />
-        <WhatItProduces />
+        <WhatSheIs />
+        {/* TODO: <ChatPreview /> goes here. Awaiting real web-UI screenshots
+            from Adam. Not shipping a placeholder box on a sales page. */}
+        <WhatSheProduces />
+        <WhyDifferent />
+        <TheWeek />
         <TheHolidayTest />
         <Proof />
         <HowItWorks />
@@ -146,16 +162,17 @@ function Hero() {
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 text-center">
         <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-6">
-          Your Own AI Marketing Team
+          Meet Irene
         </p>
         <h1 className="font-serif text-4xl md:text-6xl tracking-tight leading-[1.04] text-[#111111] max-w-4xl mx-auto">
-          Your marketing runs while you are with a client, at dinner, or asleep.
+          Your own marketing department, trained on your business, working while
+          you are with a client.
         </h1>
         <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-3xl mx-auto leading-relaxed">
-          Your Own AI Marketing Team is trained on your methodology, your voice,
-          and your proof points. It plans the week, drafts the content, and
-          queues everything for your approval while you get on with the work.
-          You set it up yourself in a single conversation with the AI itself.
+          Irene is a marketing operator trained on your methodology, your
+          voice, and your ideal customer. She plans the week, drafts the
+          content, and queues it for your approval while you get on with the
+          work. You keep control of every decision.
         </p>
         <div className="mt-10 flex justify-center">
           <CTAButton size="lg">{CTA_LABEL}</CTAButton>
@@ -168,20 +185,20 @@ function Hero() {
 function TheProblem() {
   const options = [
     {
-      title: "Write the content yourself",
-      body: "It competes with client work for the same hours, and your clients will always win. Marketing is the first thing to stop when things get busy and the last thing to restart when they slow down.",
+      title: "Write it yourself",
+      body: "It competes with client work for the same hours, and your clients will always win. The cost is the time you do not have, plus the positioning you lose every week the marketing does not go out.",
     },
     {
       title: "Use off-the-shelf AI",
-      body: "The tools were trained on everything, so the output defaults to average. It sounds like every other business using the same subscription, and fixing it takes nearly as long as writing it.",
+      body: "The tools were trained on everything, so the output defaults to average. It sounds like every other business paying for the same subscription, which makes it indistinguishable from noise.",
     },
     {
       title: "Hire an agency",
-      body: "They can produce quality work, but the strategy and the trained voice sit inside the agency, not the business. When the relationship ends, everything leaves with them.",
+      body: "You rent the asset. A playbook gets applied to your brand, and the strategy and trained voice sit inside the agency. When the relationship ends, the IP walks out with them.",
     },
     {
       title: "Hire in-house",
-      body: "The most expensive option. Even when the hire works, someone still has to direct, review, and correct them. That someone is the owner.",
+      body: "This solves execution and creates a dependency. There is an approval queue, a key person to lose, and someone still has to direct, review, and correct the work. That someone is you.",
     },
   ];
   return (
@@ -207,51 +224,54 @@ function TheProblem() {
           ))}
         </div>
         <p className="mt-12 max-w-3xl mx-auto text-lg text-[#111111] font-medium leading-relaxed text-center">
-          The real problem with all four: the owner is still the bottleneck.
-          The marketing stops the moment the owner stops paying attention to
-          it.
+          The real problem with all four is that the owner is still the
+          bottleneck. The marketing stops the moment the owner stops paying
+          attention to it.
         </p>
       </div>
     </section>
   );
 }
 
-function WhatItIs() {
+function WhatSheIs() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-3xl px-6 py-24 md:py-32 text-center">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
-          What It Is
+          What She Is
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
-          A single AI that owns the marketing plan and keeps it moving.
+          A fifth option. A marketing operator built for your business
+          specifically.
         </h2>
         <div className="mt-10 space-y-6 text-lg text-[#111111]/80 leading-relaxed">
           <p>
-            This is not a tool you operate or a template you fill in. It is a
-            single AI that runs an agreed weekly plan, drafts the content ahead
-            of time, tells you what is ready for approval, and tracks what is
-            still outstanding.
+            Irene is not a tool you operate or a template you fill in. She runs
+            an agreed weekly plan, drafts the content ahead of time, tells you
+            what is ready for approval, and tracks what is still outstanding.
+            She works the plan proactively, draws it down, and chases what is
+            left.
           </p>
           <p>
             The personalisation is half of it. The other half is what sits
             underneath: the principles of the greatest marketers in history and
-            your industry&apos;s best practices, trained in before it produces a
-            word. Your methodology gives the output its voice, and that
+            your industry&apos;s best practices, trained in before she produces
+            a word. Your methodology gives the output its voice, and that
             foundation sets its standard. The combination is what generic AI
             tools cannot replicate, and it is the reason the drafts arrive
             usable rather than needing a rewrite.
           </p>
           <p>
-            You talk to it the same way you would brief a member of staff. It
-            asks what it needs, updates you on progress, and tells you plainly
-            when it is waiting on you. Ours is called Piper, and yours gets its
-            own name.
+            She remembers. Every conversation persists, so she carries the
+            context from Monday&apos;s newsletter into Friday&apos;s post
+            without being re-briefed. You talk to her the way you would brief a
+            sharp member of staff. She asks what she needs, updates you on
+            progress, and tells you plainly when she is waiting on you.
           </p>
           <p className="text-[#111111] font-medium">
-            You are already looking at it in action. The AI on this site runs on
-            the same underlying intelligence, with this business encoded into it
-            the way yours would be. Ask it about this product right now.
+            You are already looking at the same underlying intelligence. The AI
+            on this site runs on it, with this business encoded into it the way
+            yours would be. Ask it about this product right now.
           </p>
         </div>
       </div>
@@ -259,57 +279,53 @@ function WhatItIs() {
   );
 }
 
-function WhatItProduces() {
+function WhatSheProduces() {
   const items = [
     {
-      title: "Social posts",
-      body: "Built on your angle bank and your proof points. Structured to generate engagement from the right people, not just impressions.",
+      title: "LinkedIn and social posts",
+      body: "Short-form, single-topic, or run as a series. Built on your angle bank and your proof points, structured to reach the right people rather than chase impressions.",
     },
     {
       title: "Newsletters",
-      body: "A complete issue each week, written in your voice, built on your methodology and the week's market research. Something people actually read.",
+      body: "A complete issue each week, written in your voice, built on your methodology and the week's market research. Something people read to the end.",
     },
     {
-      title: "Emails",
-      body: "Promotional, nurture, onboarding. Each email is written to move the right reader one step closer to a conversation.",
+      title: "Sales emails and cold outreach",
+      body: "Promotional, nurture, onboarding, and outbound drafts. Each one written to move the right reader a step closer to a conversation.",
+    },
+    {
+      title: "Ad copy",
+      body: "Google, Meta, and LinkedIn. Written against your positioning and your ideal customer rather than a swipe file.",
     },
     {
       title: "YouTube scripts",
-      body: "Long-form, 5 to 20 minutes. The hook, the structure, the close. Packaged with a full SEO suite: titles, thumbnail brief, description, tags, and timestamps.",
+      body: "Long-form and shorts. The hook, the structure, the close, packaged with titles, a thumbnail brief, description, tags, and timestamps.",
     },
     {
-      title: "Short-form scripts",
-      body: "Reels, Shorts, TikTok. Structured for watch time and written to convert.",
+      title: "Podcast show notes and pull-quotes",
+      body: "Episode notes, timestamps, and the lines worth cutting out and posting on their own.",
     },
     {
       title: "Content repurposing",
-      body: "One long-form source becomes a full week of channel assets. You record once. It produces the rest.",
-    },
-    {
-      title: "Audience pain research",
-      body: "Surfaces the specific problems your ideal client is trying to solve, in the words they use. Drawn from forums, comment threads, and competitor content.",
+      body: "One long-form asset becomes a week of posts, threads, and emails. You record once, she produces the rest.",
     },
     {
       title: "Weekly market research briefs",
-      body: "Every week it researches your industry and pulls the stories that matter. You get a brief with ready content angles before the week starts.",
+      body: "Every Monday she researches your industry and pulls what changed, with three to seven ready content angles that fit your methodology.",
     },
     {
       title: "Referral and JV partner research",
-      body: "It searches for candidates, builds a short dossier on each, and drafts an outreach message. Nothing goes out until you approve it.",
-    },
-    {
-      title: "LinkedIn analytics",
-      body: "It pulls your post-level data, reads what landed, and tells you why.",
+      body: "She finds candidates, builds a short dossier on each, and drafts the outreach. Nothing sends until you approve it.",
     },
   ];
   return (
     <section className="bg-[#F9FAFB]">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
-          What It Produces
+          What She Produces
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
-          One AI. The output of a whole team.
+          One operator. The output of a whole team.
         </h2>
         <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
           {items.map((it) => (
@@ -322,6 +338,100 @@ function WhatItProduces() {
               </h3>
               <p className="mt-3 text-[#111111]/70 leading-relaxed">
                 {it.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyDifferent() {
+  const points = [
+    {
+      title: "She fails the sounds-like-AI test on purpose",
+      body: "Every draft passes an anti-slop scan for banned phrases, em-dashes, announced pivots, and the usual AI tells before you ever see it. If a draft does not pass the read-aloud test as your own voice, it is not finished.",
+    },
+    {
+      title: "She uses cited proof, never invented proof",
+      body: "Content references only the client outcomes you have verified and given her. She does not invent statistics, quotes, or case studies to make a point land.",
+    },
+    {
+      title: "She works from a methodology, not a template",
+      body: "Your methodology files define what she names as the enemy, what she recommends, and what she never says. The content is grounded in your actual IP rather than generic best practice.",
+    },
+    {
+      title: "She is finite and accountable",
+      body: "You see exactly what is planned, drafted, approved, shipped, and outstanding. She is a system with visible state rather than a black box that emits content.",
+    },
+  ];
+  return (
+    <section className="bg-white">
+      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
+          Why She Is Different
+        </p>
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
+          The reason her drafts do not read like everyone else&apos;s.
+        </h2>
+        <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
+          {points.map((p) => (
+            <div
+              key={p.title}
+              className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8"
+            >
+              <h3 className="text-lg font-semibold text-[#111111]">
+                {p.title}
+              </h3>
+              <p className="mt-3 text-[#111111]/70 leading-relaxed">{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TheWeek() {
+  const days = [
+    {
+      label: "Monday",
+      body: "Irene delivers the market research brief. Three to seven content angles pulled from the week's news that fit your methodology.",
+    },
+    {
+      label: "Tuesday to Thursday",
+      body: "Drafts land in the queue against your weekly targets. Three LinkedIn posts, one newsletter, one long-form repurpose, one email sequence, or whatever the plan says.",
+    },
+    {
+      label: "Friday",
+      body: "You do a batch approval pass. Approved content is scheduled. Anything you reject becomes a training signal, and she banks the correction.",
+    },
+    {
+      label: "Any time",
+      body: "You can direct-command outside the plan. Write me an ad for this. Repurpose this podcast. Find me twenty referral partners in Ballina. She runs the job and returns the output.",
+    },
+  ];
+  return (
+    <section className="bg-[#0a0f1e]">
+      <div className="mx-auto max-w-5xl px-6 py-24 md:py-32">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
+          A Week With Irene
+        </p>
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-white text-center">
+          The plan moves whether or not you think about it.
+        </h2>
+        <div className="mt-14 space-y-4">
+          {days.map((d) => (
+            <div
+              key={d.label}
+              className="border border-white/10 rounded-2xl p-7 md:flex md:gap-8 md:items-baseline"
+            >
+              <div className="text-[#188bf6] font-medium md:w-52 md:shrink-0">
+                {d.label}
+              </div>
+              <p className="mt-2 md:mt-0 text-white/75 leading-relaxed">
+                {d.body}
               </p>
             </div>
           ))}
@@ -344,17 +454,17 @@ function TheHolidayTest() {
         </h2>
         <div className="mt-10 space-y-6 text-lg text-[#111111]/80 leading-relaxed">
           <p>
-            The standard worth holding your marketing to is simple: it should
-            keep producing while you are on holiday. Agencies fail it. They need
-            briefings, approvals, and feedback cycles. In-house staff need
-            direction, and AI tools need a human at the keyboard. Your Own AI
-            Marketing Team does not wait for you.
+            The standard worth holding your marketing to is simple. It should
+            keep producing while you are on holiday. Agencies fail it, because
+            they need briefings, approvals, and feedback cycles. In-house staff
+            need direction, and AI tools need a human at the keyboard. Irene
+            does not wait for you.
           </p>
           <p>
             The weekly plan is agreed once and executes on schedule. The market
-            research brief lands on Tuesday without anyone asking for it. The
-            week&apos;s draft content is queued before you sit down on Monday
-            morning, and the only thing left in your column is approval.
+            research brief lands on Monday without anyone asking for it. The
+            week&apos;s draft content is queued before you sit down, and the
+            only thing left in your column is approval.
           </p>
           <p className="text-[#111111] font-medium">
             The 36 hours come back because the system keeps moving after you
@@ -369,36 +479,36 @@ function TheHolidayTest() {
 
 function Proof() {
   return (
-    <section className="bg-[#0a0f1e]">
+    <section className="bg-[#F9FAFB]">
       <div className="mx-auto max-w-3xl px-6 py-24 md:py-32 text-center">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
           The Proof
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-white">
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.1] text-[#111111]">
           36 hours a week, reclaimed.
         </h2>
-        <div className="mt-10 space-y-6 text-lg text-white/75 leading-relaxed">
+        <div className="mt-10 space-y-6 text-lg text-[#111111]/80 leading-relaxed">
           <p>
-            The first business this ran was mine. Twenty-six years building
+            The first business Irene ran was mine. Twenty-six years building
             businesses, fifteen of them running a marketing agency, and my own
             marketing still consumed 36 hours of my week or did not happen at
             all. The social posts, the newsletter, the research, the drafting:
             every hour it needed belonged to a client first.
           </p>
           <p>
-            The system took those tasks over. The research brief arrives on
-            schedule. The week&apos;s content is drafted before I look at it. My
+            She took those tasks over. The research brief arrives on schedule.
+            The week&apos;s content is drafted before I look at it. My
             involvement is reading, approving, and occasionally redirecting,
             which takes minutes where the work took hours. The time came back
             and the output did not fall.
           </p>
-          <p className="text-white font-medium">
+          <p className="text-[#111111] font-medium">
             The same methodology, deployed as a full acquisition system for a
             financial advisory client, produced a 10x lift in average lead asset
             value. That story belongs to{" "}
             <Link
               href="/products/marketing-ecosystem"
-              className="text-[#188bf6] underline underline-offset-4 hover:text-white transition"
+              className="text-[#188bf6] underline underline-offset-4 hover:text-[#111111] transition"
             >
               the Marketing Ecosystem
             </Link>
@@ -406,7 +516,7 @@ function Proof() {
             and what it buys you first is time.
           </p>
         </div>
-        {/* TODO: testimonial from a Team user, speaking to VOICE accuracy ("it
+        {/* TODO: testimonial from an Irene user, speaking to VOICE accuracy ("it
             sounds like me"), not time saved. Awaiting an approved testimonial. */}
       </div>
     </section>
@@ -417,33 +527,33 @@ function HowItWorks() {
   const steps = [
     {
       n: "01",
-      title: "The Setup Session",
-      body: "One conversation, about an hour, and it is with the AI itself. It asks about your methodology, your voice, your proof points, and your ideal client. You answer in plain language, the way you would explain your business to a sharp new hire. No forms, no onboarding project.",
+      title: "A 20-minute voice interview",
+      body: "You talk to Jordan, the intake agent. She asks about your methodology, your positioning, your ideal customer, and how you sound. You answer in plain language, the way you would explain your business to a sharp new hire.",
     },
     {
       n: "02",
-      title: "The Weekly Plan",
-      body: "You agree the targets for the week. Three social posts, one newsletter, one market research brief, or whatever your strategy requires. It owns the execution of that plan.",
+      title: "A 20-minute chat with Iris",
+      body: "Iris is the onboarder. She fills the remaining gaps and ingests any existing content you want to share, whether that is your blog, your posts, or recordings of your sales calls.",
     },
     {
       n: "03",
-      title: "The Draft Queue",
-      body: "While you work on your business, it drafts the content, formats it, and queues it for your review.",
+      title: "Irene goes live the same day",
+      body: "Once intake is complete she is working, in the same chat window. No forms, no onboarding project, and no technical setup on your side.",
     },
     {
       n: "04",
-      title: "Approval and Release",
-      body: "Nothing goes out without your approval. You review the drafts, ask for changes if needed, and release the approved content. The output belongs entirely to your business.",
+      title: "You agree the weekly plan",
+      body: "Set the targets per channel. Three social posts, one newsletter, one market research brief, or whatever your strategy requires. She owns the execution of that plan and nothing goes out without your approval.",
     },
   ];
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
-          How It Works
+          How She Is Trained On Your Business
         </p>
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
-          Simple to set up. No technical knowledge required.
+          Two conversations, about 45 minutes, and she is yours.
         </h2>
         <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
           {steps.map((s) => (
@@ -461,6 +571,17 @@ function HowItWorks() {
             </div>
           ))}
         </div>
+        <p className="mt-12 max-w-3xl mx-auto text-lg text-[#111111]/75 leading-relaxed text-center">
+          Not sure Irene is the one that moves your sales fastest? The{" "}
+          <Link
+            href="/diagnostic"
+            className="text-[#188bf6] underline underline-offset-4 hover:text-[#111111] transition"
+          >
+            AI Marketing Diagnostic
+          </Link>{" "}
+          takes seven to ten minutes and tells you which of the six systems to
+          start with.
+        </p>
       </div>
     </section>
   );
@@ -509,7 +630,7 @@ function FinalCTA() {
           The marketing plan that keeps moving while you build the business.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          One conversation to set it up, held with the AI itself. A working
+          Two conversations to set her up, about 45 minutes in total. A working
           content queue by the end of the week.
         </p>
         <div className="mt-10 flex justify-center">

@@ -459,7 +459,7 @@ function WorksWellWith() {
             Works well with
           </p>
           <h2 className="font-serif text-2xl tracking-tight text-[#111111]">
-            Your Own AI Marketing Team
+            Irene, Your Own AI Marketing Team
           </h2>
           <p className="mt-3 text-[#111111]/75 leading-relaxed">
             The Outreach Agent works the engagement your content earns.{" "}
@@ -467,7 +467,7 @@ function WorksWellWith() {
               href="/products/ai-marketing-team"
               className="text-[#188bf6] underline underline-offset-4 hover:text-[#0d78dc] transition"
             >
-              Your Own AI Marketing Team
+              Irene
             </Link>{" "}
             produces that content in the first place. Run together, one makes the
             posts and the other makes sure no signal they generate goes

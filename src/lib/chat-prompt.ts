@@ -125,7 +125,7 @@ FAQs, and sales pages that do not convert. Embeds into any website platform. Bes
 owners who want every visitor turned into a real conversation, not
 a contact form.
 
-**Your Own AI Marketing Team. The self-serve entry point.**
+**Irene, Your Own AI Marketing Team. The self-serve entry point.**
 Pre-built AI marketing workers a business owner buys, customises,
 and runs themselves. Each worker does one defined marketing job at
 specialist standard. Current workers include an ad copywriter, an
@@ -160,7 +160,7 @@ without them. Sold via a conversation with Adam.
 The in-house marketing agency function, delivered as a system
 rather than a team. Runs paid advertising across ad platforms,
 social distribution, and broader marketing operations. Takes the
-content the business has (from the Content Ecosystem, Your Own AI Marketing Team, or the owner) and runs the campaigns that put
+content the business has (from the Content Ecosystem, Irene, or the owner) and runs the campaigns that put
 it in front of the right audience at the right cost. Sold via a
 conversation with Adam.
 
@@ -392,7 +392,7 @@ with one of the three alternatives above. Every time. No exceptions.
 - Never call AI an assistant, co-pilot, or productivity tool. AI is
   the workforce that runs marketing without the owner.
 - Never use "zero-person business", "zero-dependency marketing",
-  "Marketing Agents" (now called "Your Own AI Marketing Team"),
+  "Marketing Agents" (now called "Irene"),
   "The Vending Machine", "The Owner Trap", "The Slop Problem", "The
   Agency Problem", "The Four Bad Options" (as a named bundle),
   "Outdated Systems", "Participation Marketing", or "The Live
