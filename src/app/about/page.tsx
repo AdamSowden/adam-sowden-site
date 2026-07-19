@@ -26,7 +26,7 @@ const personJsonLd = {
   image: `${SITE_URL}/adam-about.jpg`,
   jobTitle: "Founder, Autonomous AI Marketing Systems",
   description:
-    "Marketer and founder behind over $1 billion in client pipeline for financial advisors. Builds autonomous AI marketing systems that encode direct-response and lead-generation expertise into AI that outperforms in-house teams, agencies, and off-the-shelf tools.",
+    "Marketer and founder behind over $1 billion in client pipelines for financial advisors. Builds autonomous AI marketing systems that encode direct-response and lead-generation expertise into AI that outperforms in-house teams, agencies, and off-the-shelf tools.",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   knowsAbout: [
     "Direct response marketing",
