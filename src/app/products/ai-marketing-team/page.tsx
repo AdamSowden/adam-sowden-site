@@ -383,6 +383,12 @@ function WhatSheProduces() {
             </div>
           ))}
         </div>
+        <p className="mt-14 max-w-2xl mx-auto text-lg text-[#111111]/75 leading-relaxed text-center">
+          Those are the skills she runs at one click. She also works to
+          request, so when you need something the list does not cover you ask
+          her directly. Ad copy for Google, Meta, and LinkedIn, or show notes
+          and pull-quotes from a podcast episode, all come back the same way.
+        </p>
       </div>
     </section>
   );
