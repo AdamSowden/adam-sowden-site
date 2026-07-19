@@ -279,45 +279,70 @@ function WhatSheIs() {
   );
 }
 
+// Mirrors the Skills screen in the app: the same three groups, the same
+// skills, in the same order. Keep this in sync when skills ship or change.
+const skillGroups = [
+  {
+    label: "Draft",
+    caption: "Create new content in your voice",
+    skills: [
+      {
+        title: "LinkedIn post",
+        body: "A single post in your voice for your LinkedIn profile, built on your angle bank and your proof points.",
+      },
+      {
+        title: "Newsletter",
+        body: "This week's issue for your subscribers, written from your methodology and the week's market brief.",
+      },
+      {
+        title: "Reel or short script",
+        body: "A 60-second script for Instagram Reels, TikTok, and YouTube Shorts, structured for watch time.",
+      },
+      {
+        title: "YouTube script",
+        body: "Long-form script with the intro, the body, and the close already in place.",
+      },
+      {
+        title: "Promotional email",
+        body: "A campaign or one-off promotional email written to move the right reader toward a conversation.",
+      },
+    ],
+  },
+  {
+    label: "Package",
+    caption: "Turn existing content into more content",
+    skills: [
+      {
+        title: "Repurpose content",
+        body: "One piece becomes a week of assets. You record or write once, she produces the rest.",
+      },
+      {
+        title: "YouTube packaging",
+        body: "Titles, thumbnail brief, description, tags, and timestamps for a video you have already made.",
+      },
+    ],
+  },
+  {
+    label: "Research",
+    caption: "Understand your market and find opportunities",
+    skills: [
+      {
+        title: "Audience pain research",
+        body: "Finds what your target market is struggling with, in the words they use, drawn from where they talk.",
+      },
+      {
+        title: "Weekly market brief",
+        body: "This week's news and the angles in your industry worth responding to, delivered every Monday.",
+      },
+      {
+        title: "Referral partners",
+        body: "Finds potential referral or JV partners on LinkedIn, builds a short dossier, and drafts the outreach.",
+      },
+    ],
+  },
+];
+
 function WhatSheProduces() {
-  const items = [
-    {
-      title: "LinkedIn and social posts",
-      body: "Short-form, single-topic, or run as a series. Built on your angle bank and your proof points, structured to reach the right people rather than chase impressions.",
-    },
-    {
-      title: "Newsletters",
-      body: "A complete issue each week, written in your voice, built on your methodology and the week's market research. Something people read to the end.",
-    },
-    {
-      title: "Sales emails and cold outreach",
-      body: "Promotional, nurture, onboarding, and outbound drafts. Each one written to move the right reader a step closer to a conversation.",
-    },
-    {
-      title: "Ad copy",
-      body: "Google, Meta, and LinkedIn. Written against your positioning and your ideal customer rather than a swipe file.",
-    },
-    {
-      title: "YouTube scripts",
-      body: "Long-form and shorts. The hook, the structure, the close, packaged with titles, a thumbnail brief, description, tags, and timestamps.",
-    },
-    {
-      title: "Podcast show notes and pull-quotes",
-      body: "Episode notes, timestamps, and the lines worth cutting out and posting on their own.",
-    },
-    {
-      title: "Content repurposing",
-      body: "One long-form asset becomes a week of posts, threads, and emails. You record once, she produces the rest.",
-    },
-    {
-      title: "Weekly market research briefs",
-      body: "Every Monday she researches your industry and pulls what changed, with three to seven ready content angles that fit your methodology.",
-    },
-    {
-      title: "Referral and JV partner research",
-      body: "She finds candidates, builds a short dossier on each, and drafts the outreach. Nothing sends until you approve it.",
-    },
-  ];
   return (
     <section className="bg-[#F9FAFB]">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
@@ -327,18 +352,34 @@ function WhatSheProduces() {
         <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
           One operator. The output of a whole team.
         </h2>
-        <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
-          {items.map((it) => (
-            <div
-              key={it.title}
-              className="bg-white border border-black/10 rounded-2xl p-8"
-            >
-              <h3 className="text-lg font-semibold text-[#111111]">
-                {it.title}
-              </h3>
-              <p className="mt-3 text-[#111111]/70 leading-relaxed">
-                {it.body}
-              </p>
+        <p className="mt-6 text-lg text-[#111111]/70 max-w-2xl mx-auto leading-relaxed text-center">
+          You pick a skill and she runs it using what she already knows about
+          your voice and your methodology.
+        </p>
+        <div className="mt-14 space-y-12">
+          {skillGroups.map((g) => (
+            <div key={g.label}>
+              <div className="flex items-baseline gap-4">
+                <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-semibold">
+                  {g.label}
+                </p>
+                <p className="text-sm text-[#111111]/55">{g.caption}</p>
+              </div>
+              <div className="mt-5 grid md:grid-cols-3 gap-5">
+                {g.skills.map((s) => (
+                  <div
+                    key={s.title}
+                    className="bg-white border border-black/10 rounded-2xl p-7"
+                  >
+                    <h3 className="text-lg font-semibold text-[#111111]">
+                      {s.title}
+                    </h3>
+                    <p className="mt-3 text-[#111111]/70 leading-relaxed">
+                      {s.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
