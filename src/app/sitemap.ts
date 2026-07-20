@@ -2,10 +2,15 @@ import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity";
 import { SITE_URL } from "@/lib/site";
 
-// Without this the sitemap is cached at build time, so posts published in
-// Sanity never reach it until someone redeploys. Matches the ISR cadence
-// used by the blog routes (src/app/blog/page.tsx).
-export const revalidate = 60;
+// The sitemap must reflect posts published in Sanity between deploys.
+// `export const revalidate` is NOT enough here: unlike a page route, the
+// sitemap is a metadata route that Vercel emits as a build-time static
+// artifact, so ISR never refreshes it and new posts silently never appear.
+// Verified in production: /blog (revalidate=60) picked up a new post in
+// under a minute while /sitemap.xml stayed stale indefinitely.
+// force-dynamic makes it server-render per request so it is always current.
+// Cost is one Sanity query per request, and only crawlers request this.
+export const dynamic = "force-dynamic";
 
 type ChangeFreq =
   | "always"
