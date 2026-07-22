@@ -3,7 +3,6 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import SubscribeForm from "@/components/SubscribeForm";
 import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
 
 const DIAGNOSTIC_URL = "/diagnostic";
@@ -274,34 +273,20 @@ function TheDemo() {
 function FinalCTA() {
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              See where AI fits in your marketing.
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              The AI Marketing Diagnostic. Seven to ten minutes, no call. You
-              get a written plan showing where AI would move your sales
-              fastest, and where to start.
-            </p>
-            <div className="mt-6">
-              <CTAButton size="lg" href={DIAGNOSTIC_URL} fullWidth>
-                {DIAGNOSTIC_CTA_LABEL}
-              </CTAButton>
-            </div>
-          </div>
-          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Follow the work.
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              One short essay each Monday. One idea, no filler. Unsubscribe
-              anytime.
-            </p>
-            <div className="mt-6">
-              <SubscribeForm buttonLabel="Subscribe" />
-            </div>
+      <div className="mx-auto max-w-2xl px-6 py-24 md:py-32">
+        <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col text-center items-center">
+          <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+            See where AI fits in your marketing.
+          </h3>
+          <p className="mt-4 text-[#111111]/70 leading-relaxed">
+            The AI Marketing Diagnostic. Seven to ten minutes, no call. You
+            get a written plan showing where AI would move your sales
+            fastest, and where to start.
+          </p>
+          <div className="mt-6">
+            <CTAButton size="lg" href={DIAGNOSTIC_URL}>
+              {DIAGNOSTIC_CTA_LABEL}
+            </CTAButton>
           </div>
         </div>
       </div>

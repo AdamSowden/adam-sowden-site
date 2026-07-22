@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import SubscribeForm from "@/components/SubscribeForm";
 import { client } from "@/lib/sanity";
 import { OG_DEFAULTS } from "@/lib/site";
 
@@ -50,7 +49,6 @@ export default async function BlogIndexPage() {
       <main className="flex-1">
         <Header />
         {posts.length === 0 ? <EmptyState /> : <PostGrid posts={posts} />}
-        <FinalCTA />
       </main>
       <SiteFooter />
     </>
@@ -92,9 +90,6 @@ function EmptyState() {
             written through the methodology, structured for search and AI
             answer engines, and ready for conversation the moment it lands.
           </p>
-          <div className="mt-8 max-w-xl mx-auto text-left">
-            <SubscribeForm buttonLabel="Get the first one" />
-          </div>
         </div>
       </div>
     </section>
@@ -130,24 +125,6 @@ function PostGrid({ posts }: { posts: BlogPostSummary[] }) {
               </p>
             </a>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FinalCTA() {
-  return (
-    <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-4xl px-6 py-20 md:py-24 text-center">
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          Want the essays delivered?
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          One short email a week. One idea. No filler.
-        </p>
-        <div className="mt-8 max-w-xl mx-auto text-left">
-          <SubscribeForm buttonLabel="Subscribe" />
         </div>
       </div>
     </section>

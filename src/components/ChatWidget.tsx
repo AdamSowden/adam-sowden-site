@@ -24,7 +24,7 @@ type ArticleContext = {
 
 const BOOK_MARKER = "[BOOK_QUICK_CHAT]";
 
-const OPENING_ASSISTANT_MESSAGE = "What do you help with today?";
+const OPENING_ASSISTANT_MESSAGE = "What can I help you with today?";
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);

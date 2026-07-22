@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import SubscribeForm from "@/components/SubscribeForm";
 import { BOOKING_URL, OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -19,7 +18,6 @@ export default function ContactPage() {
       <main className="flex-1">
         <Hero />
         <Booking />
-        <Other />
       </main>
       <SiteFooter />
     </>
@@ -68,28 +66,6 @@ function Booking() {
             Open it in a new tab.
           </a>
         </p>
-      </div>
-    </section>
-  );
-}
-
-function Other() {
-  return (
-    <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
-        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
-          Or read first
-        </p>
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          Prefer to read a few essays first?
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          Subscribe to the weekly Monday essay. One idea, deeply unpacked.
-          No pitches, no upsells, easy unsubscribe.
-        </p>
-        <div className="mt-8">
-          <SubscribeForm buttonLabel="Subscribe" />
-        </div>
       </div>
     </section>
   );

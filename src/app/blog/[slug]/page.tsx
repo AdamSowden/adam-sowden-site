@@ -9,7 +9,6 @@ import type {
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import SubscribeForm from "@/components/SubscribeForm";
 import ChatWidget from "@/components/ChatWidget";
 import JumpToChat from "@/components/JumpToChat";
 import { client } from "@/lib/sanity";
@@ -18,6 +17,9 @@ import { portableTextToPlain } from "@/lib/portable-text-plain";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 export const revalidate = 60;
+
+const DIAGNOSTIC_URL = "/diagnostic";
+const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
 
 type SanityImage = {
   asset?: { _ref: string };
@@ -452,32 +454,20 @@ function FAQ({ items }: { items: FAQItem[] }) {
 function PostCTA() {
   return (
     <section className="bg-[#F9FAFB]">
-      <div className="mx-auto max-w-6xl px-6 py-20 md:py-24">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Want this applied to your business?
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              A 20-minute Quick Chat. No pitch. We look at where owner
-              dependency is costing growth and what becomes possible when
-              it&apos;s removed.
-            </p>
-            <div className="mt-6">
-              <CTAButton size="lg">Book a Quick Chat</CTAButton>
-            </div>
-          </div>
-          <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col">
-            <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
-              Want more like this?
-            </h3>
-            <p className="mt-4 text-[#111111]/70 leading-relaxed flex-1">
-              One short essay each Monday. One idea. No filler.
-              Unsubscribe anytime.
-            </p>
-            <div className="mt-6">
-              <SubscribeForm buttonLabel="Subscribe" />
-            </div>
+      <div className="mx-auto max-w-2xl px-6 py-20 md:py-24">
+        <div className="bg-white border border-black/10 rounded-2xl p-8 md:p-10 flex flex-col text-center items-center">
+          <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+            Want this applied to your business?
+          </h3>
+          <p className="mt-4 text-[#111111]/70 leading-relaxed">
+            The AI Marketing Diagnostic. Seven to ten minutes, no call. You
+            get a written plan showing where AI would move your sales
+            fastest, and where to start.
+          </p>
+          <div className="mt-6">
+            <CTAButton size="lg" href={DIAGNOSTIC_URL}>
+              {DIAGNOSTIC_CTA_LABEL}
+            </CTAButton>
           </div>
         </div>
       </div>
