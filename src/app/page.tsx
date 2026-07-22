@@ -3,7 +3,6 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import SubscribeForm from "@/components/SubscribeForm";
 
 const DIAGNOSTIC_URL = "/diagnostic";
 const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
@@ -72,7 +71,6 @@ export default function Home() {
         <TrustCluster />
         <HomeFAQ />
         <FinalCTA />
-        <SubscribeStrip />
       </main>
       <SiteFooter showAiToolHuntBadge showToolPilotBadge />
       <script
@@ -498,29 +496,6 @@ function FinalCTA() {
             Free. Seven to ten minutes. AI Marketing Diagnostic. Instant
             personalised implementation plan.
           </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SubscribeStrip() {
-  return (
-    <section className="bg-[#F9FAFB] border-y border-black/5">
-      <div className="mx-auto max-w-3xl px-6 py-20 md:py-24 text-center">
-        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
-          Weekly essay
-        </p>
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-[1.15] text-[#111111]">
-          One short email each Monday. One idea. No filler.
-        </h2>
-        <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          How autonomous AI marketing systems work, where off-the-shelf
-          tools fail, and the architecture behind marketing that runs without
-          you. One essay a week.
-        </p>
-        <div className="mt-8 max-w-xl mx-auto text-left">
-          <SubscribeForm buttonLabel="Send ME the Monday Essay" />
         </div>
       </div>
     </section>
