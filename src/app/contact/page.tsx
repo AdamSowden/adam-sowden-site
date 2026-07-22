@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
-import { BOOKING_URL, OG_DEFAULTS } from "@/lib/site";
+import { BOOKING_URL, CALENDAR_WIDGET_URL, OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
@@ -20,6 +21,10 @@ export default function ContactPage() {
         <Booking />
       </main>
       <SiteFooter />
+      <Script
+        src="https://link.msgsndr.com/js/form_embed.js"
+        strategy="afterInteractive"
+      />
     </>
   );
 }
@@ -48,15 +53,13 @@ function Booking() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-4xl px-6 pb-20 md:pb-24">
-        <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden">
-          <iframe
-            src={BOOKING_URL}
-            className="w-full"
-            style={{ minHeight: 780, border: 0 }}
-            title="Book a Quick Chat with Adam Sowden"
-            loading="lazy"
-          />
-        </div>
+        <iframe
+          src={CALENDAR_WIDGET_URL}
+          id="lc-booking-iframe"
+          scrolling="no"
+          style={{ width: "100%", border: "none", minHeight: 800 }}
+          title="Book a Quick Chat with Adam Sowden"
+        />
         <p className="mt-4 text-center text-sm text-[#111111]/55">
           Trouble with the booking widget?{" "}
           <a
