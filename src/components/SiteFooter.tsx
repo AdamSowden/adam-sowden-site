@@ -6,9 +6,11 @@ import { NAV_LINKS } from "@/lib/site";
 export default function SiteFooter({
   showAiToolHuntBadge = false,
   showToolPilotBadge = false,
+  showLaunchpadlyBadge = false,
 }: {
   showAiToolHuntBadge?: boolean;
   showToolPilotBadge?: boolean;
+  showLaunchpadlyBadge?: boolean;
 }) {
   return (
     <footer className="border-t border-black/10">
@@ -84,7 +86,7 @@ export default function SiteFooter({
             </div>
           </div>
         </div>
-        {(showAiToolHuntBadge || showToolPilotBadge) && (
+        {(showAiToolHuntBadge || showToolPilotBadge || showLaunchpadlyBadge) && (
           <div className="mx-auto max-w-6xl px-6 pb-14">
             <div className="border-t border-black/10 pt-8 flex flex-wrap items-center justify-center md:justify-start gap-6">
               {showAiToolHuntBadge && (
@@ -113,6 +115,23 @@ export default function SiteFooter({
                   <img
                     src="https://www.toolpilot.ai/cdn/shop/files/f-w_690x151_crop_center.png"
                     alt="Featured on ToolPilot"
+                    style={{ height: "58px", width: "auto" }}
+                  />
+                </a>
+              )}
+              {showLaunchpadlyBadge && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <a
+                  href="https://launchpadly.co/startup/site-conversation-agent?ref=badge"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-launchpadly-badge="site-conversation-agent"
+                  data-launchpadly-badge-variant="light"
+                  aria-label="Launchpadly Startup Directory"
+                >
+                  <img
+                    src="https://launchpadly.co/embed/badges/startup/site-conversation-agent.svg?variant=light"
+                    alt="Launchpadly Startup Directory"
                     style={{ height: "58px", width: "auto" }}
                   />
                 </a>

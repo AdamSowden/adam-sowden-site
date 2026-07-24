@@ -72,7 +72,7 @@ export default function Home() {
         <HomeFAQ />
         <FinalCTA />
       </main>
-      <SiteFooter showAiToolHuntBadge showToolPilotBadge />
+      <SiteFooter showAiToolHuntBadge showToolPilotBadge showLaunchpadlyBadge />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
