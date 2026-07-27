@@ -84,11 +84,11 @@ const faqItems = [
 
 const productJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Product",
+  "@type": "Service",
   name: "The Outreach Agent",
   description: ANSWER_FIRST,
-  category: "AI marketing software",
-  brand: { "@type": "Brand", name: "Adam Sowden" },
+  serviceType: "AI marketing software",
+  provider: { "@type": "Person", name: "Adam Sowden", url: SITE_URL },
   url: `${SITE_URL}${PAGE_PATH}`,
 };
 
