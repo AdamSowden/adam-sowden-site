@@ -82,6 +82,8 @@ const productJsonLd = {
     "@type": "Offer",
     price: "497",
     priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+    url: `${SITE_URL}${PAGE_PATH}`,
     priceSpecification: {
       "@type": "UnitPriceSpecification",
       price: "497",
