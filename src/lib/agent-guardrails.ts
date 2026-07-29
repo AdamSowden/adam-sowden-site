@@ -175,6 +175,39 @@ export async function claimEvent(
   return result !== null;
 }
 
+// The opt-in form lets someone type an opening question. It arrives on
+// the web request, but the agent is triggered separately by GHL a moment
+// later, so the question has to be parked somewhere in between.
+//
+// Redis rather than a GHL custom field: no new field for Adam to create,
+// no guessing at a field key, and the value is single-use by nature.
+const PENDING_QUESTION_PREFIX = "agent:pending-question:";
+const PENDING_QUESTION_TTL_SECONDS = 3600;
+
+export async function setPendingQuestion(
+  contactId: string,
+  question: string
+): Promise<void> {
+  const trimmed = question.trim();
+  if (!trimmed) return;
+  await getRedis().set(
+    `${PENDING_QUESTION_PREFIX}${contactId}`,
+    trimmed.slice(0, 500),
+    { ex: PENDING_QUESTION_TTL_SECONDS }
+  );
+}
+
+/** Reads and clears in one go, so a question is only ever answered once. */
+export async function takePendingQuestion(
+  contactId: string
+): Promise<string | null> {
+  const key = `${PENDING_QUESTION_PREFIX}${contactId}`;
+  const redis = getRedis();
+  const value = await redis.get<string>(key);
+  if (value) await redis.del(key);
+  return typeof value === "string" && value.trim() ? value : null;
+}
+
 export function isOptOut(body: string): boolean {
   const trimmed = body.trim();
   if (!trimmed) return false;

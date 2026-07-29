@@ -7,7 +7,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/studio/", "/studio"],
+        // /try-sms is the unlisted beta door for the Speed-to-Lead
+        // Agent. It carries noindex metadata too; this is belt and
+        // braces so it never surfaces in search while in beta.
+        disallow: ["/api/", "/studio/", "/studio", "/try-sms"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

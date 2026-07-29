@@ -66,6 +66,7 @@ function readContext(raw: unknown): AgentContext {
       ? c.tags.filter((t): t is string => typeof t === "string")
       : [],
     isFirstTouch: c.isFirstTouch === true,
+    hasOpeningMessage: c.hasOpeningMessage === true,
   };
 }
 

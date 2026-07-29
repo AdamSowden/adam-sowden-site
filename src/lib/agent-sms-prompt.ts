@@ -19,6 +19,9 @@ export type AgentContext = {
   timezone?: string | null;
   /** True on the very first outbound touch after a lead opts in. */
   isFirstTouch: boolean;
+  /** True when the lead typed an opening question on the opt-in form, so
+   *  the first message answers something rather than opening cold. */
+  hasOpeningMessage?: boolean;
 };
 
 const SMS_CONTRACT = `
@@ -53,6 +56,19 @@ const EMAIL_CONTRACT = `
 - Do not use the [BOOK_QUICK_CHAT] marker. Link inline instead:
   ${BOOKING_URL}
 - No subject line in the body, that is passed separately.
+`;
+
+const FIRST_TOUCH_WITH_QUESTION_CONTRACT = `
+## This is the first message, and they opened with a question
+
+They put their number in seconds ago and typed the message below. Speed
+is the product, so your reply is landing almost immediately.
+
+- Answer what they actually asked, in one or two sentences. Directly.
+- Then ask ONE question about their situation.
+- Do not welcome them, do not thank them for signing up, do not
+  explain what you are.
+- Under 320 characters total.
 `;
 
 const FIRST_TOUCH_CONTRACT = `
@@ -104,7 +120,13 @@ export function buildAgentSystemPrompt(
     channel === "sms" ? SMS_CONTRACT : EMAIL_CONTRACT,
     buildContextBlock(ctx),
   ];
-  if (ctx.isFirstTouch) blocks.push(FIRST_TOUCH_CONTRACT);
+  if (ctx.isFirstTouch) {
+    blocks.push(
+      ctx.hasOpeningMessage
+        ? FIRST_TOUCH_WITH_QUESTION_CONTRACT
+        : FIRST_TOUCH_CONTRACT
+    );
+  }
   return blocks.join("\n\n");
 }
 

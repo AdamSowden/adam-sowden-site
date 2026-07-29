@@ -40,6 +40,7 @@ import {
   getThreadState,
   hashBody,
   saveThreadState,
+  takePendingQuestion,
 } from "@/lib/agent-guardrails";
 import { SITE_URL } from "@/lib/site";
 
@@ -198,6 +199,23 @@ export async function POST(req: NextRequest) {
   after(async () => {
     const startedAt = Date.now();
     let history: AgentMessage[] = [];
+    let hasOpeningMessage = false;
+
+    // Someone opting in via /try-sms can type an opening question. It was
+    // parked in Redis by /api/beta/optin because that request finishes
+    // before GHL triggers us. Answering it makes the first message land
+    // as a reply rather than a greeting.
+    if (isFirstTouch) {
+      try {
+        const pending = await takePendingQuestion(contactId);
+        if (pending) {
+          history = [{ role: "user", content: pending }];
+          hasOpeningMessage = true;
+        }
+      } catch (err) {
+        log("pending_question_failed", { contactId, error: String(err) });
+      }
+    }
 
     // No conversationId in the payload, so resolve it. Only needed when
     // there is history to fetch; a first touch has none by definition.
@@ -244,6 +262,7 @@ export async function POST(req: NextRequest) {
         timezone: payload.timezone ?? null,
         tags,
         isFirstTouch,
+        hasOpeningMessage,
       },
       secret,
     });
