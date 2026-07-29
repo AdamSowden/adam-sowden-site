@@ -56,6 +56,23 @@ function log(event: string, detail: Record<string, unknown>) {
   );
 }
 
+// Staff notification messages can land inside a contact's conversation
+// thread when the notification destination number is the same as the
+// contact's number, e.g. while testing against your own mobile. They read
+// as "A A replied , Conversation AI / you handling." and would otherwise
+// be fed to the model as things the agent said.
+//
+// Deliberately narrow. An earlier version matched anything containing
+// "replied", which would have silently swallowed a prospect writing "I
+// replied to your email yesterday". Dropping a real inbound message is
+// far worse than leaving one line of noise in the context, so this only
+// matches the notification's own signature.
+const SYSTEM_NOISE_PATTERNS = [/Conversation AI \/ you handling/i];
+
+function isSystemNoise(body: string): boolean {
+  return SYSTEM_NOISE_PATTERNS.some((re) => re.test(body));
+}
+
 // Maps GHL's message records into the role/content pairs the agent
 // expects. The messages API returns newest-first; the model needs
 // oldest-first. Direction on this endpoint is a string ("inbound" /
@@ -65,6 +82,7 @@ function toAgentMessages(
 ): AgentMessage[] {
   return raw
     .filter((m) => typeof m.body === "string" && m.body.trim())
+    .filter((m) => !isSystemNoise(m.body as string))
     .reverse()
     .map((m) => ({
       role: m.direction === "inbound" ? ("user" as const) : ("assistant" as const),
