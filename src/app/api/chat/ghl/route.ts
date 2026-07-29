@@ -148,14 +148,24 @@ export async function POST(req: NextRequest) {
     }
 
     // Brand-voice backstop, same as /api/chat: em dashes never ship.
-    let cleaned = text.replace(/\s*—\s*/g, ", ");
-    if (channel === "sms") cleaned = enforceSmsLength(cleaned);
+    const scrubbed = text.replace(/\s*—\s*/g, ", ");
+
+    // SMS is a single line. Line breaks in a text message waste screen
+    // and read as a pasted template rather than a person typing.
+    const singleLine =
+      channel === "sms" ? scrubbed.replace(/\s*\n+\s*/g, " ") : scrubbed;
+
+    const cleaned =
+      channel === "sms" ? enforceSmsLength(singleLine) : singleLine;
 
     return Response.json({
       message: cleaned,
       channel,
       model: MODEL,
-      truncated: channel === "sms" && cleaned.length < text.length,
+      // Compare against the post-scrub string, not the raw model output.
+      // The em-dash replacement shortens text on its own, which made this
+      // flag report truncation that never happened.
+      truncated: channel === "sms" && cleaned.length < singleLine.length,
     });
   } catch (err) {
     console.error("[/api/chat/ghl] LLM error:", err);

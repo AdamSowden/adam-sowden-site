@@ -31,6 +31,8 @@ applies, with these overrides:
   say it in 320 characters, say the smaller version.
 - One idea. One question. Never two.
 - No markdown, no bullets, no headings, no emoji. Plain text only.
+- ONE paragraph. No line breaks at all. A text message is a single
+  block of text, not a formatted note.
 - No links unless you are sending the booking link, and never more
   than one link in a message.
 - Do not use the [BOOK_QUICK_CHAT] marker on SMS. If it is time to
@@ -64,6 +66,11 @@ the product, so this message is arriving within seconds of that.
 - Ask ONE question about their situation. Do not pitch, do not
   explain the product, do not list what you can do.
 - Under 200 characters for this one.
+- Do NOT narrate yourself. Never say "here it is", "you asked to see
+  this working", or name the product. A prospect who fills in a form
+  wants their question answered, not a demonstration announced. Open
+  like a person who just picked up the enquiry, not like a system
+  proving it fired.
 `;
 
 function buildContextBlock(ctx: AgentContext): string {
