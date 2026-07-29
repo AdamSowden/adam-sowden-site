@@ -35,8 +35,10 @@ import {
 } from "@/lib/ghl";
 import {
   claimEvent,
+  detectHumanTakeover,
   evaluateGates,
   getThreadState,
+  hashBody,
   saveThreadState,
 } from "@/lib/agent-guardrails";
 import { SITE_URL } from "@/lib/site";
@@ -202,6 +204,17 @@ export async function POST(req: NextRequest) {
       if (history.length === 0 && inboundBody) {
         history = [{ role: "user", content: inboundBody }];
       }
+
+      // Human takeover check, done here rather than in a GHL workflow.
+      // If the newest outbound message in the thread isn't the one we
+      // sent, someone typed into the conversation and the agent stands
+      // down for good on this contact.
+      if (detectHumanTakeover(history, thread)) {
+        log("blocked", { contactId, reason: "human replied in thread" });
+        await addTags(contactId, [GHL_TAG.handover]);
+        await removeTags(contactId, [GHL_TAG.active]);
+        return;
+      }
     }
 
     const reply = await generateReply({
@@ -241,6 +254,7 @@ export async function POST(req: NextRequest) {
       unansweredOutbound: isFirstTouch ? thread.unansweredOutbound + 1 : 1,
       lastInboundAt: isFirstTouch ? thread.lastInboundAt : Date.now(),
       lastOutboundAt: Date.now(),
+      lastOutboundHash: hashBody(reply.message),
     });
 
     await updateContactFields(contactId, [

@@ -58,8 +58,46 @@ export type ThreadState = {
   unansweredOutbound: number;
   lastInboundAt: number | null;
   lastOutboundAt: number | null;
+  /** Hash of the last message THIS agent sent. Used to detect whether a
+   *  human has since replied in the thread — see detectHumanTakeover.
+   *  GHL cannot distinguish an API-sent message from a staff-typed one,
+   *  so we track our own sends rather than trusting the platform. */
+  lastOutboundHash: string | null;
   updatedAt: number;
 };
+
+// Small, fast, non-cryptographic. Only needs to distinguish "we wrote
+// this" from "someone else did".
+export function hashBody(body: string): string {
+  let h = 0;
+  const s = body.trim();
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) | 0;
+  }
+  return String(h);
+}
+
+// True when the newest outbound message in the thread is not one we sent,
+// which means a human stepped in and the agent should stand down.
+//
+// This replaces the W3 workflow approach. W3 tagged ai-handover whenever
+// an outbound message appeared, but the agent's own API sends look
+// identical to a staff member typing, so the agent kept muting itself
+// after its first reply.
+export function detectHumanTakeover(
+  history: Array<{ role: "user" | "assistant"; content: string }>,
+  thread: ThreadState
+): boolean {
+  // Nothing sent yet, so nothing to compare against.
+  if (!thread.lastOutboundHash) return false;
+
+  for (let i = history.length - 1; i >= 0; i--) {
+    const msg = history[i];
+    if (msg.role !== "assistant") continue;
+    return hashBody(msg.content) !== thread.lastOutboundHash;
+  }
+  return false;
+}
 
 let redisSingleton: Redis | null = null;
 
@@ -104,6 +142,7 @@ export async function getThreadState(
     unansweredOutbound: 0,
     lastInboundAt: null,
     lastOutboundAt: null,
+    lastOutboundHash: null,
     updatedAt: Date.now(),
   };
 }
