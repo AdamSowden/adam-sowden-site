@@ -46,7 +46,12 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Each submission costs an SMS and a model call, and the page is a public
 // URL once shared. Light Redis-backed limits: per IP and per phone.
-const RATE_LIMIT_PER_IP_PER_HOUR = 5;
+//
+// Set to 20 rather than 5 so a group signing up from one office wifi or
+// conference network doesn't hit a shared-IP wall mid-demo. The per-phone
+// cooldown below is the limit that actually prevents abuse; this one only
+// needs to stop a script.
+const RATE_LIMIT_PER_IP_PER_HOUR = 20;
 const PHONE_COOLDOWN_SECONDS = 600;
 
 type OptinBody = {
