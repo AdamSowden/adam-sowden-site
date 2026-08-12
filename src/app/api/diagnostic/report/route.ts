@@ -28,6 +28,7 @@ import {
 import { sendProspectReportEmail } from "@/lib/diagnostic-emails";
 import { upsertDiagnosticContact } from "@/lib/diagnostic-ghl";
 import { BOOKING_URL, SITE_URL } from "@/lib/site";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -38,6 +39,9 @@ export const maxDuration = 90;
 type Body = { sessionToken?: unknown };
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "diagnostic-report", limit: 5, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return Response.json(

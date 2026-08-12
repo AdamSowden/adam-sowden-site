@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   SYSTEM_PROMPT_CORE,
@@ -70,6 +71,9 @@ function sanitizeMessages(raw: unknown): ChatMessage[] {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "chat", limit: 20, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return new Response(

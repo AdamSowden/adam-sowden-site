@@ -25,6 +25,7 @@ import {
   updateContactFields,
 } from "@/lib/ghl";
 import { setPendingQuestion } from "@/lib/agent-guardrails";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -210,6 +211,9 @@ async function writeConsentNote(args: {
 }
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "beta-optin", limit: 5, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   let body: OptinBody;
   try {
     body = (await req.json()) as OptinBody;

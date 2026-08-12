@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 type Body = {
   email?: string;
@@ -12,6 +13,9 @@ type Body = {
 };
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "questionnaire", limit: 5, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   const body = (await req.json().catch(() => ({}))) as Body;
 
   // Honeypot — silently succeed for bots

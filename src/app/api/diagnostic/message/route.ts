@@ -28,6 +28,7 @@ import {
   type ConversationTurn,
 } from "@/lib/diagnostic-store";
 import { captureSpeedToLead } from "@/lib/speed-to-lead-ghl";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -40,6 +41,9 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type Body = { sessionToken?: unknown; userMessage?: unknown };
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "diagnostic-message", limit: 30, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return Response.json(

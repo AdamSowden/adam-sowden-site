@@ -7,6 +7,7 @@
 import { randomUUID } from "node:crypto";
 import { createSession } from "@/lib/diagnostic-store";
 import { OPENING_MESSAGE } from "@/lib/diagnostic-prompts";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,7 +19,10 @@ function generateSessionToken(): string {
   return randomUUID().replace(/-/g, "");
 }
 
-export async function POST() {
+export async function POST(req: Request) {
+  const rl = await rateLimit(req, { bucket: "diagnostic-start", limit: 10, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   try {
     const sessionToken = generateSessionToken();
     await createSession(sessionToken, OPENING_MESSAGE);

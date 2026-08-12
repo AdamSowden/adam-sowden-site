@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -103,6 +104,9 @@ async function addToResendAudience(
 }
 
 export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "subscribe", limit: 5, windowSec: 60 });
+  if (!rl.success) return tooManyRequests(rl);
+
   const apiKey = process.env.GHL_API_KEY;
   if (!apiKey) {
     return jsonResponse(503, {
