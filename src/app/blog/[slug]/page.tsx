@@ -11,6 +11,7 @@ import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import ChatWidget from "@/components/ChatWidget";
 import JumpToChat from "@/components/JumpToChat";
+import RelatedPosts from "@/components/RelatedPosts";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
 import { portableTextToPlain } from "@/lib/portable-text-plain";
@@ -313,6 +314,7 @@ export default async function BlogPostPage({
               }}
             />
           </section>
+          <RelatedPosts currentSlug={post.slug.current} />
           <PostCTA />
         </article>
       </main>
