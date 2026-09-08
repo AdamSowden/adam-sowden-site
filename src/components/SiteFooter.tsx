@@ -72,6 +72,12 @@ export default function SiteFooter({
                 </Link>
               ))}
               <Link
+                href="/waitlist"
+                className="hover:text-black transition"
+              >
+                Waiting List
+              </Link>
+              <Link
                 href="/privacy"
                 className="hover:text-black transition"
               >

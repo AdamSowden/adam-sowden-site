@@ -5,6 +5,7 @@ import {
   relatedPostsQuery,
   type RelatedCandidate,
 } from "@/lib/related-posts";
+import { buildProductMap } from "@/lib/related-product";
 
 /**
  * Three generated internal links at the foot of every post.
@@ -32,7 +33,19 @@ export default async function RelatedPosts({
   }
 
   const related = buildRelatedMap(posts, limit).get(currentSlug) ?? [];
-  if (related.length === 0) return null;
+
+  // The product this post's topic actually maps to. Null when nothing scores
+  // well enough: a wrong product link is worse than no product link.
+  const product = buildProductMap(
+    posts.map((p) => ({
+      slug: p.slug.current,
+      title: p.title,
+      primaryKeyword: p.primaryKeyword,
+      articleSection: p.articleSection,
+    }))
+  ).get(currentSlug);
+
+  if (related.length === 0 && !product) return null;
 
   return (
     <section
@@ -74,6 +87,25 @@ export default async function RelatedPosts({
             </li>
           ))}
         </ul>
+
+        {product && (
+          <div className="mt-12 border-t border-black/10 pt-8">
+            <p className="text-xs uppercase tracking-[0.18em] text-black/50 font-medium mb-4">
+              The system behind this
+            </p>
+            <Link
+              href={`/products/${product.slug}`}
+              className="group flex flex-col sm:flex-row sm:items-baseline sm:gap-4"
+            >
+              <span className="font-serif text-xl md:text-2xl tracking-tight text-[#111111] group-hover:text-[#188bf6] transition whitespace-nowrap">
+                {product.name}
+              </span>
+              <span className="mt-2 sm:mt-0 text-[#111111]/70 leading-relaxed">
+                {product.tagline}
+              </span>
+            </Link>
+          </div>
+        )}
 
         <p className="mt-10">
           <Link
