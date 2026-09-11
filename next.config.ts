@@ -25,6 +25,18 @@ const nextConfig: NextConfig = {
         destination: "/products/ai-marketing-team",
         permanent: true,
       },
+      // Dead URLs from the pre-Next.js site that Google still holds in Search
+      // Console as "Not found (404)", first detected 3 Feb 2026. Each has a
+      // genuine equivalent on this site, so a permanent redirect passes the
+      // signal on and clears the report.
+      //
+      // Deliberately NOT redirected: /thought-partner, /cassar/ads,
+      // /cassar/sales and /pdf_avss. They are also dead, but nothing here
+      // replaces them. Pointing them at the homepage would be a soft 404,
+      // which Google treats worse than an honest 404.
+      { source: "/home", destination: "/", permanent: true },
+      { source: "/agents", destination: "/products", permanent: true },
+      { source: "/cookies", destination: "/privacy", permanent: true },
     ];
   },
   async headers() {

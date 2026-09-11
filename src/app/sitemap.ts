@@ -74,11 +74,28 @@ type SitemapPost = {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
+  // Static routes deliberately emit NO lastModified.
+  //
+  // This route is `force-dynamic` (see the note at the top), so it runs per
+  // request. `lastModified: now` therefore told every crawler that the
+  // homepage, /about, /products, all six product pages and /diagnostic had
+  // been modified in the same second the sitemap was fetched, on every fetch,
+  // forever. Verified in production: two requests two seconds apart returned
+  // different lastmod values for all 14 static URLs.
+  //
+  // Google ignores lastmod when a site's values look unreliable, and "always
+  // now" is the clearest possible case of that. Worse, the discounting is not
+  // necessarily per-URL, so 14 lying entries can devalue the accurate dates on
+  // the 23 blog posts below.
+  //
+  // Omitting the field is honest: we genuinely do not track when these pages
+  // last changed. Google falls back to its own crawl signals, which is the
+  // correct outcome. If per-page dates are wanted later, they need a real
+  // source (a CMS field or a build-time git timestamp), not `new Date()`.
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((r) => ({
     // Root emits the bare origin (no trailing slash) to match the homepage's
     // self-referencing canonical (<link rel="canonical" href={SITE_URL}>).
     url: r.path === "/" ? SITE_URL : `${SITE_URL}${r.path}`,
-    lastModified: now,
     changeFrequency: r.changeFrequency,
     priority: r.priority,
   }));
