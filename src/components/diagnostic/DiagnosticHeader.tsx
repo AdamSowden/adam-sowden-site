@@ -1,6 +1,6 @@
 // Fixed header for the diagnostic page. Adam Sowden script logo on the
-// left (visual brand), "AI Marketing Diagnostic" sub-label so the user
-// knows where they are, progress indicator on the right. The
+// left (visual brand), the page H1 ("AI Marketing Diagnostic") so the user
+// and crawlers know where they are, progress indicator on the right. The
 // progress block hides once the report is complete (questionIndex >= 20)
 // so the report can breathe.
 //
@@ -33,14 +33,18 @@ export default function DiagnosticHeader({
             priority
             className="h-14 sm:h-16 w-auto flex-shrink-0"
           />
-          <div className="hidden sm:block leading-tight border-l border-black/10 pl-4">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-black/55">
-              Diagnostic
-            </p>
-            <p className="font-serif text-[15px] font-semibold tracking-tight text-[#0a0f1e] mt-0.5">
-              AI Marketing
-            </p>
-          </div>
+          {/* The page's H1. It was previously two <p> tags hidden below the
+              sm breakpoint, so /diagnostic rendered no heading at all. Google
+              indexes the mobile rendering, so a desktop-only heading would not
+              have counted either.
+
+              One text node, not one per breakpoint: duplicating the string
+              across a `hidden sm:block` / `sm:hidden` pair puts both copies in
+              the DOM, and anything reading the heading as text gets them
+              concatenated. Size responds, wording does not. */}
+          <h1 className="leading-tight border-l border-black/10 pl-3 sm:pl-4 min-w-0 font-serif text-[13px] sm:text-[15px] font-semibold tracking-tight text-[#0a0f1e]">
+            AI Marketing Diagnostic
+          </h1>
         </div>
         {showProgress && (
           <div className="text-right flex-shrink-0">
