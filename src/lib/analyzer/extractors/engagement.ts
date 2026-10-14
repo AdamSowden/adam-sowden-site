@@ -127,7 +127,7 @@ export async function runEngagement(ctx: ExtractorContext): Promise<ExtractorRes
   const top = c.vendors.filter((v) => v.cls === c.cls)[0];
   const status = c.cls === 4 ? "pass" : c.cls === 3 ? "partial" : "fail";
   const ev = top
-    ? `${top.name} detected (class: ${CLASS_NAME[c.cls]}) via: ${top.evidence}`
+    ? `${top.name} detected, class: ${CLASS_NAME[c.cls]}. Signal: ${top.evidence}`
     : "No chat or conversation surface detected on any crawled page.";
   findings.push(finding(8, "eng-01", status, 70, ev));
 
