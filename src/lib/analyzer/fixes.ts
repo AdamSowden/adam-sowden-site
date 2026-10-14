@@ -33,12 +33,12 @@ export const FIXES: Record<string, string> = {
   "cd-05": "Add specific numbers, timeframes and situations to the copy.",
   "cd-06": "Add a FAQ that answers the real questions buyers ask before they decide.",
   // 8 Engagement
-  "eng-01": "Replace the current chat surface with an agent that answers from the site's own content and books the call.",
+  "eng-01": "Put an agent on every page that answers from the site's own content, qualifies the visitor and books the call.",
   "eng-02": "Put the conversation surface on every page, not just one.",
   // 9 Conversion path
   "cp-01": "Cut the contact form to five fields or fewer.",
   "cp-02": "Give a ready buyer more than one way to act: booking, phone and chat alongside the form.",
-  "cp-03": "Replace the capture widget with a chat that converses.",
+  "cp-03": "Give visitors a chat that answers and books, not a form or a bubble that collects details.",
   "cp-04": "Add a booking calendar so a visitor can pick a time without waiting for a reply.",
   "cp-05": "Make the phone number a tap-to-call link.",
   "cp-06": "State how fast enquiries are answered, and mean it.",
