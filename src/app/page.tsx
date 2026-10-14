@@ -3,6 +3,7 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import AnalyzerUrlForm from "@/components/AnalyzerUrlForm";
 
 const DIAGNOSTIC_URL = "/diagnostic";
 const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
@@ -111,6 +112,13 @@ function Hero() {
               Free. Seven to ten minutes. AI Marketing Diagnostic with a
               personalised implementation plan at the end.
             </p>
+            <div className="mt-8 pt-6 border-t border-black/10">
+              <p className="text-sm text-[#111111]/70 mb-3">
+                Or start with your website. Real findings about your own site in
+                about a minute, no email needed.
+              </p>
+              <AnalyzerUrlForm />
+            </div>
           </div>
         </div>
         <div className="flex justify-center md:justify-end">

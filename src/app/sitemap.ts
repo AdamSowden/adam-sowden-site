@@ -28,6 +28,7 @@ const staticRoutes: Array<{
   priority: number;
 }> = [
   { path: "/", changeFrequency: "weekly", priority: 1.0 },
+  { path: "/analyzer", changeFrequency: "monthly", priority: 0.9 },
   { path: "/about", changeFrequency: "monthly", priority: 0.8 },
   { path: "/products", changeFrequency: "monthly", priority: 0.9 },
   {

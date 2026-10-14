@@ -1,0 +1,54 @@
+// POST /api/analyzer/email  { token, email, costInputs? }
+//
+// Stores the email (and optional cost inputs) on the job. Sending the full
+// report (WP7) and the GHL upsert + speed-to-lead follow-up (WP8) hang off
+// this record. Never required before the first finding (spec §13).
+
+import { NextRequest } from "next/server";
+import { getStore } from "@/lib/analyzer/store";
+import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+type Body = { token?: unknown; email?: unknown; costInputs?: { enquiries?: unknown; value?: unknown; closeRate?: unknown } | null };
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function num(v: unknown, min: number, max: number): number | null {
+  const n = typeof v === "string" ? Number(v.replace(/[,$%\s]/g, "")) : typeof v === "number" ? v : NaN;
+  return isFinite(n) && n >= min && n <= max ? n : null;
+}
+
+export async function POST(req: NextRequest) {
+  const rl = await rateLimit(req, { bucket: "analyzer-email", limit: 10, windowSec: 3600 });
+  if (!rl.success) return tooManyRequests(rl);
+  let body: Body;
+  try {
+    body = (await req.json()) as Body;
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+  const token = typeof body.token === "string" ? body.token : "";
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  if (!/^[a-f0-9]{32}$/.test(token)) return Response.json({ error: "Not found." }, { status: 404 });
+  if (!EMAIL_RE.test(email) || email.length > 254) return Response.json({ error: "Enter a valid email address." }, { status: 400 });
+
+  const store = getStore();
+  const job = await store.getJob(token);
+  if (!job) return Response.json({ error: "Not found." }, { status: 404 });
+
+  let costInputs: { enquiries: number; value: number; closeRate: number } | null = null;
+  if (body.costInputs) {
+    const enquiries = num(body.costInputs.enquiries, 1, 100000);
+    const value = num(body.costInputs.value, 1, 100000000);
+    const closeRate = num(body.costInputs.closeRate, 0.1, 100);
+    if (enquiries && value && closeRate) costInputs = { enquiries, value, closeRate };
+  }
+
+  job.email = email;
+  job.costInputs = costInputs ?? job.costInputs;
+  job.updatedAt = Date.now();
+  await store.putJob(job);
+  return Response.json({ ok: true, reportReady: job.state === "done" || job.state === "partial" });
+}
