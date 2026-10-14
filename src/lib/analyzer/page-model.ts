@@ -197,8 +197,13 @@ export function parsePage(fetched: FetchResult): PageModel {
   };
   const mainCount = $("main, [role='main']").length;
 
-  // Visible text: strip non-content elements then read body text.
+  // Visible text: strip non-content elements, separate block boundaries so
+  // adjacent blocks do not run together, then read body text.
   $("script, style, noscript, template, svg, head").remove();
+  $("br").replaceWith(" ");
+  $("p, h1, h2, h3, h4, h5, h6, li, div, section, article, header, footer, nav, aside, blockquote, figcaption, td, th, tr, dd, dt, button, a").each((_, el) => {
+    $(el).append(" ");
+  });
   const text = collapse($("body").text()).slice(0, TEXT_CAP);
   const wordCount = text ? text.split(/\s+/).length : 0;
   const scriptPayloadLarge = inlineScriptBytes > 50 * 1024 || scripts.length > 5;
