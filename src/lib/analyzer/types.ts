@@ -36,6 +36,8 @@ export type Finding = {
   fixId: string;
   pages: string[];
   naReason?: string;
+  /** Assessed layer only: the model's one-sentence judgement behind the quoted evidence. */
+  note?: string;
 };
 
 export type HttpHeaders = Record<string, string>;

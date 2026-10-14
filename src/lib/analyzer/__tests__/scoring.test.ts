@@ -81,3 +81,12 @@ describe("benchmark and public view", () => {
     expect(pv.dimensions[0].counts.fail).toBe(1);
   });
 });
+
+describe("statementFor", () => {
+  it("uses the model note for assessed findings and the evidence otherwise", async () => {
+    const { statementFor } = await import("../scoring");
+    const assessed: Finding = { dimension: 2, criterionId: "cq-01", layer: "assessed", status: "fail", weight: 20, evidence: "Tax Strategy That Builds Legacies", fixId: "cq-01", pages: [], note: "The headline names a theme but not a buyer, a benefit or a specific" };
+    expect(statementFor(assessed)).toBe('The headline names a theme but not a buyer, a benefit or a specific. The page says: "Tax Strategy That Builds Legacies"');
+    expect(statementFor(F(5, "seo-06", "fail", 12, "H1 count wrong on 3 pages. Details follow."))).toBe("H1 count wrong on 3 pages.");
+  });
+});

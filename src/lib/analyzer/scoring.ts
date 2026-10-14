@@ -118,6 +118,15 @@ export function firstSentence(s: string, cap = 180): string {
   return out.length > cap ? out.slice(0, cap - 1) + "…" : out;
 }
 
+/** One plain sentence for a finding: the model's judgement for assessed findings, else the first sentence of the evidence. */
+export function statementFor(f: Finding): string {
+  if (f.layer === "assessed" && f.note && f.note.length > 12) {
+    const quote = firstSentence(f.evidence, 120);
+    return quote && !/runs disagreed|could not be verified/.test(quote) ? `${f.note.replace(/[.!?]\s*$/, "")}. The page says: "${quote.replace(/^"|"$/g, "")}"` : f.note;
+  }
+  return firstSentence(f.evidence);
+}
+
 export function headlineFor(results: ExtractorResult[], dims: DimensionScore[]): Headline | null {
   // Lowest-scoring measured dimension, then its heaviest failed (or partial) criterion.
   const ranked = dims.filter((d) => d.score !== null).sort((a, b) => (a.score as number) - (b.score as number));
@@ -127,7 +136,7 @@ export function headlineFor(results: ExtractorResult[], dims: DimensionScore[]):
     const candidates = r.findings.filter((f) => f.status === "fail" || f.status === "partial").sort((a, b) => b.weight * (1 - STATUS_VALUE[b.status as "fail" | "partial"]) - a.weight * (1 - STATUS_VALUE[a.status as "fail" | "partial"]) || b.weight - a.weight);
     const f = candidates[0];
     if (!f) continue;
-    return { finding: f, dimension: d.dimension, statement: firstSentence(f.evidence), consequence: consequenceFor(f.criterionId) };
+    return { finding: f, dimension: d.dimension, statement: statementFor(f), consequence: consequenceFor(f.criterionId) };
   }
   return null;
 }

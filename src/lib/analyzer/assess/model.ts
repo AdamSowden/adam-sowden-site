@@ -101,12 +101,12 @@ function reconcileOne(c: RubricCriterion, dimension: Rubric["dimension"], ra: As
   const verified = graded.map((r) => (r.status === "fail" || verifyEvidence(r.evidence, corpus) ? r : { ...r, status: "uncertain" as FindingStatus, note: `${r.note} (evidence could not be verified verbatim)` }));
   if (verified.length === 1) {
     const r = verified[0];
-    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note };
+    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note, note: r.note };
   }
   const [x, y] = verified;
   const lower = RANK[x.status] <= RANK[y.status] ? x : y;
-  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600) };
-  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600) };
+  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600), note: x.note };
+  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600), note: lower.note };
 }
 
 export async function assessRubric(rubric: Rubric, windows: AssessmentWindows, caller: AssessCaller, runs = 2): Promise<Finding[]> {
