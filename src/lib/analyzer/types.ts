@@ -186,3 +186,13 @@ export function summarisePage(p: PageModel): PageSummary {
     title: p.meta.title,
   };
 }
+
+// ── Extractor contract ──────────────────────────────────────────────────
+
+export type ExtractorResult = {
+  dimension: Dimension;
+  findings: Finding[];
+  /** Optional direct 0–100 for dimensions whose rubric is additive (Rubric 08, 11). */
+  score?: number;
+  notes?: string[];
+};

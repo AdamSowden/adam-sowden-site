@@ -16,6 +16,7 @@ export type CrawlOptions = FetchOptions & {
 
 const SKIP_PATH = /\.(pdf|jpe?g|png|gif|svg|webp|mp4|mp3|zip|docx?|xlsx?|pptx?|css|js|xml|json|ico)(\?|$)/i;
 const LOW_VALUE = /\/(tag|tags|category|categories|author|page|feed|wp-json|cart|checkout|login|signin|register|account|privacy|terms|cookie|sitemap)(\/|$)/i;
+const ARTICLE_PATH_RE = /\/(blog|post|posts|article|articles|news|insights)\/[a-z0-9-]{8,}/i;
 const HIGH_VALUE = /\/(services?|products?|solutions?|pricing|about|team|contact|book|work-with|for-|industries|case-stud|results|faq|how-it-works)/i;
 
 function canonicalKey(u: string): string {
@@ -108,12 +109,25 @@ export async function crawlSite(input: string, opts: CrawlOptions = {}): Promise
 
   const candidates = rankCandidates(home, sitemap.urls.map((u) => u.loc), host);
   const homeKey = canonicalKey(home.finalUrl);
+  const allowed = (path: string) => isAllowed(robots, ANALYZER_UA, path) && isAllowed(robots, "*", path);
+  const pathFromKey = (key: string) => "/" + key.split("/").slice(1).join("/");
   const toFetch: string[] = [];
+  // Reserve one slot for the most recent article so article-level checks can run.
+  const latestArticle = sitemap.urls
+    .filter((u) => ARTICLE_PATH_RE.test(u.loc) && !LOW_VALUE.test(u.loc))
+    .sort((a, b) => (b.lastmod ?? "").localeCompare(a.lastmod ?? ""))[0];
+  if (latestArticle && maxPages > 2) {
+    try {
+      const u = new URL(latestArticle.loc);
+      if (sameSite(u.hostname, host) && allowed(u.pathname)) toFetch.push(`${origin}${u.pathname}`);
+    } catch { /* ignore */ }
+  }
   for (const key of candidates) {
     if (toFetch.length >= maxPages - 1) break;
     if (key === homeKey) continue;
-    const path = "/" + key.split("/").slice(1).join("/");
-    if (!isAllowed(robots, ANALYZER_UA, path) || !isAllowed(robots, "*", path)) continue;
+    const path = pathFromKey(key);
+    if (toFetch.some((t) => canonicalKey(t) === key)) continue;
+    if (!allowed(path)) continue;
     toFetch.push(`${origin}${path}`);
   }
 
