@@ -31,6 +31,18 @@ export const SITE_URL = (
 
 export const SITE_NAME = "Adam Sowden";
 
+// The one Person entity on the site. /about declares it in full; every other
+// page (Article author, Service provider) references it through PERSON_REF so
+// an engine reading any single page sees a named author that resolves to the
+// same node, rather than a bare @id or an anonymous duplicate.
+export const PERSON_ID = `${SITE_URL}/about#adam-sowden`;
+export const PERSON_REF = {
+  "@type": "Person",
+  "@id": PERSON_ID,
+  name: SITE_NAME,
+  url: `${SITE_URL}/about`,
+} as const;
+
 // Shared Open Graph defaults. Next.js merges metadata shallowly, so any page
 // that defines its own `openGraph` object REPLACES the layout's `openGraph`
 // entirely — dropping `type`, `siteName`, `locale`, and `images`. Pages that

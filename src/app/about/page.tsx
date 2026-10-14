@@ -3,7 +3,7 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS, PERSON_ID } from "@/lib/site";
 
 const DIAGNOSTIC_URL = "/diagnostic";
 const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "@id": `${SITE_URL}/about#adam-sowden`,
+  "@id": PERSON_ID,
   name: "Adam Sowden",
   url: `${SITE_URL}/about`,
   image: `${SITE_URL}/adam-about.jpg`,

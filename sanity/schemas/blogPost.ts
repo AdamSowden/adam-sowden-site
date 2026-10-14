@@ -1,5 +1,17 @@
 import { defineField, defineType } from 'sanity'
 
+// Alt text on every image. The publish pipeline has always written `alt`
+// onto the image objects and the templates have always read it; declaring
+// it here makes it visible and editable in Studio instead of a hidden key.
+const altField = defineField({
+  name: 'alt',
+  title: 'Alt text',
+  type: 'string',
+  description:
+    'Describe what the image shows, for screen readers and AI crawlers. Not a caption.',
+  validation: (Rule) => Rule.max(160),
+})
+
 export default defineType({
   name: 'blogPost',
   title: 'Blog Post',
@@ -30,24 +42,27 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [altField],
     }),
     defineField({
       name: 'midImage',
       title: 'Mid Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [altField],
     }),
     defineField({
       name: 'socialImage',
       title: 'Social Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [altField],
     }),
     defineField({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [{ type: 'block' }, { type: 'image' }],
+      of: [{ type: 'block' }, { type: 'image', fields: [altField] }],
     }),
     defineField({
       name: 'metaDescription',

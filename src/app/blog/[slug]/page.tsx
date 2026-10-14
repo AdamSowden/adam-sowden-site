@@ -15,7 +15,9 @@ import RelatedPosts from "@/components/RelatedPosts";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
 import { portableTextToPlain } from "@/lib/portable-text-plain";
-import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_URL, SITE_NAME, PERSON_REF } from "@/lib/site";
+import { modifiedAt, isRevised } from "@/lib/post-dates";
+import { headingId } from "@/lib/heading-id";
 
 export const revalidate = 60;
 
@@ -43,11 +45,13 @@ type BlogPost = {
   articleSection?: string;
   faqItems?: FAQItem[];
   authorName?: string;
+  _updatedAt?: string;
 };
 
 const postQuery = `*[_type == "blogPost" && slug.current == $slug && complianceApproved == true][0] {
   _id, title, slug, publishedAt, heroImage, midImage, socialImage,
-  body, metaDescription, primaryKeyword, articleSection, faqItems, authorName
+  body, metaDescription, primaryKeyword, articleSection, faqItems, authorName,
+  _updatedAt
 }`;
 
 async function getPost(slug: string): Promise<BlogPost | null> {
@@ -99,6 +103,8 @@ export async function generateMetadata({
       siteName: "Adam Sowden",
       images: ogImage ? [{ url: ogImage, width: 1200, height: 630 }] : [],
       publishedTime: post.publishedAt,
+      modifiedTime: modifiedAt(post.publishedAt, post._updatedAt),
+      authors: [`${SITE_URL}/about`],
     },
     twitter: {
       card: "summary_large_image",
@@ -111,13 +117,19 @@ export async function generateMetadata({
 
 const components: PortableTextComponents = {
   block: {
-    h2: ({ children }) => (
-      <h2 className="font-serif text-3xl md:text-4xl tracking-tight text-[#111111] mt-12 mb-5 leading-tight">
+    h2: ({ children, value }) => (
+      <h2
+        id={headingId(value)}
+        className="font-serif text-3xl md:text-4xl tracking-tight text-[#111111] mt-12 mb-5 leading-tight scroll-mt-24"
+      >
         {children}
       </h2>
     ),
-    h3: ({ children }) => (
-      <h3 className="font-semibold text-xl md:text-2xl text-[#111111] mt-10 mb-4 leading-snug">
+    h3: ({ children, value }) => (
+      <h3
+        id={headingId(value)}
+        className="font-semibold text-xl md:text-2xl text-[#111111] mt-10 mb-4 leading-snug scroll-mt-24"
+      >
         {children}
       </h3>
     ),
@@ -220,6 +232,21 @@ export default async function BlogPostPage({
     : undefined;
   const postUrl = `${SITE_URL}/blog/${post.slug.current}`;
 
+  // Freshness. Schema and OG always carry the last change; the visible
+  // "Updated" line appears only once an edit lands more than a day after
+  // publication (see lib/post-dates.ts).
+  const modified = modifiedAt(post.publishedAt, post._updatedAt);
+  const updated = isRevised(post.publishedAt, post._updatedAt)
+    ? {
+        iso: modified,
+        label: new Date(modified).toLocaleDateString("en-AU", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+      }
+    : undefined;
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -227,9 +254,12 @@ export default async function BlogPostPage({
     description: post.metaDescription,
     image: heroImageUrl ? [heroImageUrl] : undefined,
     datePublished: post.publishedAt,
+    dateModified: modified,
     inLanguage: "en",
     wordCount,
-    author: { "@id": `${SITE_URL}/about#adam-sowden` },
+    // Inline Person, not a bare @id: the full node lives on /about, but an
+    // engine reading this page alone still needs a named author here.
+    author: PERSON_REF,
     publisher: { "@id": `${SITE_URL}/#organization` },
     articleSection: post.articleSection,
     keywords: post.primaryKeyword,
@@ -279,7 +309,7 @@ export default async function BlogPostPage({
       <SiteNav />
       <main className="flex-1">
         <article>
-          <Header post={post} publishedDate={publishedDate} />
+          <Header post={post} publishedDate={publishedDate} updated={updated} />
           {heroImageUrl && (
             <HeroImage
               src={heroImageUrl}
@@ -340,9 +370,11 @@ export default async function BlogPostPage({
 function Header({
   post,
   publishedDate,
+  updated,
 }: {
   post: BlogPost;
   publishedDate: string;
+  updated?: { iso: string; label: string };
 }) {
   return (
     <header className="bg-white">
@@ -360,10 +392,24 @@ function Header({
             {post.metaDescription}
           </p>
         )}
-        <div className="mt-8 flex items-center gap-4 text-sm text-black/55">
-          <span>{post.authorName || "Adam Sowden"}</span>
+        <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-black/55">
+          <a
+            href="/about"
+            rel="author"
+            className="text-[#111111]/80 hover:text-[#188bf6] hover:underline"
+          >
+            {post.authorName || "Adam Sowden"}
+          </a>
           <span aria-hidden>·</span>
           <time dateTime={post.publishedAt}>{publishedDate}</time>
+          {updated && (
+            <>
+              <span aria-hidden>·</span>
+              <span>
+                Updated <time dateTime={updated.iso}>{updated.label}</time>
+              </span>
+            </>
+          )}
         </div>
       </div>
     </header>

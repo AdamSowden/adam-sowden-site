@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { client } from "@/lib/sanity";
 import { SITE_URL } from "@/lib/site";
+import { modifiedAt } from "@/lib/post-dates";
 
 // The sitemap must reflect posts published in Sanity between deploys.
 // `export const revalidate` is NOT enough here: unlike a page route, the
@@ -69,6 +70,7 @@ const staticRoutes: Array<{
 type SitemapPost = {
   slug?: { current?: string };
   publishedAt?: string;
+  _updatedAt?: string;
 };
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -105,14 +107,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const posts = await client.fetch<SitemapPost[]>(
       `*[_type == "blogPost" && complianceApproved == true && defined(slug.current)]{
         "slug": slug,
-        publishedAt
+        publishedAt,
+        _updatedAt
       } | order(publishedAt desc)`
     );
+    // Posts carry a real lastmod: the later of publishedAt and Sanity's
+    // _updatedAt, so an edit in the CMS tells crawlers the page changed.
     postEntries = (posts || [])
       .filter((p) => p?.slug?.current)
       .map((p) => ({
         url: `${SITE_URL}/blog/${p.slug!.current}`,
-        lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
+        lastModified: p.publishedAt
+          ? new Date(modifiedAt(p.publishedAt, p._updatedAt))
+          : now,
         changeFrequency: "monthly" as const,
         priority: 0.7,
       }));

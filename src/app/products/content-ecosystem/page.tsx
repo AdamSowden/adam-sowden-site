@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import ChatWidget from "@/components/ChatWidget";
-import { SITE_URL, OG_DEFAULTS } from "@/lib/site";
+import { SITE_URL, OG_DEFAULTS, PERSON_REF } from "@/lib/site";
 
 const PAGE_PATH = "/products/content-ecosystem";
 const CTA_LABEL = "Book the Strategy Session";
@@ -138,7 +138,7 @@ const productJsonLd = {
   name: "The Content Ecosystem",
   description: ANSWER_FIRST,
   serviceType: "AI marketing software",
-  provider: { "@type": "Person", name: "Adam Sowden", url: SITE_URL },
+  provider: PERSON_REF,
   url: `${SITE_URL}${PAGE_PATH}`,
 };
 

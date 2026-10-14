@@ -3,7 +3,7 @@ import Link from "next/link";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import { SITE_URL, WAITLIST_URL, OG_DEFAULTS } from "@/lib/site";
+import { SITE_URL, WAITLIST_URL, OG_DEFAULTS, PERSON_REF } from "@/lib/site";
 
 const PAGE_PATH = "/products/marketing-ecosystem";
 const CTA_LABEL = "Join the Waiting List";
@@ -55,7 +55,7 @@ const productJsonLd = {
   name: "The Marketing Ecosystem",
   description: ANSWER_FIRST,
   serviceType: "AI marketing software",
-  provider: { "@type": "Person", name: "Adam Sowden", url: SITE_URL },
+  provider: PERSON_REF,
   url: `${SITE_URL}${PAGE_PATH}`,
 };
 
