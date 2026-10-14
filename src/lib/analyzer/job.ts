@@ -14,6 +14,10 @@ import { DIMENSION_LABEL } from "./scoring";
 import { summarisePage, type CrawlResult, type ExtractorResult, type PageSummary } from "./types";
 import { guardUrl, normaliseInput, type Resolver } from "./url-guard";
 import { getStore, LIMITS, todayKey, type AnalyzerStore } from "./store";
+import { buildReport, type Report } from "./report";
+import type { NarrativeCaller } from "./narrative";
+import { reportUrlFor, sendReportEmail } from "./analyzer-email";
+import { BOOKING_URL, SITE_URL } from "../site";
 
 export type JobState = "queued" | "fast" | "slow" | "done" | "partial" | "failed";
 
@@ -35,6 +39,9 @@ export type AnalyzerJob = {
   error: string | null;
   email: string | null;
   costInputs: { enquiries: number; value: number; closeRate: number } | null;
+  report: Report | null;
+  reportSentAt: number | null;
+  reportSendError: string | null;
   createdAt: number;
   updatedAt: number;
   completedAt: number | null;
@@ -53,6 +60,8 @@ export type RunnerOptions = {
   psiFetch?: typeof fetch;
   assessCaller?: AssessCaller;
   assessRuns?: number;
+  narrativeCaller?: NarrativeCaller;
+  emailFetch?: typeof fetch;
   now?: () => number;
   skipAssessed?: boolean;
   skipPsi?: boolean;
@@ -63,6 +72,7 @@ function newJob(url: string, host: string, now: number): AnalyzerJob {
     token: randomUUID().replace(/-/g, ""),
     url, host, state: "queued", preliminary: true, steps: [], pages: [], results: [], card: null, headline: null,
     specifics: [], couldNotCheck: [], error: null, email: null, costInputs: null,
+    report: null, reportSentAt: null, reportSendError: null,
     createdAt: now, updatedAt: now, completedAt: null, cachedFrom: null,
   };
 }
@@ -201,12 +211,37 @@ export async function runSlowPath(token: string, opts: RunnerOptions = {}): Prom
     job.completedAt = now();
     await step(job, store, "Report ready", now);
     await store.setDomainToken(job.host, job.token);
+    await deliverReport(job, store, opts);
   } catch (e) {
     // The fast-path findings stand; the job is partial, never silently complete.
     job.state = "partial";
     job.error = (e as Error).message;
     job.completedAt = now();
     await step(job, store, "Some checks could not run", now);
+  }
+  return job;
+}
+
+/**
+ * Build the report once the job is finished, and send it once if an email is
+ * on the job. Safe to call from the slow path and from the email route; it is
+ * idempotent on reportSentAt. The web report page also calls buildReport
+ * lazily when a job finished before the report was persisted.
+ */
+export async function deliverReport(job: AnalyzerJob, store: AnalyzerStore, opts: RunnerOptions = {}): Promise<AnalyzerJob> {
+  if (!job.card || !(job.state === "done" || job.state === "partial")) return job;
+  if (!job.report || (job.costInputs && !job.report.cost)) {
+    const benchmark = await store.getBenchmark();
+    job.report = await buildReport(job, benchmark, { narrativeCaller: opts.narrativeCaller });
+    job.updatedAt = (opts.now ?? Date.now)();
+    await store.putJob(job);
+  }
+  if (job.email && !job.reportSentAt) {
+    const res = await sendReportEmail({ to: job.email, report: job.report, reportUrl: reportUrlFor(job.token), bookingUrl: `${SITE_URL}${BOOKING_URL}`, fetchImpl: opts.emailFetch });
+    if (res.ok) job.reportSentAt = (opts.now ?? Date.now)();
+    else job.reportSendError = res.error ?? "send failed";
+    job.updatedAt = (opts.now ?? Date.now)();
+    await store.putJob(job);
   }
   return job;
 }

@@ -5,11 +5,17 @@
 // this record. Never required before the first finding (spec §13).
 
 import { NextRequest } from "next/server";
+import { setDefaultResultOrder } from "node:dns";
+setDefaultResultOrder("ipv4first");
+
+import { after } from "next/server";
 import { getStore } from "@/lib/analyzer/store";
+import { deliverReport } from "@/lib/analyzer/job";
 import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 120;
 
 type Body = { token?: unknown; email?: unknown; costInputs?: { enquiries?: unknown; value?: unknown; closeRate?: unknown } | null };
 
@@ -48,7 +54,20 @@ export async function POST(req: NextRequest) {
 
   job.email = email;
   job.costInputs = costInputs ?? job.costInputs;
+  job.reportSentAt = null;
   job.updatedAt = Date.now();
   await store.putJob(job);
-  return Response.json({ ok: true, reportReady: job.state === "done" || job.state === "partial" });
+  const ready = job.state === "done" || job.state === "partial";
+  // If the job is already finished, build and send now (after the response).
+  // Otherwise the slow path sends when it completes.
+  if (ready) {
+    after(async () => {
+      try {
+        await deliverReport(job, store);
+      } catch (err) {
+        console.error("[analyzer] deliverReport error", token, err);
+      }
+    });
+  }
+  return Response.json({ ok: true, reportReady: ready });
 }

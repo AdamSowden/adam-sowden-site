@@ -2,6 +2,46 @@
 // report. Written to the brand voice: plain, about the site, never the owner.
 
 export const FIXES: Record<string, string> = {
+  // 1 Offer
+  "of-01": "Rewrite the hero to say what you do, for whom, and what changes for them.",
+  "of-02": "Show how the result is produced, in steps a buyer can picture.",
+  "of-03": "Cut the lines any competitor could say and replace them with what only this business can.",
+  "of-04": "Lead every section with the change for the buyer, then what is delivered.",
+  "of-05": "Use one primary call to action, repeated, with at most one softer alternative.",
+  "of-06": "Say how it is priced, even if the number is scoped per client.",
+  "of-07": "State the standard you hold yourself to, or who this is not for.",
+  // 2 Copy quality
+  "cq-01": "Rewrite the headline with a benefit, a who, and a specific; drop the slogan.",
+  "cq-02": "Make the first sentence pay off the headline and cut everything before it.",
+  "cq-03": "Open each section with what changes for the reader, then what is delivered.",
+  "cq-04": "Replace the vague claim quoted in the evidence with a number, a name or a situation.",
+  "cq-05": "Answer price, effort and fit next to the call to action.",
+  "cq-06": "Shorten the sentences and swap the long words for the ones people say.",
+  "cq-07": "Vary sentence length; the copy reads as machine-paced.",
+  "cq-08": "Remove the filler and AI vocabulary listed in the evidence.",
+  "cq-09": "Write the button in the visitor's voice: 'Send me', 'Show me my'.",
+  "cq-10": "Put one piece of proof beside the first call to action.",
+  // 3 Target market
+  "tm-01": "Put the buyer in the headline: who it is for and what changes for them.",
+  "tm-02": "Define the buyer by what is happening to them, not by the category they belong to.",
+  "tm-03": "Rewrite the opening so the first two sentences are about the reader, and move the company story below the fold.",
+  "tm-04": "Replace 'we' with 'you' in the hero and opening wherever the sentence allows it.",
+  "tm-05": "Use the words the buyer would use to describe the problem.",
+  "tm-06": "Answer price, effort, fit and next step somewhere on every commercial page.",
+  "tm-07": "Add one page or section per audience you serve, each saying something the others do not.",
+  "tm-08": "Say who this is not for.",
+  "tm-09": "Use the same audience words in the meta description and schema as on the page.",
+  "tm-10": "Lead with proof from the buyer type you are trying to attract.",
+  // 4 Trust
+  "tr-01": "Add two attributed testimonials with a result in them: first name, role, category or location.",
+  "tr-02": "Replace the round numbers and adjectives with specific figures and situations.",
+  "tr-03": "Put one proof element beside the first and the last call to action.",
+  "tr-04": "Show who is behind the business: name, role, real photo.",
+  "tr-05": "State the credentials and the track record in one line near the hero.",
+  "tr-06": "Add the address or service area, a phone number, and the policy pages.",
+  "tr-07": "Link to the profiles and reviews other people host.",
+  "tr-08": "Name the source beside every statistic.",
+  "tr-09": "Remove the proof that looks manufactured; it costs more than it earns.",
   // 5 SEO
   "seo-01": "Remove the noindex directive from pages that should rank.",
   "seo-02": "Publish a valid sitemap.xml and reference it from robots.txt.",
