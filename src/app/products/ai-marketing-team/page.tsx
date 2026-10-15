@@ -657,13 +657,13 @@ function HowItWorks() {
         <p className="mt-12 max-w-3xl mx-auto text-lg text-[#111111]/75 leading-relaxed text-center">
           Not sure Irene is the one that moves your sales fastest? The{" "}
           <Link
-            href="/diagnostic"
+            href="/analyzer"
             className="text-[#188bf6] underline underline-offset-4 hover:text-[#111111] transition"
           >
-            AI Marketing Diagnostic
+            Smart Site Analyzer
           </Link>{" "}
-          takes seven to ten minutes and tells you which of the six systems to
-          start with.
+          reads your website in about a minute and shows where it is losing
+          the most.
         </p>
       </div>
     </section>

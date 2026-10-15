@@ -13,7 +13,7 @@ import { getStore } from "@/lib/analyzer/store";
 import { deliverReport } from "@/lib/analyzer/job";
 import type { Report, ReportDimension } from "@/lib/analyzer/report";
 import type { StatusCounts } from "@/lib/analyzer/scoring";
-import { BOOKING_URL } from "@/lib/site";
+import { BOOKING_URL, DIAGNOSTIC_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -135,6 +135,10 @@ function ReportBody({ report }: { report: Report }) {
         <div className="mt-6">
           <CTAButton href={BOOKING_URL} variant="light" size="lg">Book a Quick Chat</CTAButton>
         </div>
+        <p className="mt-6 text-sm text-white/60">
+          Want a plan for your marketing rather than a report on your site? The{" "}
+          <a href={DIAGNOSTIC_URL} className="underline underline-offset-4 hover:text-white">AI Marketing Diagnostic</a> takes seven to ten minutes.
+        </p>
       </section>
     </article>
   );

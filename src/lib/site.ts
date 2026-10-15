@@ -6,6 +6,13 @@ import type { Metadata } from "next";
 // confirmation + questionnaire flow.
 export const BOOKING_URL = "/book";
 
+// Smart Site Analyzer: the public front door. Every primary CTA points here
+// (Adam, 15 Oct 2026). The 18-question diagnostic stays live at /diagnostic as
+// a back page reached from the analyzer report, not from navigation or hero CTAs.
+export const ANALYZER_URL = "/analyzer";
+export const ANALYZER_CTA_LABEL = "Analyze My Site";
+export const DIAGNOSTIC_URL = "/diagnostic";
+
 // Branded waitlist page — "Join the Waiting List" CTAs (Outreach Agent,
 // Marketing Ecosystem) point here. The page embeds the LeadConnector
 // opt-in form below.

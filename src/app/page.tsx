@@ -5,8 +5,8 @@ import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import AnalyzerUrlForm from "@/components/AnalyzerUrlForm";
 
-const DIAGNOSTIC_URL = "/diagnostic";
-const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
+const ANALYZER_URL = "/analyzer";
+const ANALYZER_CTA_LABEL = "Analyze My Site";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 const homeFaqItems = [
   {
-    question: "What is the AI Marketing Diagnostic?",
+    question: "What is the Smart Site Analyzer?",
     answer:
-      "An 18-question AI-led conversation that identifies where AI marketing automation will have the biggest impact in your business right now. Takes seven to ten minutes. At the end you get a personalised written implementation plan covering where AI fits first, an Effort vs Impact map, a three-action Fix Sequence, and three micro-actions you can take this week without help. The report is shown on screen and emailed to you.",
+      "Enter your website address and the analyzer reads your public pages and reports what it finds: how a ready buyer can get in touch, whether AI search engines can read the site, how it is built, how fast it loads, and the three things to fix first. The first finding is on screen in about a minute with no email required. The full report, with every finding and its evidence, is sent by email.",
   },
   {
     question: "What is an autonomous AI marketing system?",
@@ -40,7 +40,7 @@ const homeFaqItems = [
   {
     question: "Do I need to buy all six automations?",
     answer:
-      "No. Each automation handles a different part of the marketing job. Start with the one that will move your sales fastest. The AI Marketing Diagnostic tells you which one that is for your specific business.",
+      "No. Each automation handles a different part of the marketing job. Start with the one that will move your sales fastest. The Smart Site Analyzer shows where your current website is losing the most, which is usually where to start.",
   },
   {
     question: "How long does it take to see results?",
@@ -105,20 +105,14 @@ function Hero() {
             Currently working with a limited number of new clients per quarter.
           </p>
           <div className="mt-10">
-            <CTAButton size="lg" href={DIAGNOSTIC_URL}>
-              {DIAGNOSTIC_CTA_LABEL}
-            </CTAButton>
-            <p className="mt-3 text-xs text-black/55 max-w-md">
-              Free. Seven to ten minutes. AI Marketing Diagnostic with a
-              personalised implementation plan at the end.
+            <p className="text-sm font-medium text-[#111111] mb-3">
+              Start with your website.
             </p>
-            <div className="mt-8 pt-6 border-t border-black/10">
-              <p className="text-sm text-[#111111]/70 mb-3">
-                Or start with your website. Real findings about your own site in
-                about a minute, no email needed.
-              </p>
-              <AnalyzerUrlForm />
-            </div>
+            <AnalyzerUrlForm />
+            <p className="mt-3 text-xs text-black/55 max-w-md">
+              Free. Real findings about your own site in about a minute. No
+              email needed to see the first one.
+            </p>
           </div>
         </div>
         <div className="flex justify-center md:justify-end">
@@ -331,8 +325,8 @@ function TheProducts() {
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
           Not a ladder. Each automation handles a different part of the
           marketing job. The architecture is shared. The standard is the
-          same. The AI Marketing Diagnostic tells you which one will move
-          your sales fastest.
+          same. The Smart Site Analyzer shows where your current website is
+          losing the most, which is usually where to start.
         </p>
 
         <div className="mt-14 flex flex-wrap justify-center gap-6 md:gap-8">
@@ -355,8 +349,8 @@ function TheProducts() {
               </p>
 
               <div className="mt-8">
-                <CTAButton variant="ghost" href={DIAGNOSTIC_URL} fullWidth>
-                  {DIAGNOSTIC_CTA_LABEL}
+                <CTAButton variant="ghost" href={ANALYZER_URL} fullWidth>
+                  {ANALYZER_CTA_LABEL}
                 </CTAButton>
               </div>
             </div>
@@ -380,7 +374,7 @@ function TrustCluster() {
       icon: <polyline points="20 6 9 17 4 12" />,
     },
     {
-      label: "7-10 min AI Marketing Diagnostic, no pitch",
+      label: "Free site analyzer, first finding with no email",
       icon: (
         <>
           <circle cx="12" cy="12" r="10" />
@@ -490,19 +484,18 @@ function FinalCTA() {
           Start running it.
         </h2>
         <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-          The AI Marketing Diagnostic is the fastest way to see where AI could
-          be running your marketing right now, where it would deliver the
-          biggest lift in sales, and where to start. Seven to ten minutes. No
-          pitch.
+          The Smart Site Analyzer reads your website and shows where it is
+          losing enquiries, whether AI search can read it, and the three things
+          to fix first. About a minute. No pitch.
         </p>
 
         <div className="mt-10 flex flex-col items-center gap-3">
-          <CTAButton size="lg" href={DIAGNOSTIC_URL}>
-            {DIAGNOSTIC_CTA_LABEL}
+          <CTAButton size="lg" href={ANALYZER_URL}>
+            {ANALYZER_CTA_LABEL}
           </CTAButton>
           <p className="text-xs text-black/55">
-            Free. Seven to ten minutes. AI Marketing Diagnostic. Instant
-            personalised implementation plan.
+            Free. The first finding is on screen with no email. The full report
+            is sent to you.
           </p>
         </div>
       </div>

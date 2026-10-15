@@ -101,8 +101,9 @@ export default function ProductsPage() {
             </h1>
             <p className="mt-7 text-lg md:text-xl text-[#111111]/75 max-w-3xl mx-auto leading-relaxed">
               Six modular systems, each running a different part of your
-              marketing without you. Start with the one you need first, and the
-              AI Marketing Diagnostic tells you which moves your sales fastest.
+              marketing without you. Start with the one you need first. The
+              Smart Site Analyzer shows where your current website is losing
+              the most.
             </p>
           </div>
         </section>
@@ -146,13 +147,13 @@ export default function ProductsPage() {
               Not sure which one to start with?
             </h2>
             <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
-              The AI Marketing Diagnostic is seven to ten minutes, no call. You
-              get a written plan showing where AI would move your sales fastest,
-              and which system to start with.
+              Enter your website address. In about a minute the Smart Site
+              Analyzer shows where your site is losing enquiries and the three
+              things to fix first, no email needed to see the first finding.
             </p>
             <div className="mt-10 flex justify-center">
-              <CTAButton size="lg" href="/diagnostic">
-                Get MY AI Marketing Implementation Plan
+              <CTAButton size="lg" href="/analyzer">
+                Analyze My Site
               </CTAButton>
             </div>
           </div>

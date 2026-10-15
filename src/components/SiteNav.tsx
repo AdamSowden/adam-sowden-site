@@ -33,10 +33,10 @@ export default function SiteNav() {
             ))}
           </div>
           <Link
-            href="/diagnostic"
+            href="/analyzer"
             className="ml-1 md:ml-2 inline-flex items-center rounded-full bg-[#188bf6] text-white px-4 py-2 text-xs sm:text-sm font-medium hover:bg-[#0d78dc] transition whitespace-nowrap"
           >
-            Get MY AI Marketing Plan
+            Analyze My Site
           </Link>
 
           {/* Mobile menu — pure-CSS disclosure, mirrors the FAQ details/group-open pattern */}

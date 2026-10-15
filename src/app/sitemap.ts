@@ -62,7 +62,7 @@ const staticRoutes: Array<{
     priority: 0.8,
   },
   { path: "/blog", changeFrequency: "weekly", priority: 0.9 },
-  { path: "/diagnostic", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/diagnostic", changeFrequency: "monthly", priority: 0.4 },
   { path: "/book", changeFrequency: "monthly", priority: 0.7 },
   { path: "/waitlist", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.6 },

@@ -5,8 +5,8 @@ import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import { SITE_URL, OG_DEFAULTS, PERSON_ID } from "@/lib/site";
 
-const DIAGNOSTIC_URL = "/diagnostic";
-const DIAGNOSTIC_CTA_LABEL = "Get MY AI Marketing Implementation Plan";
+const ANALYZER_URL = "/analyzer";
+const ANALYZER_CTA_LABEL = "Analyze My Site";
 
 export const metadata: Metadata = {
   title: "About Adam Sowden: Billion-Dollar Marketing, Built Into AI",
@@ -279,13 +279,13 @@ function FinalCTA() {
             See where AI fits in your marketing.
           </h3>
           <p className="mt-4 text-[#111111]/70 leading-relaxed">
-            The AI Marketing Diagnostic. Seven to ten minutes, no call. You
-            get a written plan showing where AI would move your sales
-            fastest, and where to start.
+            The Smart Site Analyzer. Enter your website address and in about
+            a minute you see where the site is losing enquiries and the three
+            things to fix first. No email to see the first finding.
           </p>
           <div className="mt-6">
-            <CTAButton size="lg" href={DIAGNOSTIC_URL}>
-              {DIAGNOSTIC_CTA_LABEL}
+            <CTAButton size="lg" href={ANALYZER_URL}>
+              {ANALYZER_CTA_LABEL}
             </CTAButton>
           </div>
         </div>
