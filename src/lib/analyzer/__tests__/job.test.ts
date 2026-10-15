@@ -19,7 +19,7 @@ const fetchImpl = fakeFetch({
 });
 const fakeAssess = async (system: string): Promise<Assessment> => {
   const ids = [...system.matchAll(/^([a-z]{2}-\d\d) \(/gm)].map((m) => m[1]);
-  return { criteria: ids.map((id) => ({ criterionId: id, status: "fail", evidence: "", note: "fake" })) };
+  return { criteria: ids.map((id) => ({ criterionId: id, status: "fail" as const, evidence: "", note: "fake", location: "", confidence: "low" as const })) };
 };
 const base = { resolver, crawl: { fetchImpl, resolver }, assessCaller: fakeAssess, skipPsi: true } as const;
 

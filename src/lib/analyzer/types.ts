@@ -40,6 +40,10 @@ export type Finding = {
   note?: string;
   /** True when the judgement failed the anti-slop gate and was dropped; the quoted evidence stands alone. */
   noteDropped?: boolean;
+  /** Assessed layer only. */
+  confidence?: "high" | "medium" | "low";
+  /** Assessed layer only: where on the page the evidence sits (hero, opening, section heading, proof block, CTA). */
+  location?: string;
 };
 
 export type HttpHeaders = Record<string, string>;

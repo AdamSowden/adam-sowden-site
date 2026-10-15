@@ -3,6 +3,8 @@
 
 export const FIXES: Record<string, string> = {
   // 1 Offer
+  "of-11": "Say, in the first screen, what is happening to the buyer now, what changes, and why this offer is the thing that changes it.",
+  "of-12": "Name what the problem costs the buyer and what resolving it is worth, with any figure sourced or marked as illustrative.",
   "of-01": "Rewrite the hero to say what you do, for whom, and what changes for them.",
   "of-02": "Show how the result is produced, in steps a buyer can picture.",
   "of-03": "Cut the lines any competitor could say and replace them with what only this business can.",
@@ -11,6 +13,9 @@ export const FIXES: Record<string, string> = {
   "of-06": "Say how it is priced, even if the number is scoped per client.",
   "of-07": "State the standard you hold yourself to, or who this is not for.",
   // 2 Copy quality
+  "cq-13": "Carry each main claim past the feature to the practical benefit and on to the outcome that matters to the buyer.",
+  "cq-14": "Open on the reader's situation, a specific result, or a real tension. Cut the greeting and the company introduction.",
+  "cq-15": "Write it the way a competent person would explain it to a sceptical buyer: direct, bounded claims, evidence separated from promise.",
   "cq-01": "Rewrite the headline with a benefit, a who, and a specific. Drop the slogan.",
   "cq-02": "Make the first sentence pay off the headline and cut everything before it.",
   "cq-03": "Open each section with what changes for the reader, then what is delivered.",

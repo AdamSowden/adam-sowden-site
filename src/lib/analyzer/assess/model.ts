@@ -30,6 +30,8 @@ export const AssessmentSchema = z.object({
       status: StatusSchema,
       evidence: z.string().describe("A verbatim quote from the supplied page text that supports the status. Empty only when status is na."),
       note: z.string().describe("One sentence explaining the judgement. No numbers that are not in the evidence."),
+      location: z.string().describe("Where the evidence sits: hero, opening, section heading, body, proof block, FAQ, or CTA."),
+      confidence: z.enum(["high", "medium", "low"]).describe("How confident you are in the status given the evidence available."),
     }),
   ),
 });
@@ -48,6 +50,8 @@ export function buildSystemPrompt(rubric: Rubric): string {
     "- Status is pass, partial or fail as defined per criterion. Use na only where the criterion says it may not apply.",
     "- evidence must be a verbatim quote copied from the supplied text (20 to 240 characters). If you cannot quote supporting text, the status cannot be pass.",
     "- note is one plain sentence. Do not introduce numbers that are not in the evidence.",
+    "- location names where the evidence sits on the page. confidence is high, medium or low.",
+    "- A pass must be supported by visible copy. Never infer buyer understanding, pain, credibility or outcomes the page does not state or clearly demonstrate.",
     "- Findings are about the site, never about the owner. Be conservative: when torn between two statuses, choose the lower.",
     "- House style for the note: plain words. No em dashes, no semicolons, no 'quietly', 'seamlessly', 'effortlessly', 'silently', no 'genuinely', 'honestly', 'actually', 'really', 'truly', no 'delve', 'robust', 'holistic', 'leverage', 'pivotal', 'journey', 'unlock', 'empower'.",
     "",
@@ -101,22 +105,29 @@ function reconcileOne(c: RubricCriterion, dimension: Rubric["dimension"], ra: As
   const base = { dimension, criterionId: c.id, layer: "assessed" as const, weight: c.weight, fixId: c.id, pages: [] as string[] };
   if (!ra && !rb) return { ...base, status: "uncertain", evidence: "The model did not return this criterion." };
   const runs = [ra, rb].filter((x): x is NonNullable<typeof x> => Boolean(x));
-  // na handling: both na and allowed -> na; otherwise treat na as uncertain.
+  const lowerConf = (a?: string, b?: string) => (["low", "medium", "high"].find((l) => a === l || b === l) ?? a ?? b) as Finding["confidence"];
+  // na: only where the rubric allows it. Otherwise it is "not observed": excluded
+  // from the score and reported as a coverage gap. Never scored as 0.5.
   if (runs.every((r) => r.status === "na")) {
     if (c.naAllowed) return { ...base, status: "na", evidence: "", naReason: runs[0].note || "Not applicable." };
-    return { ...base, status: "uncertain", evidence: runs[0].note || "Returned not applicable where it is not allowed." };
+    return { ...base, status: "na", evidence: "", naReason: `Not observed: ${runs[0].note || "the model could not assess this from the supplied copy."}` };
   }
   const graded = runs.map((r) => ({ ...r, status: r.status === "na" ? ("uncertain" as FindingStatus) : (r.status as FindingStatus) }));
-  // Evidence verification: a pass or partial without verbatim evidence is downgraded.
-  const verified = graded.map((r) => (r.status === "fail" || verifyEvidence(r.evidence, corpus) ? r : { ...r, status: "uncertain" as FindingStatus, note: `${r.note} (evidence could not be verified verbatim)` }));
+  // Evidence verification: a pass or partial whose quote is not verbatim on the
+  // page is not observed. Excluded from the score, shown as a coverage gap.
+  const unverifiable = graded.filter((r) => r.status !== "fail" && !verifyEvidence(r.evidence, corpus));
+  if (unverifiable.length === graded.length) {
+    return { ...base, status: "na", evidence: "", naReason: "Not observed: the quoted evidence could not be found verbatim on the page.", confidence: "low" };
+  }
+  const verified = graded.filter((r) => r.status === "fail" || verifyEvidence(r.evidence, corpus));
   if (verified.length === 1) {
     const r = verified[0];
-    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note, ...gateNote(r.note) };
+    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note, ...gateNote(r.note), confidence: (r.confidence ?? "medium") as Finding["confidence"], location: r.location };
   }
   const [x, y] = verified;
   const lower = RANK[x.status] <= RANK[y.status] ? x : y;
-  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600), ...gateNote(x.note) };
-  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600), ...gateNote(lower.note) };
+  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600), ...gateNote(x.note), confidence: lowerConf(x.confidence, y.confidence), location: x.location };
+  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600), ...gateNote(lower.note), confidence: "low", location: lower.location };
 }
 
 export async function assessRubric(rubric: Rubric, windows: AssessmentWindows, caller: AssessCaller, runs = 2): Promise<Finding[]> {

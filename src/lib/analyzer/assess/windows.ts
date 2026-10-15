@@ -39,7 +39,8 @@ function heroOf(home: PageModel): string {
   const h1 = home.headings.find((h) => h.level === 1)?.text ?? "";
   const i = h1 ? home.text.indexOf(h1) : -1;
   const after = i >= 0 ? home.text.slice(i + h1.length) : home.text;
-  const sub = words(after, 45);
+  // Opening per the copy criteria: the H1 plus the first 75 visible words.
+  const sub = words(after, 75);
   const cta = home.links.find((l) => l.internal && CTA_RE.test(l.text) && l.text.length <= 60)?.text ?? "";
   return [h1, sub, cta ? `[CTA: ${cta}]` : ""].filter(Boolean).join("\n");
 }
@@ -48,8 +49,8 @@ function openingOf(home: PageModel): string {
   const h1 = home.headings.find((h) => h.level === 1)?.text ?? "";
   const i = h1 ? home.text.indexOf(h1) : -1;
   const after = i >= 0 ? home.text.slice(i + h1.length) : home.text;
-  // Skip the hero sub (first 45 words) and take the next 150.
-  return after.split(/\s+/).filter(Boolean).slice(45, 195).join(" ");
+  // After the 75-word opening, the next 150 words (the primary proposition continues).
+  return after.split(/\s+/).filter(Boolean).slice(75, 225).join(" ");
 }
 
 function proofLinesOf(p: PageModel, max = 8): string[] {
@@ -94,8 +95,8 @@ export function buildWindows(crawl: CrawlResult, maxPages = 5): AssessmentWindow
 export function renderWindows(w: AssessmentWindows): string {
   const lines: string[] = [];
   lines.push(`SITE: ${w.host}`);
-  lines.push(`\nHERO (what a visitor sees first):\n${w.hero}`);
-  lines.push(`\nOPENING (the next ~150 words of body copy):\n${w.opening}`);
+  lines.push(`\nOPENING (the H1 plus the first 75 visible words, then the first CTA):\n${w.hero}`);
+  lines.push(`\nPRIMARY PROPOSITION CONTINUES (the next ~150 words):\n${w.opening}`);
   lines.push(`\nHOME TITLE: ${w.homeTitle}\nHOME META DESCRIPTION: ${w.homeDescription}\nSCHEMA DESCRIPTION: ${w.schemaDescription || "(none)"}`);
   for (const p of w.pages) {
     lines.push(`\n--- PAGE ${p.path} ---\nTITLE: ${p.title}\nDESCRIPTION: ${p.description}\nHEADINGS:\n${p.headings.join("\n")}\nOPENING TEXT (first 400 words):\n${p.opening}\nCTA TEXTS: ${p.ctaTexts.join(" | ") || "(none)"}\nFORM FIELD COUNTS: ${p.formFieldCounts.join(", ") || "(no forms)"}\nLINES WITH NUMBERS OR QUOTES:\n${p.proofLines.join("\n") || "(none)"}\nIMAGE ALT TEXT SAMPLE: ${p.imageAltSample.join(" | ") || "(none)"}`);

@@ -43,7 +43,6 @@ describe("measured message criteria", () => {
     expect(r["tm-06"]).toBe("pass");
     expect(r["tm-07"]).toBe("pass");
     expect(r["of-05"]).toBe("pass");
-    expect(r["cq-09"]).toBe("pass");
     expect(r["tr-06"]).toBe("pass");
     expect(r["tr-07"]).toBe("pass");
   });
@@ -65,11 +64,13 @@ describe("model reconciliation", () => {
       status: over[c.id]?.status ?? "pass",
       evidence: over[c.id]?.evidence ?? "Owners doing $2M to $20M who plan to sell within five years.",
       note: "ok",
+      location: "hero",
+      confidence: "high" as const,
     })),
   });
   it("keeps agreeing verified statuses", () => {
     const f = bySt(reconcile(run({}), run({}), OFFER_RUBRIC, corpus));
-    expect(f["of-01"]).toBe("pass");
+    expect(f["of-11"]).toBe("pass");
   });
   it("takes the lower status and marks uncertain on disagreement", () => {
     const f = reconcile(run({ "of-03": { status: "pass" } }), run({ "of-03": { status: "fail" } }), OFFER_RUBRIC, corpus);
@@ -77,15 +78,15 @@ describe("model reconciliation", () => {
     expect(x.status).toBe("uncertain");
     expect(x.evidence).toMatch(/runs disagreed: pass vs fail/);
   });
-  it("downgrades a pass whose evidence is not verbatim", () => {
-    const f = bySt(reconcile(run({ "of-02": { status: "pass", evidence: "This sentence is not on the page at all." } }), run({ "of-02": { status: "pass", evidence: "This sentence is not on the page at all." } }), OFFER_RUBRIC, corpus));
-    expect(f["of-02"]).toBe("uncertain");
+  it("treats a pass whose evidence is not verbatim as not observed", () => {
+    const f = bySt(reconcile(run({ "of-11": { status: "pass", evidence: "This sentence is not on the page at all." } }), run({ "of-11": { status: "pass", evidence: "This sentence is not on the page at all." } }), OFFER_RUBRIC, corpus));
+    expect(f["of-11"]).toBe("na"); // not observed: excluded, never 0.5
   });
   it("accepts na only where allowed", () => {
-    const tm = (s: "na"): Assessment => ({ criteria: TARGET_MARKET_RUBRIC.criteria.filter((c) => c.kind === "assessed").map((c) => ({ criterionId: c.id, status: s, evidence: "", note: "n/a" })) });
+    const tm = (s: "na"): Assessment => ({ criteria: TARGET_MARKET_RUBRIC.criteria.filter((c) => c.kind === "assessed").map((c) => ({ criterionId: c.id, status: s, evidence: "", note: "n/a", location: "", confidence: "low" as const })) });
     const f = bySt(reconcile(tm("na"), tm("na"), TARGET_MARKET_RUBRIC, corpus));
     expect(f["tm-10"]).toBe("na");
-    expect(f["tm-01"]).toBe("uncertain");
+    expect(f["tm-01"]).toBe("na"); // not allowed -> not observed, excluded
   });
   it("verifyEvidence normalises whitespace and quotes", () => {
     expect(verifyEvidence("Owners doing $2M   to $20M who plan", corpus)).toBe(true);
@@ -93,7 +94,7 @@ describe("model reconciliation", () => {
   });
   it("system prompt lists only assessed criteria with ids", () => {
     const p = buildSystemPrompt(OFFER_RUBRIC);
-    expect(p).toContain("of-01");
+    expect(p).toContain("of-11");
     expect(p).not.toContain("of-05 (");
     expect(p).toContain("verbatim");
   });
@@ -104,7 +105,7 @@ describe("runAssessedLayer with a fake caller", () => {
     const corpus = buildWindows(site).corpus;
     const caller = async (system: string) => {
       const ids = [...system.matchAll(/^([a-z]{2}-\d\d) \(/gm)].map((m) => m[1]);
-      return { criteria: ids.map((id) => ({ criterionId: id, status: "partial" as const, evidence: corpus.slice(0, 60), note: "fake" })) };
+      return { criteria: ids.map((id) => ({ criterionId: id, status: "partial" as const, evidence: corpus.slice(0, 60), note: "fake", location: "hero", confidence: "medium" as const })) };
     };
     const results = await runAssessedLayer(site, { caller, runs: 2 });
     expect(results.map((r) => r.dimension)).toEqual([1, 2, 3, 4]);

@@ -4,6 +4,8 @@
 
 export const CONSEQUENCES: Record<string, string> = {
   // 1 Offer
+  "of-11": "A buyer who cannot see their own situation, the change, and why this offer causes it has no reason to go further.",
+  "of-12": "Without a concrete cost and a concrete payoff, the buyer has no reason to act now rather than later.",
   "of-01": "A visitor who cannot tell what this is and who it is for in ten seconds leaves.",
   "of-02": "Outcomes with no visible mechanism read as claims, and claims are what every competitor also makes.",
   "of-03": "A pitch any competitor could run leaves the buyer choosing on price.",
@@ -12,6 +14,9 @@ export const CONSEQUENCES: Record<string, string> = {
   "of-06": "Silence on price reads as expensive and evasive to a buyer who is otherwise ready.",
   "of-07": "Without a standard or a fit statement, the buyer carries all the risk of being wrong.",
   // 2 Copy quality
+  "cq-13": "When the copy stops at the feature, the reader has to work out why it matters, and most do not.",
+  "cq-14": "An opening that does not move the reader forward is where most of them stop reading.",
+  "cq-15": "Copy a cautious buyer cannot evaluate is copy they do not trust.",
   "cq-01": "Most visitors read only the headline, and a headline without a benefit, a who or a specific gives them no reason to continue.",
   "cq-02": "A lead that does not pay off the headline breaks the one promise the page has made so far.",
   "cq-03": "Features tell and benefits sell. Copy that opens with features makes the reader do the selling.",

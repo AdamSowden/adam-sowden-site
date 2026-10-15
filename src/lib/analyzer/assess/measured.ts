@@ -34,8 +34,8 @@ export function sentenceVariation(text: string): number {
 export function slopDensity(text: string): { per1k: number; hits: string[] } {
   const ws = text.split(/\s+/).filter(Boolean).length || 1;
   const hits = (text.match(SLOP_WORDS) ?? []).map((h) => h.toLowerCase());
-  const dashes = (text.match(/—|–| -- /g) ?? []).length;
-  return { per1k: Math.round(((hits.length + dashes) / ws) * 1000 * 10) / 10, hits: [...new Set(hits)].slice(0, 10).concat(dashes ? [`${dashes} em/en dash(es)`] : []) };
+  // Punctuation is a style choice on a third-party site, not a copy defect, so em dashes are not counted here.
+  return { per1k: Math.round((hits.length / ws) * 1000 * 10) / 10, hits: [...new Set(hits)].slice(0, 10) };
 }
 
 const BOOKING_OR_CTA = /\b(book|get|start|schedule|talk|call|contact|apply|download|try|request|claim|join|see|show me|send me)\b/i;
@@ -80,20 +80,13 @@ export function runMessageMeasured(crawl: CrawlResult, w: AssessmentWindows): Fi
   // cq-06 reading grade, cq-07 variety, cq-08 slop, over opening + first 400 words of home
   const sample = `${w.opening}\n${w.pages[0]?.opening ?? ""}`;
   const fk = fleschKincaid(sample);
-  if (isNaN(fk.grade)) f.push(na(2, "cq-06", 10, "Not enough prose on the homepage to measure readability."));
-  else f.push(finding(2, "cq-06", fk.grade >= 5 && fk.grade <= 8 ? "pass" : (fk.grade > 8 && fk.grade <= 10) || (fk.grade >= 4 && fk.grade < 5) ? "partial" : "fail", 10, `Flesch-Kincaid grade ${fk.grade} over ${fk.words} words.`));
+  if (isNaN(fk.grade)) f.push(na(2, "cq-06", 8, "Not enough prose on the homepage to measure readability."));
+  else f.push(finding(2, "cq-06", fk.grade >= 5 && fk.grade <= 8 ? "pass" : (fk.grade > 8 && fk.grade <= 10) || (fk.grade >= 4 && fk.grade < 5) ? "partial" : "fail", 8, `Flesch-Kincaid grade ${fk.grade} over ${fk.words} words.`));
   const cv = sentenceVariation(sample);
   if (isNaN(cv)) f.push(na(2, "cq-07", 5, "Not enough sentences to measure variety."));
   else f.push(finding(2, "cq-07", cv >= 0.45 ? "pass" : cv >= 0.3 ? "partial" : "fail", 5, `Sentence-length variation ${cv} (coefficient of variation).`));
   const slop = slopDensity(sample);
-  f.push(finding(2, "cq-08", slop.per1k < 2 ? "pass" : slop.per1k <= 5 ? "partial" : "fail", 10, slop.hits.length ? `${slop.per1k} filler or AI-tell terms per 1,000 words: ${slop.hits.join(", ")}.` : "No filler or AI-tell vocabulary in the sample."));
-
-  // cq-09 first-person CTA (same logic as cp-10)
-  const ctaTexts = crawl.pages.flatMap((p) => p.links.filter((l) => l.internal && BOOKING_OR_CTA.test(l.text) && l.text.length <= 60).map((l) => l.text));
-  const fp = ctaTexts.filter((t) => /\b(my|me)\b/i.test(t));
-  const yr = ctaTexts.filter((t) => /\byour\b/i.test(t));
-  if (!ctaTexts.length) f.push(na(2, "cq-09", 5, "No CTA link text to assess."));
-  else f.push(finding(2, "cq-09", fp.length ? "pass" : yr.length ? "partial" : "fail", 5, fp.length ? `First-person CTA: "${fp[0]}".` : yr.length ? `CTA uses "your": "${yr[0]}".` : `Generic CTA: "${ctaTexts[0]}".`));
+  f.push(finding(2, "cq-08", slop.per1k < 2 ? "pass" : slop.per1k <= 5 ? "partial" : "fail", 5, slop.hits.length ? `${slop.per1k} filler or AI-tell terms per 1,000 words: ${slop.hits.join(", ")}.` : "No filler or AI-tell vocabulary in the sample."));
 
   // tr-06 contactable business
   const allText = crawl.pages.map((p) => p.text).join("\n");

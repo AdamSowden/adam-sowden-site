@@ -70,7 +70,7 @@ describe("report assembly and delivery", () => {
     "http://acme.test/": { status: 301, headers: { location: "https://acme.test/" } },
     "https://www.acme.test/": { status: 301, headers: { location: "https://acme.test/" } },
   });
-  const fakeAssess = async (system: string): Promise<Assessment> => ({ criteria: [...system.matchAll(/^([a-z]{2}-\d\d) \(/gm)].map((m) => ({ criterionId: m[1], status: "partial" as const, evidence: "", note: "fake" })) });
+  const fakeAssess = async (system: string): Promise<Assessment> => ({ criteria: [...system.matchAll(/^([a-z]{2}-\d\d) \(/gm)].map((m) => ({ criterionId: m[1], status: "partial" as const, evidence: "", note: "fake", location: "", confidence: "low" as const })) });
   const fakeNarrative = async () => ({ opening: "Plain opening.", fixed: "Plain fixed.", pillars: { message: "m", findability: "f", conversion: "c", foundation: "fo" } });
   const base = { resolver, crawl: { fetchImpl, resolver }, assessCaller: fakeAssess, skipPsi: true, narrativeCaller: fakeNarrative } as const;
 
