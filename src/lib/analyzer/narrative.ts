@@ -11,6 +11,7 @@ import { BRAND_VOICE_RULES } from "../brand-voice";
 import type { ScoreCard } from "./scoring";
 import { PILLAR_LABEL, PILLARS, type Band } from "./scoring";
 import type { Finding } from "./types";
+import { scanForSlop, type SlopFinding } from "./slop-scan";
 
 export const NARRATIVE_MODEL = "claude-opus-5-5";
 
@@ -22,6 +23,16 @@ export const NarrativeSchema = z.object({
 export type Narrative = z.infer<typeof NarrativeSchema>;
 
 export type NarrativeCaller = (system: string, user: string) => Promise<Narrative>;
+
+export type NarrativeOutcome = {
+  narrative: Narrative;
+  source: "model" | "fallback";
+  slop: { firstPassErrors: SlopFinding[]; regenerated: boolean; finalErrors: SlopFinding[]; warnings: SlopFinding[] };
+};
+
+export function narrativeText(n: Narrative): string {
+  return [n.opening, ...PILLARS.map((p) => n.pillars[p] ?? ""), n.fixed].join("\n");
+}
 
 const BAND_LINE: Record<Band, string> = {
   Leaking: "Enquiries arrive and are being lost between arriving and being answered.",
@@ -72,6 +83,7 @@ function buildPrompts(card: ScoreCard, host: string, findings: Finding[]): { sys
     "- Plain, direct, spoken. Short sentences mixed with longer ones. Contractions are fine.",
     "- Never use an em dash or a semicolon. Use a comma, a full stop or a colon.",
     "- Never name a client, a competitor, or a person.",
+    "- House style, enforced by a scanner after you write: no em dashes or semicolons; no filler qualifiers (genuinely, honestly, actually, really, truly); no personified adverbs (quietly, seamlessly, effortlessly, silently); no AI-tell words (delve, tapestry, multifaceted, resonate, embark, foster, illuminate, paramount, pivotal, holistic, testament, meticulous, intricate, furthermore, moreover, leverage); no 'most people'; no 'here's the thing', 'the truth is', 'at the end of the day', 'let that sink in', 'sound familiar', 'it's worth noting', 'in today's world', 'more than ever', 'needless to say', 'in essence', 'in conclusion', 'in summary'. Avoid robust, comprehensive, nuanced, journey, navigate, unlock, empower, transform, elevate, cutting-edge.",
     BRAND_VOICE_RULES,
   ].join("\n");
   const lines = findings
@@ -102,20 +114,46 @@ export function makeNarrativeCaller(client = new Anthropic()): NarrativeCaller {
   };
 }
 
-export async function writeNarrative(card: ScoreCard, host: string, findings: Finding[], caller?: NarrativeCaller): Promise<{ narrative: Narrative; source: "model" | "fallback" }> {
+function clean(raw: Narrative): Narrative {
+  return {
+    opening: stripDashes(raw.opening ?? ""),
+    fixed: stripDashes(raw.fixed ?? ""),
+    pillars: Object.fromEntries(PILLARS.map((p) => [p, stripDashes(raw.pillars?.[p] ?? "")])) as Narrative["pillars"],
+  };
+}
+
+function acceptable(n: Narrative, findings: Finding[], extra: string): boolean {
+  return Boolean(n.opening) && PILLARS.every((p) => Boolean(n.pillars[p])) && narrativeNumbersOk(n, findings, extra);
+}
+
+/**
+ * Model narrative, gated: numbers must come from the findings, and the prose
+ * must pass the anti-slop scan. One regeneration with the violations fed back;
+ * if it still fails, the deterministic fallback is used.
+ */
+export async function writeNarrative(card: ScoreCard, host: string, findings: Finding[], caller?: NarrativeCaller): Promise<NarrativeOutcome> {
   const fallback = fallbackNarrative(card, host);
+  const extra = `${card.band} ${card.headline?.statement ?? ""}`;
+  const call = caller ?? makeNarrativeCaller();
+  const none = { firstPassErrors: [] as SlopFinding[], regenerated: false, finalErrors: [] as SlopFinding[], warnings: [] as SlopFinding[] };
   try {
     const { system, user } = buildPrompts(card, host, findings);
-    const raw = await (caller ?? makeNarrativeCaller())(system, user);
-    const cleaned: Narrative = {
-      opening: stripDashes(raw.opening),
-      fixed: stripDashes(raw.fixed),
-      pillars: Object.fromEntries(PILLARS.map((p) => [p, stripDashes(raw.pillars[p] ?? "")])) as Narrative["pillars"],
-    };
-    if (!narrativeNumbersOk(cleaned, findings, `${card.band} ${card.headline?.statement ?? ""}`)) return { narrative: fallback, source: "fallback" };
-    if (!cleaned.opening || PILLARS.some((p) => !cleaned.pillars[p])) return { narrative: fallback, source: "fallback" };
-    return { narrative: cleaned, source: "model" };
+    let n = clean(await call(system, user));
+    if (!acceptable(n, findings, extra)) return { narrative: fallback, source: "fallback", slop: none };
+    let scan = scanForSlop(narrativeText(n));
+    const firstPassErrors = scan.errors;
+    let regenerated = false;
+    if (scan.errors.length) {
+      regenerated = true;
+      const violations = scan.errors.map((e) => `"${e.match}": ${e.message}`).join("\n");
+      const retryUser = `${user}\n\nYour previous draft was rejected by the house style check for these violations. Rewrite all sections without them. Do not substitute a synonym from the same family (no "quietly", "silently", "seamlessly", no em dashes or semicolons, no filler qualifiers).\n${violations}`;
+      n = clean(await call(system, retryUser));
+      if (!acceptable(n, findings, extra)) return { narrative: fallback, source: "fallback", slop: { ...none, firstPassErrors, regenerated } };
+      scan = scanForSlop(narrativeText(n));
+    }
+    if (scan.errors.length) return { narrative: fallback, source: "fallback", slop: { firstPassErrors, regenerated, finalErrors: scan.errors, warnings: scan.warnings } };
+    return { narrative: n, source: "model", slop: { firstPassErrors, regenerated, finalErrors: [], warnings: scan.warnings } };
   } catch {
-    return { narrative: fallback, source: "fallback" };
+    return { narrative: fallback, source: "fallback", slop: none };
   }
 }

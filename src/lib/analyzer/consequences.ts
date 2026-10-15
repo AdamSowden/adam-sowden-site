@@ -14,7 +14,7 @@ export const CONSEQUENCES: Record<string, string> = {
   // 2 Copy quality
   "cq-01": "Most visitors read only the headline, and a headline without a benefit, a who or a specific gives them no reason to continue.",
   "cq-02": "A lead that does not pay off the headline breaks the one promise the page has made so far.",
-  "cq-03": "Features tell, benefits sell; copy that opens with features makes the reader do the selling.",
+  "cq-03": "Features tell and benefits sell. Copy that opens with features makes the reader do the selling.",
   "cq-04": "Vague, unbelievable or slow copy is skimmed and forgotten.",
   "cq-05": "Unanswered objections at the decision point become reasons to leave.",
   "cq-06": "Copy above grade eight loses readers, including smart ones, who prefer simple.",
@@ -26,13 +26,13 @@ export const CONSEQUENCES: Record<string, string> = {
   "tm-01": "A visitor who does not see themselves in the hero assumes the site is for someone else.",
   "tm-02": "Category copy attracts the wrong buyer and reads as generic to the right one.",
   "tm-03": "A page that opens with the company makes the visitor wait to find out if it is about them.",
-  "tm-04": "Copy weighted to 'we' describes the business; copy weighted to 'you' describes the reader's situation.",
+  "tm-04": "Copy weighted to 'we' describes the business. Copy weighted to 'you' describes the reader's situation.",
   "tm-05": "Jargon tells the buyer the site was written for the industry, not for them.",
   "tm-06": "A buyer at the decision point with an unanswered question about price, effort, fit or next step leaves to find it elsewhere.",
   "tm-07": "Without an audience page, the site cannot speak to a specific buyer's situation anywhere.",
   "tm-08": "A site that wants everyone convinces no one it is right for them.",
   "tm-09": "An audience that drifts between pages and metadata confuses buyers and answer engines alike.",
-  "tm-10": "Proof from a different buyer type does not transfer; the reader thinks it worked for someone else.",
+  "tm-10": "Proof from a different buyer type does not transfer. The reader thinks it worked for someone else.",
   // 4 Trust
   "tr-01": "Without attributed voices, every claim on the site is the business speaking about itself.",
   "tr-02": "Round numbers and adjectives are what a sceptical buyer checks first, and they do not hold.",
@@ -40,7 +40,7 @@ export const CONSEQUENCES: Record<string, string> = {
   "tr-04": "A business with no visible human behind it is trusted less and cited less.",
   "tr-05": "Without credentials or a track record, expertise has to be taken on faith.",
   "tr-06": "A business that is hard to locate or contact reads as temporary.",
-  "tr-07": "Proof hosted only on the site is proof the site controls; third-party proof is what buyers believe.",
+  "tr-07": "Proof hosted only on the site is proof the site controls. Third-party proof is what buyers believe.",
   "tr-08": "A confident statistic with no source is the first thing a sceptical buyer checks and the first thing that fails.",
   "tr-09": "Proof that looks manufactured costs more trust than it earns.",
   "seo-01": "Pages marked noindex cannot appear in search results at all.",
@@ -95,7 +95,7 @@ export const CONSEQUENCES: Record<string, string> = {
   "tech-02": "Two copies of the site split authority and confuse crawlers.",
   "tech-03": "Missing security headers leave the site open to clickjacking and content sniffing.",
   "tech-04": "Mixed content triggers browser warnings and blocked resources.",
-  "tech-08": "Visitors using assistive technology cannot complete the journey.",
+  "tech-08": "Visitors using assistive technology cannot complete the task they came for.",
   "tech-10": "Soft 404s get indexed as real pages and dilute the site.",
 };
 

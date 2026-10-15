@@ -10,6 +10,15 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { ExtractorResult, Finding, FindingStatus } from "../types";
 import type { Rubric, RubricCriterion } from "./rubrics";
 import { renderWindows, type AssessmentWindows } from "./windows";
+import { scanForSlop } from "../slop-scan";
+
+/** The model's judgement is our prose, so it passes the slop gate or it is dropped. */
+export function gateNote(note: string | undefined): { note?: string; noteDropped?: boolean } {
+  if (!note) return {};
+  const scan = scanForSlop(note);
+  if (scan.errors.length) return { noteDropped: true };
+  return { note: note.replace(/\s*[—–]\s*/g, ", ") };
+}
 
 export const ASSESS_MODEL = "claude-opus-5-5";
 
@@ -40,6 +49,7 @@ export function buildSystemPrompt(rubric: Rubric): string {
     "- evidence must be a verbatim quote copied from the supplied text (20 to 240 characters). If you cannot quote supporting text, the status cannot be pass.",
     "- note is one plain sentence. Do not introduce numbers that are not in the evidence.",
     "- Findings are about the site, never about the owner. Be conservative: when torn between two statuses, choose the lower.",
+    "- House style for the note: plain words. No em dashes, no semicolons, no 'quietly', 'seamlessly', 'effortlessly', 'silently', no 'genuinely', 'honestly', 'actually', 'really', 'truly', no 'delve', 'robust', 'holistic', 'leverage', 'pivotal', 'journey', 'unlock', 'empower'.",
     "",
     "Criteria:",
     ...crit.map((c) => `${c.id} (${c.title}). PASS: ${c.pass} PARTIAL: ${c.partial} FAIL: ${c.fail}${c.naAllowed ? " NA allowed when the criterion does not apply." : ""}`),
@@ -101,12 +111,12 @@ function reconcileOne(c: RubricCriterion, dimension: Rubric["dimension"], ra: As
   const verified = graded.map((r) => (r.status === "fail" || verifyEvidence(r.evidence, corpus) ? r : { ...r, status: "uncertain" as FindingStatus, note: `${r.note} (evidence could not be verified verbatim)` }));
   if (verified.length === 1) {
     const r = verified[0];
-    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note, note: r.note };
+    return { ...base, status: r.status === "uncertain" ? "uncertain" : r.status, evidence: r.evidence || r.note, ...gateNote(r.note) };
   }
   const [x, y] = verified;
   const lower = RANK[x.status] <= RANK[y.status] ? x : y;
-  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600), note: x.note };
-  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600), note: lower.note };
+  if (x.status === y.status) return { ...base, status: x.status, evidence: (x.evidence || x.note).slice(0, 600), ...gateNote(x.note) };
+  return { ...base, status: "uncertain", evidence: `${lower.evidence || lower.note} (runs disagreed: ${x.status} vs ${y.status}; lower taken)`.slice(0, 600), ...gateNote(lower.note) };
 }
 
 export async function assessRubric(rubric: Rubric, windows: AssessmentWindows, caller: AssessCaller, runs = 2): Promise<Finding[]> {

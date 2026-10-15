@@ -8,7 +8,7 @@ import { criterionTitle } from "./criteria-titles";
 import { fixFor } from "./fixes";
 import { consequenceFor } from "./consequences";
 import { costOfLoss, type CostOfLoss } from "./cost-of-loss";
-import { writeNarrative, type Narrative, type NarrativeCaller } from "./narrative";
+import { writeNarrative, type Narrative, type NarrativeCaller, type NarrativeOutcome } from "./narrative";
 import { PILLARS, PILLAR_LABEL, statementFor, type StatusCounts } from "./scoring";
 
 export type ReportFinding = { criterionId: string; title: string; status: Finding["status"]; layer: Finding["layer"]; evidence: string; note?: string; fix: string | null; consequence: string | null };
@@ -29,6 +29,7 @@ export type Report = {
   headline: { statement: string; consequence: string } | null;
   narrative: Narrative;
   narrativeSource: "model" | "fallback";
+  slop: NarrativeOutcome["slop"] & { notesDropped: number };
   pillars: { pillar: Pillar; label: string; dimensions: ReportDimension[] }[];
   fixes: { order: number; dimensionLabel: string; fix: string; consequence: string; evidence: string }[];
   cost: CostOfLoss | null;
@@ -45,7 +46,8 @@ const BAND_MEANING: Record<string, string> = {
 export async function buildReport(job: AnalyzerJob, benchmark: AnalyzerJob | null, opts: { narrativeCaller?: NarrativeCaller } = {}): Promise<Report> {
   const card = job.card!;
   const findings = job.results.flatMap((r) => r.findings);
-  const { narrative, source } = await writeNarrative(card, job.host, findings, opts.narrativeCaller);
+  const { narrative, source, slop } = await writeNarrative(card, job.host, findings, opts.narrativeCaller);
+  const notesDropped = findings.filter((f) => f.layer === "assessed" && f.note === undefined && f.noteDropped).length;
   const pillars = PILLARS.map((p) => ({
     pillar: p,
     label: PILLAR_LABEL[p],
@@ -88,6 +90,7 @@ export async function buildReport(job: AnalyzerJob, benchmark: AnalyzerJob | nul
     headline: job.headline ? { statement: job.headline.statement, consequence: job.headline.consequence } : null,
     narrative,
     narrativeSource: source,
+    slop: { ...slop, notesDropped },
     pillars,
     fixes: card.fixes.map((f, i) => ({ order: i + 1, dimensionLabel: card.dimensions.find((d) => d.dimension === f.dimension)?.label ?? "", fix: f.fix, consequence: f.consequence, evidence: statementFor(f.finding) })),
     cost: costOfLoss(job.costInputs, findings),

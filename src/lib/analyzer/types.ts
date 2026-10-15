@@ -38,6 +38,8 @@ export type Finding = {
   naReason?: string;
   /** Assessed layer only: the model's one-sentence judgement behind the quoted evidence. */
   note?: string;
+  /** True when the judgement failed the anti-slop gate and was dropped; the quoted evidence stands alone. */
+  noteDropped?: boolean;
 };
 
 export type HttpHeaders = Record<string, string>;
