@@ -38,7 +38,13 @@ export interface AnalyzerStore {
   bumpBudget(day: string): Promise<number>;
   getBenchmark(): Promise<AnalyzerJob | null>;
   setBenchmark(job: AnalyzerJob): Promise<void>;
+  /** WP9: the last eight benchmark runs, newest first. */
+  getBenchmarkHistory(): Promise<BenchmarkEntry[]>;
+  pushBenchmarkHistory(entry: BenchmarkEntry): Promise<void>;
 }
+
+export type BenchmarkEntry = { token: string; host: string; band: string; overall: number | null; completedAt: number; engage: number | null };
+export const BENCHMARK_HISTORY_MAX = 8;
 
 const K = {
   job: (t: string) => `analyzer:job:${t}`,
@@ -47,6 +53,7 @@ const K = {
   sem: "analyzer:sem",
   budget: (d: string) => `analyzer:budget:${d}`,
   benchmark: "analyzer:benchmark:latest",
+  benchmarkHistory: "analyzer:benchmark:history",
 };
 
 class RedisStore implements AnalyzerStore {
@@ -67,6 +74,8 @@ class RedisStore implements AnalyzerStore {
   async bumpBudget(d: string) { const n = await this.r.incr(K.budget(d)); if (n === 1) await this.r.expire(K.budget(d), TTL.budget); return n; }
   async getBenchmark() { return (await this.r.get<AnalyzerJob>(K.benchmark)) ?? null; }
   async setBenchmark(j: AnalyzerJob) { await this.r.set(K.benchmark, j, { ex: TTL.benchmark }); }
+  async getBenchmarkHistory() { return (await this.r.get<BenchmarkEntry[]>(K.benchmarkHistory)) ?? []; }
+  async pushBenchmarkHistory(e: BenchmarkEntry) { const h = [e, ...(await this.getBenchmarkHistory())].slice(0, BENCHMARK_HISTORY_MAX); await this.r.set(K.benchmarkHistory, h); }
 }
 
 export class MemoryStore implements AnalyzerStore {
@@ -85,6 +94,8 @@ export class MemoryStore implements AnalyzerStore {
   async bumpBudget(d: string) { const n = (this.get<number>(K.budget(d)) ?? 0) + 1; this.set(K.budget(d), n, TTL.budget); return n; }
   async getBenchmark() { return this.get<AnalyzerJob>(K.benchmark); }
   async setBenchmark(j: AnalyzerJob) { this.set(K.benchmark, j, TTL.benchmark); }
+  async getBenchmarkHistory() { return this.get<BenchmarkEntry[]>(K.benchmarkHistory) ?? []; }
+  async pushBenchmarkHistory(e: BenchmarkEntry) { this.set(K.benchmarkHistory, [e, ...(await this.getBenchmarkHistory())].slice(0, BENCHMARK_HISTORY_MAX), TTL.benchmark); }
   get inFlight() { return this.sem; }
 }
 

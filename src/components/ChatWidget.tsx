@@ -163,6 +163,11 @@ export default function ChatWidget({
 
   const card = (
     <div
+      // Server-rendered marker: a crawler that does not run JavaScript can
+      // still tell this is a first-party conversational agent (the Smart Site
+      // Analyzer's engagement check reads it; Rubric 08 Part A).
+      data-conversation-agent="first-party"
+      data-agent-capabilities="answers-from-site-content,qualifies,books"
       className={`bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden ${
         wide && !bare ? "max-w-3xl" : ""
       }`}

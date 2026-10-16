@@ -63,6 +63,27 @@ export async function sendReportEmail(args: { to: string; report: Report; report
   }
 }
 
+/** WP9: short internal alert when the weekly benchmark is not Working. Goes to ANALYZER_BCC or RESEND_REPLY_TO. */
+export async function sendBenchmarkAlert(args: { host: string; band: string; overall: number | null; reportUrl: string; previousBand: string | null; fetchImpl?: typeof fetch }): Promise<{ ok: boolean; error?: string }> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.RESEND_FROM;
+  const to = (process.env.ANALYZER_BCC ?? process.env.RESEND_REPLY_TO ?? "").split(",").map((s) => s.trim()).filter(Boolean);
+  if (!apiKey || !from || !to.length) return { ok: false, error: "Resend not configured for alerts (RESEND_API_KEY, RESEND_FROM, ANALYZER_BCC or RESEND_REPLY_TO)." };
+  const subject = `Analyzer benchmark: ${args.host} came out ${args.band}`;
+  const text = [
+    `The weekly benchmark run on ${args.host} came out ${args.band}${args.overall !== null ? ` (internal ${args.overall})` : ""}.${args.previousBand ? ` Last run: ${args.previousBand}.` : ""}`,
+    "Either the site regressed or the engine did. Check the report before the next prospect reads a comparison against it.",
+    args.reportUrl,
+  ].join("\n\n");
+  try {
+    const res = await (args.fetchImpl ?? fetch)(`${RESEND_API_BASE}/emails`, { method: "POST", headers: { Authorization: `Bearer ${apiKey}`, "content-type": "application/json" }, body: JSON.stringify({ from, to, subject, text }) });
+    if (!res.ok) return { ok: false, error: `Resend alert failed (${res.status}): ${(await res.text()).slice(0, 240)}` };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
 export function reportUrlFor(token: string): string {
   return `${SITE_URL}/analyzer/r/${token}`;
 }

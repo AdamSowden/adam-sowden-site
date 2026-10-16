@@ -71,6 +71,8 @@ export type RunnerOptions = {
   now?: () => number;
   skipAssessed?: boolean;
   skipPsi?: boolean;
+  /** WP9: bypass the per-domain cache and the daily public budget. Benchmark runs only. */
+  fresh?: boolean;
 };
 
 function newJob(url: string, host: string, now: number): AnalyzerJob {
@@ -128,14 +130,15 @@ export async function startAnalysis(rawUrl: string, opts: RunnerOptions = {}): P
   const host = guard.host.toLowerCase();
 
   // Per-domain cache: one fresh run per 24 hours, repeats get the stored job.
-  const cachedToken = await store.getDomainToken(host);
-  if (cachedToken) {
-    const cached = await store.getJob(cachedToken);
-    if (cached && (cached.state === "done" || cached.state === "partial")) return { ok: true, job: cached, cached: true };
+  if (!opts.fresh) {
+    const cachedToken = await store.getDomainToken(host);
+    if (cachedToken) {
+      const cached = await store.getJob(cachedToken);
+      if (cached && (cached.state === "done" || cached.state === "partial")) return { ok: true, job: cached, cached: true };
+    }
+    const budget = await store.bumpBudget(todayKey(new Date(now())));
+    if (budget > LIMITS.dailyFreshRuns) return { ok: false, status: 503, error: "The analyzer has reached today's limit. Try again tomorrow." };
   }
-
-  const budget = await store.bumpBudget(todayKey(new Date(now())));
-  if (budget > LIMITS.dailyFreshRuns) return { ok: false, status: 503, error: "The analyzer has reached today's limit. Try again tomorrow." };
 
   if (!(await store.acquire())) return { ok: false, status: 429, error: "The analyzer is busy right now. Try again in a minute." };
 

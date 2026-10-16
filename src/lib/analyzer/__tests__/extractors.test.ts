@@ -56,6 +56,12 @@ describe("content depth", () => {
 });
 
 describe("engagement classification", () => {
+  it("a server-rendered data-conversation-agent marker classifies as a conversational agent", () => {
+    const crawl = buildCrawl({ pages: { "/": html({ body: '<section id="chat"><div data-conversation-agent="first-party" data-agent-capabilities="answers-from-site-content,qualifies,books"><p>Ask a question</p></div></section>' }) } });
+    const c = classifyChat(crawl);
+    expect(c.cls).toBe(4);
+    expect(c.vendors[0].name).toBe("Custom first-party agent");
+  });
   it("classes GHL as capture, Tidio as live chat, Chatbase as agent, none as T0", async () => {
     const mk = (head: string) => buildCrawl({ pages: { "/": html({ head }) } });
     expect(classifyChat(mk('<script src="https://widgets.leadconnectorhq.com/loader.js" data-chat-widget-id="x"></script>')).cls).toBe(1);

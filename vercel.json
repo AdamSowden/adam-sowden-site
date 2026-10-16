@@ -1,0 +1,5 @@
+{
+  "crons": [
+    { "path": "/api/analyzer/benchmark", "schedule": "0 20 * * 1" }
+  ]
+}
