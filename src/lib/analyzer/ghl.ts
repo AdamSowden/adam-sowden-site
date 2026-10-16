@@ -65,7 +65,11 @@ export function analyzerContactFields(a: AnalyzerContactArgs): Array<{ key: stri
   ];
 }
 
-export async function syncAnalyzerContact(a: AnalyzerContactArgs, opts: GhlCallOptions = {}): Promise<AnalyzerContactResult> {
+export async function syncAnalyzerContact(a: AnalyzerContactArgs, callOpts: GhlCallOptions = {}): Promise<AnalyzerContactResult> {
+  // Contact writes use GHL_API_KEY, the key the diagnostic upsert has proven
+  // has contacts write scope. The speed-to-lead PIT is scoped for
+  // conversations and returned 401 on /contacts/upsert (checked 16 Oct 2026).
+  const opts: GhlCallOptions = { ...callOpts, token: callOpts.token || process.env.GHL_API_KEY || undefined };
   const up = await upsertContact({ email: a.email, source: "analyzer", tags: [GHL_TAG.lead, GHL_TAG.analyzerState, GHL_TAG.analyzerRun] }, opts);
   if (!up.ok) return { ok: false, fieldsWritten: false, error: up.error };
   const contactId = up.data.contactId;
