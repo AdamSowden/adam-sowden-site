@@ -20,10 +20,10 @@ export default async function AnalyzerPage({ searchParams }: { searchParams: Pro
         <section className="mx-auto max-w-3xl px-6 pt-14 pb-10 md:pt-20">
           <p className="text-[#188bf6] text-sm font-medium uppercase tracking-[0.18em] mb-5">Smart Site Analyzer</p>
           <h1 className="font-serif text-4xl md:text-6xl tracking-tight leading-[1.05] text-[#111111]">
-            Find out what your website does when you are not there.
+            Transform Your Website From A Passive Business Card Into An Active Sales Team Member
           </h1>
           <p className="mt-6 text-lg text-[#111111]/75 leading-relaxed max-w-2xl">
-            Enter the address. In about a minute you get real findings about your own site: how a ready buyer can get in touch, whether AI search engines can read it, how it is built, how fast it loads, and the three things to fix first. No email needed to see the first finding.
+            Most website visitors don&apos;t become clients. Enter your address and find the holes on your site that are costing you the most. Enquiries nobody answers in time, buyers it never engages, AI search engines that can&apos;t read it. No email needed to see the first finding.
           </p>
         </section>
         <AnalyzerClient initialUrl={initialUrl} />
