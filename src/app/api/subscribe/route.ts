@@ -1,5 +1,18 @@
 import { NextRequest } from "next/server";
-import { rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import { clientId, rateLimit, tooManyRequests } from "@/lib/rate-limit";
+import { isSameSiteRequest } from "@/lib/request-origin";
+import {
+  decoyFormToken,
+  formTokenSecret,
+  mintFormToken,
+  verifyFormToken,
+} from "@/lib/subscribe-token";
+import { turnstileEnabled, verifyTurnstile } from "@/lib/turnstile";
+import {
+  domainAcceptsMail,
+  emailDomain,
+  isDisposableDomain,
+} from "@/lib/email-guard";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,7 +32,26 @@ const GHL_CONTACTS_ENDPOINT =
 // ── Resend ───────────────────────────────────────────────────────────
 const RESEND_API_BASE = "https://api.resend.com";
 
-// ── ─────────────────────────────────────────────────────────────────
+// ── Abuse controls ───────────────────────────────────────────────────
+// Oct 2026: bots posted JSON straight at this route (41 opt-ins in four
+// days against ~34 real sessions), each one creating a GHL contact and a
+// Resend welcome email to a stranger. The gates below run before anything
+// is written. Anything that fails a bot gate gets the same 200 {ok:true}
+// a real submit gets, so the sender learns nothing.
+//
+//   1. Same-site headers (Origin / Sec-Fetch-Site).
+//   2. Honeypot field.
+//   3. Cloudflare Turnstile, when TURNSTILE_SECRET_KEY is configured.
+//   4. Signed form token minted by GET /api/subscribe, fetched by the form
+//      just before it posts (always on).
+//   5. Disposable-domain block list.
+//   6. Rate limits: per IP, and a global daily cap on GHL/Resend writes.
+//   7. The address's domain must be able to receive mail (MX / A record).
+const PER_IP_LIMIT = 3;
+const PER_IP_WINDOW_SEC = 10 * 60;
+const GLOBAL_DAILY_CAP = Number(process.env.SUBSCRIBE_DAILY_CAP) || 20;
+const GLOBAL_WINDOW_SEC = 24 * 60 * 60;
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type SubscribeBody = {
@@ -27,6 +59,10 @@ type SubscribeBody = {
   firstName?: unknown;
   // Honeypot: bots usually fill every field. Real users never see this.
   website?: unknown;
+  // Signed token from GET /api/subscribe.
+  formToken?: unknown;
+  // Turnstile widget response, present when the widget is configured.
+  turnstileToken?: unknown;
 };
 
 function jsonResponse(
@@ -40,6 +76,31 @@ function jsonResponse(
       "cache-control": "no-store",
     },
   });
+}
+
+/**
+ * The response a bot gets: indistinguishable from a real success. Logged
+ * server-side (reason, IP, email domain only) so the Vercel logs show what
+ * is being filtered.
+ */
+function silentDrop(reason: string, req: NextRequest, domain = ""): Response {
+  console.warn(
+    `[subscribe] dropped (${reason}) ip=${clientId(req)}${domain ? ` domain=${domain}` : ""}`
+  );
+  return jsonResponse(200, { ok: true });
+}
+
+/**
+ * GET /api/subscribe: mint the short-lived form token the form sends back
+ * with its POST. A caller that does not look like our own page still gets a
+ * token-shaped reply, just one that will never verify.
+ */
+export async function GET(req: NextRequest) {
+  const secret = formTokenSecret();
+  const site = isSameSiteRequest(req);
+  const token = secret && site.ok ? mintFormToken(secret) : decoyFormToken();
+  if (!site.ok) console.warn(`[subscribe] decoy token (${site.reason}) ip=${clientId(req)}`);
+  return jsonResponse(200, { token });
 }
 
 /**
@@ -104,16 +165,6 @@ async function addToResendAudience(
 }
 
 export async function POST(req: NextRequest) {
-  const rl = await rateLimit(req, { bucket: "subscribe", limit: 5, windowSec: 60 });
-  if (!rl.success) return tooManyRequests(rl);
-
-  const apiKey = process.env.GHL_API_KEY;
-  if (!apiKey) {
-    return jsonResponse(503, {
-      error: "Subscriptions are temporarily unavailable.",
-    });
-  }
-
   let body: SubscribeBody;
   try {
     body = (await req.json()) as SubscribeBody;
@@ -121,9 +172,33 @@ export async function POST(req: NextRequest) {
     return jsonResponse(400, { error: "Invalid request body." });
   }
 
-  // Honeypot: silently succeed without doing anything when filled.
+  // Gate 1: did this come from a page on our site?
+  const site = isSameSiteRequest(req);
+  if (!site.ok) return silentDrop(site.reason, req);
+
+  // Gate 2: honeypot.
   if (typeof body.website === "string" && body.website.trim().length > 0) {
-    return jsonResponse(200, { ok: true });
+    return silentDrop("honeypot", req);
+  }
+
+  // Gate 3: Turnstile (only when configured). A siteverify outage (null)
+  // falls through to the form-token gate rather than dropping real people.
+  if (turnstileEnabled()) {
+    const human = await verifyTurnstile(body.turnstileToken, clientId(req));
+    if (human === false) return silentDrop("turnstile", req);
+  }
+
+  // Gate 4: signed form token from GET /api/subscribe.
+  const secret = formTokenSecret();
+  if (!secret || !verifyFormToken(body.formToken, secret)) {
+    return silentDrop(secret ? "form token" : "no token secret", req);
+  }
+
+  const apiKey = process.env.GHL_API_KEY;
+  if (!apiKey) {
+    return jsonResponse(503, {
+      error: "Subscriptions are temporarily unavailable.",
+    });
   }
 
   const email =
@@ -135,6 +210,38 @@ export async function POST(req: NextRequest) {
 
   if (!email || !EMAIL_REGEX.test(email) || email.length > 200) {
     return jsonResponse(400, { error: "Please enter a valid email address." });
+  }
+  const domain = emailDomain(email);
+
+  // Gate 5: disposable inboxes.
+  if (isDisposableDomain(domain)) return silentDrop("disposable domain", req, domain);
+
+  // Gate 6: rate limits. Counted only after the cheap gates so bot traffic
+  // cannot burn the budget real subscribers share.
+  const perIp = await rateLimit(req, {
+    bucket: "subscribe",
+    limit: PER_IP_LIMIT,
+    windowSec: PER_IP_WINDOW_SEC,
+  });
+  if (!perIp.success) return tooManyRequests(perIp);
+  const global = await rateLimit(req, {
+    bucket: "subscribe-global",
+    id: "all",
+    limit: GLOBAL_DAILY_CAP,
+    windowSec: GLOBAL_WINDOW_SEC,
+  });
+  if (!global.success) {
+    console.error(`[subscribe] global daily cap (${GLOBAL_DAILY_CAP}) reached`);
+    return tooManyRequests(global);
+  }
+
+  // Gate 7: the domain must be able to receive mail. Unknown (DNS timeout)
+  // is allowed through; only a definitive "no MX, no A" is rejected.
+  if ((await domainAcceptsMail(domain)) === false) {
+    console.warn(`[subscribe] no mail records ip=${clientId(req)} domain=${domain}`);
+    return jsonResponse(400, {
+      error: "That email domain cannot receive mail. Please check the address.",
+    });
   }
 
   try {

@@ -88,13 +88,15 @@ export function clientId(req: Request): string {
 
 /**
  * Rate-limit a request. `bucket` namespaces the limit per endpoint so the chat
- * budget is separate from the subscribe budget for the same IP.
+ * budget is separate from the subscribe budget for the same IP. Pass `id` to
+ * count against something other than the caller's IP (for example a single
+ * shared id for a global daily cap).
  */
 export async function rateLimit(
   req: Request,
-  opts: { limit: number; windowSec: number; bucket: string }
+  opts: { limit: number; windowSec: number; bucket: string; id?: string }
 ): Promise<RateResult> {
-  const id = `${opts.bucket}:${clientId(req)}`;
+  const id = `${opts.bucket}:${opts.id ?? clientId(req)}`;
   if (hasUpstash) {
     const r = await upstashLimiter(opts.limit, opts.windowSec).limit(id);
     return {
