@@ -14,7 +14,7 @@ import { getStore } from "@/lib/analyzer/store";
 import { deliverReport } from "@/lib/analyzer/job";
 import type { Report, ReportArea, ReportJob } from "@/lib/analyzer/report";
 import { bandLabelFor, type Band, type StatusCounts } from "@/lib/analyzer/scoring";
-import { BOOKING_URL, BOOKING_CTA_LABEL, DIAGNOSTIC_URL } from "@/lib/site";
+import { BOOKING_URL, BOOKING_CTA_LABEL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -112,18 +112,17 @@ function ReportBody({ report }: { report: Report }) {
       </section>
 
       <section className="mt-14 rounded-2xl bg-[#111111] text-white p-6 md:p-10">
-        <h2 className="font-serif text-2xl md:text-3xl tracking-tight">See the version of this for your business.</h2>
+        <h2 className="font-serif text-2xl md:text-3xl tracking-tight">Turn this site into a smart site.</h2>
         <p className="mt-3 text-white/75 leading-relaxed">
-          Twenty minutes. We pick the one visitor path most worth fixing first, map what the site needs to do it, and decide whether there is a practical fit to build it together.
+          A smart site is your current site, moved onto a build that does the five jobs on its own. The pages and addresses Google already ranks come across with it. Whatever was holding the site back gets cleaned up on the way, and nothing is thrown away. It stops being a business card on the internet and starts working as a sales asset.
+        </p>
+        <p className="mt-3 text-white/75 leading-relaxed">
+          There&apos;s less to it than a redesign, because the content stays and only the build changes. The call is twenty minutes. We pick the one visitor path most worth fixing first and work out whether there is a practical fit to build it together.
         </p>
         <div className="mt-6">
           <CTAButton href={BOOKING_URL} variant="light" size="lg">{BOOKING_CTA_LABEL}</CTAButton>
         </div>
-        <p className="mt-4 text-sm text-white/60">No generic website pitch, no obligation. If a smart site is not the right next move, I will tell you directly.</p>
-        <p className="mt-6 text-sm text-white/60">
-          Want a plan for your marketing rather than a report on your site? The{" "}
-          <a href={DIAGNOSTIC_URL} className="underline underline-offset-4 hover:text-white">AI Marketing Diagnostic</a> takes seven to ten minutes.
-        </p>
+        <p className="mt-4 text-sm text-white/60">No generic website pitch, no obligation. If a smart site isn&apos;t the right next move, I&apos;ll tell you directly.</p>
       </section>
 
       <details className="mt-14 group">

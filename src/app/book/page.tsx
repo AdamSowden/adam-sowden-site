@@ -7,7 +7,7 @@ import { CALENDAR_WIDGET_URL, OG_DEFAULTS } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Book a Smart Site Strategy Call — Adam Sowden",
   description:
-    "Book a 20-minute Smart Site Strategy Call. We pick the one visitor path most worth fixing first and decide whether there is a practical fit. No pitch.",
+    "Book a 20-minute Smart Site Strategy Call on turning your current site into a smart site: same pages, same addresses, cleaned up and working as a sales asset. No pitch.",
   alternates: { canonical: "/book" },
   openGraph: { ...OG_DEFAULTS, url: "/book" },
 };
@@ -37,14 +37,21 @@ function Hero() {
           Smart Site Strategy Call
         </p>
         <h1 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.08] text-[#111111]">
-          Twenty minutes on the version of this for your business.
+          Twenty minutes on turning your site into a smart site.
         </h1>
         <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
-          We pick the one visitor path most worth fixing first, map what your
-          site needs to do it, and decide whether there is a practical fit to
-          build it together. No generic pitch, no obligation. If a smart site
-          is not the right next move, I will tell you directly. Pick a time
-          that works for you.
+          A smart site is your current site, moved onto a build that works on
+          its own. It brings the right people in, then answers and books them
+          while you run the business. The pages and addresses Google already
+          ranks come across with it. Whatever was holding the site back gets
+          cleaned up on the way, and nothing is thrown away. It stops being a
+          business card on the internet and starts working as a sales asset.
+        </p>
+        <p className="mt-4 text-lg text-[#111111]/75 leading-relaxed">
+          On the call we pick the one visitor path most worth fixing first and
+          work out whether there&apos;s a practical fit to build it together. No
+          generic pitch, no obligation. If a smart site isn&apos;t the right next
+          move, I&apos;ll tell you directly. Pick a time that works for you.
         </p>
       </div>
     </section>

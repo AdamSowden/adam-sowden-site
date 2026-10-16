@@ -30,7 +30,7 @@ ${moves ? `<p style="margin:0 0 8px 0;"><strong>Where to start.</strong></p><ol 
 ${cost}
 <p style="margin:18px 0 0 0;">The full report has each job explained, what the site looks like fixed, and every check with its evidence.</p>
 <p style="margin:18px 0 0 0;"><a href="${esc(reportUrl)}" style="display:inline-block;background:#111111;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:600;">Read the full report</a></p>
-<p style="margin:28px 0 0 0;">Twenty minutes to pick the one visitor path most worth fixing first and decide whether there is a fit. No generic pitch, no obligation.</p>
+<p style="margin:28px 0 0 0;">The next step is turning this site into a smart site: the same site, moved onto a build that does the five jobs on its own. The pages and addresses Google already ranks come across with it, and whatever was holding it back gets cleaned up on the way. Twenty minutes on the call to pick the one visitor path most worth fixing first and work out whether there&#39;s a practical fit. No generic pitch, no obligation.</p>
 <p style="margin:10px 0 0 0;"><a href="${esc(bookingUrl)}" style="color:#188bf6;">${esc(BOOKING_CTA_LABEL)}</a></p>
 <p style="margin:32px 0 0 0;font-size:13px;color:#777;">Checked ${report.pagesChecked} page${report.pagesChecked === 1 ? "" : "s"}, ${report.checksRun} checks. Public pages only; nothing was submitted to the site.</p>
 </div></body></html>`;
