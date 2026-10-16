@@ -56,6 +56,19 @@ export const GHL_FIELD = {
     key: "consent_text_version",
     displayName: "Consent Text Version",
   },
+  // Smart Site Analyzer (WP8). Create these in GHL Settings → Custom Fields
+  // with exactly these keys; see src/lib/analyzer/GHL-SETUP.md.
+  analyzerUrl: { key: "analyzer_url", displayName: "Analyzer URL" },
+  analyzerBand: { key: "analyzer_band", displayName: "Analyzer Band" },
+  analyzerTopFinding: {
+    key: "analyzer_top_finding",
+    displayName: "Analyzer Top Finding",
+  },
+  analyzerReportUrl: {
+    key: "analyzer_report_url",
+    displayName: "Analyzer Report URL",
+  },
+  analyzerRunAt: { key: "analyzer_run_at", displayName: "Analyzer Run At" },
 } as const;
 
 export const GHL_TAG = {
@@ -64,7 +77,15 @@ export const GHL_TAG = {
   handover: "ai-handover",
   optOut: "ai-optout",
   escalated: "ai-escalated",
+  // Speed-to-lead lifecycle (GHL-WORKFLOW-SPECS.md) and the analyzer's
+  // state tag, which keeps SL-3 off analyzer leads and triggers SL-4.
+  lead: "sl-lead",
+  analyzerState: "sl-analyzer-run",
+  analyzerRun: "analyzer-run",
 } as const;
+
+/** Per-call overrides, used by tests and by callers that need a specific token. */
+export type GhlCallOptions = { fetchImpl?: typeof fetch; token?: string };
 
 export type GhlResult<T = undefined> =
   | { ok: true; data: T }
@@ -86,9 +107,10 @@ function headers(token: string): HeadersInit {
 async function ghlFetch<T>(
   path: string,
   init: RequestInit,
-  label: string
+  label: string,
+  opts: GhlCallOptions = {}
 ): Promise<GhlResult<T>> {
-  const token = getToken();
+  const token = opts.token || getToken();
   if (!token) {
     return {
       ok: false,
@@ -97,7 +119,7 @@ async function ghlFetch<T>(
   }
 
   try {
-    const res = await fetch(`${GHL_BASE}${path}`, {
+    const res = await (opts.fetchImpl ?? fetch)(`${GHL_BASE}${path}`, {
       ...init,
       headers: { ...headers(token), ...(init.headers ?? {}) },
     });
@@ -247,7 +269,8 @@ export async function removeTags(
 // `customFields: [{ key, field_value }]` on the contact update endpoint.
 export async function updateContactFields(
   contactId: string,
-  fields: Array<{ key: string; value: string }>
+  fields: Array<{ key: string; value: string }>,
+  opts: GhlCallOptions = {}
 ): Promise<GhlResult<undefined>> {
   return ghlFetch<undefined>(
     `/contacts/${contactId}`,
@@ -260,7 +283,56 @@ export async function updateContactFields(
         })),
       }),
     },
-    "Update contact fields"
+    "Update contact fields",
+    opts
+  );
+}
+
+export type UpsertContactArgs = {
+  email: string;
+  firstName?: string | null;
+  /** Appended after "adamsowden.com/", e.g. "analyzer". */
+  source?: string;
+  tags: string[];
+};
+
+type UpsertResponse = { contact?: { id?: string }; new?: boolean };
+
+/** Create-or-update by email. The upsert endpoint takes tags and first-class fields only; custom fields go through updateContactFields. */
+export async function upsertContact(
+  args: UpsertContactArgs,
+  opts: GhlCallOptions = {}
+): Promise<GhlResult<{ contactId: string | null; isNew: boolean }>> {
+  const payload: Record<string, unknown> = {
+    locationId: GHL_LOCATION_ID,
+    email: args.email,
+    source: args.source ? `adamsowden.com/${args.source}` : "adamsowden.com",
+    tags: args.tags,
+  };
+  if (args.firstName) payload.firstName = args.firstName;
+  const res = await ghlFetch<UpsertResponse>(
+    "/contacts/upsert",
+    { method: "POST", body: JSON.stringify(payload) },
+    "Contact upsert",
+    opts
+  );
+  if (!res.ok) return res;
+  return {
+    ok: true,
+    data: { contactId: res.data?.contact?.id ?? null, isNew: res.data?.new === true },
+  };
+}
+
+export async function addNote(
+  contactId: string,
+  body: string,
+  opts: GhlCallOptions = {}
+): Promise<GhlResult<undefined>> {
+  return ghlFetch<undefined>(
+    `/contacts/${contactId}/notes`,
+    { method: "POST", body: JSON.stringify({ body }) },
+    "Add note",
+    opts
   );
 }
 

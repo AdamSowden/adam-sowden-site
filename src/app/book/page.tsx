@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
+import BookingTracker from "@/components/BookingTracker";
 import { CALENDAR_WIDGET_URL, OG_DEFAULTS } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -12,9 +13,12 @@ export const metadata: Metadata = {
   openGraph: { ...OG_DEFAULTS, url: "/book" },
 };
 
-export default function BookPage() {
+export default async function BookPage({ searchParams }: { searchParams: Promise<{ src?: string | string[] }> }) {
+  const { src } = await searchParams;
+  const source = typeof src === "string" && /^[a-z0-9-]{1,40}$/.test(src) ? src : null;
   return (
     <>
+      <BookingTracker source={source} />
       <SiteNav />
       <main className="flex-1">
         <Hero />

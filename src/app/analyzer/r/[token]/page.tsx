@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
+import TrackedCta from "@/components/TrackedCta";
 import { getStore } from "@/lib/analyzer/store";
 import { deliverReport } from "@/lib/analyzer/job";
 import type { Report, ReportArea, ReportJob } from "@/lib/analyzer/report";
@@ -120,7 +121,9 @@ function ReportBody({ report }: { report: Report }) {
           There&apos;s less to it than a redesign, because the content stays and only the build changes. The call is twenty minutes. We pick the one visitor path most worth fixing first and work out whether there is a practical fit to build it together.
         </p>
         <div className="mt-6">
-          <CTAButton href={BOOKING_URL} variant="light" size="lg">{BOOKING_CTA_LABEL}</CTAButton>
+          <TrackedCta event="analyzer_book_click" data={{ host: report.host, band: report.band }}>
+            <CTAButton href={`${BOOKING_URL}?src=analyzer`} variant="light" size="lg">{BOOKING_CTA_LABEL}</CTAButton>
+          </TrackedCta>
         </div>
         <p className="mt-4 text-sm text-white/60">No generic website pitch, no obligation. If a smart site isn&apos;t the right next move, I&apos;ll tell you directly.</p>
       </section>

@@ -9,6 +9,7 @@ import { runAssessedLayer } from "./assess";
 import type { AssessCaller } from "./assess/model";
 import { fetchPsi, isPsiFailure, type PsiResult } from "./psi";
 import { JOB_LABEL } from "./jobs";
+import { syncAnalyzerContact, type AnalyzerContactArgs } from "./ghl";
 import { buildScoreCard, statementFor, type ScoreCard } from "./scoring";
 import { consequenceFor } from "./consequences";
 import { summarisePage, type CrawlResult, type ExtractorResult, type PageSummary } from "./types";
@@ -42,6 +43,9 @@ export type AnalyzerJob = {
   report: Report | null;
   reportSentAt: number | null;
   reportSendError: string | null;
+  /** WP8: when the GHL contact was written with the findings. Idempotent. */
+  ghlSyncedAt: number | null;
+  ghlSyncError: string | null;
   createdAt: number;
   updatedAt: number;
   completedAt: number | null;
@@ -62,6 +66,8 @@ export type RunnerOptions = {
   assessRuns?: number;
   narrativeCaller?: NarrativeCaller;
   emailFetch?: typeof fetch;
+  /** WP8: GHL calls go through this fetch (tests). Absent means the real fetch. */
+  ghlFetch?: typeof fetch;
   now?: () => number;
   skipAssessed?: boolean;
   skipPsi?: boolean;
@@ -72,7 +78,7 @@ function newJob(url: string, host: string, now: number): AnalyzerJob {
     token: randomUUID().replace(/-/g, ""),
     url, host, state: "queued", preliminary: true, steps: [], pages: [], results: [], card: null, headline: null,
     specifics: [], couldNotCheck: [], error: null, email: null, costInputs: null,
-    report: null, reportSentAt: null, reportSendError: null,
+    report: null, reportSentAt: null, reportSendError: null, ghlSyncedAt: null, ghlSyncError: null,
     createdAt: now, updatedAt: now, completedAt: null, cachedFrom: null,
   };
 }
@@ -237,13 +243,45 @@ export async function deliverReport(job: AnalyzerJob, store: AnalyzerStore, opts
     await store.putJob(job);
   }
   if (job.email && !job.reportSentAt) {
-    const res = await sendReportEmail({ to: job.email, report: job.report, reportUrl: reportUrlFor(job.token), bookingUrl: `${SITE_URL}${BOOKING_URL}`, fetchImpl: opts.emailFetch });
+    const res = await sendReportEmail({ to: job.email, report: job.report, reportUrl: reportUrlFor(job.token), bookingUrl: `${SITE_URL}${BOOKING_URL}?src=analyzer-email`, fetchImpl: opts.emailFetch });
     if (res.ok) job.reportSentAt = (opts.now ?? Date.now)();
     else job.reportSendError = res.error ?? "send failed";
     job.updatedAt = (opts.now ?? Date.now)();
     await store.putJob(job);
   }
+  // WP8: the findings land on the GHL contact once, so the speed-to-lead
+  // follow-up can quote the top finding. Never blocks the report.
+  if (job.email && job.report && !job.ghlSyncedAt) {
+    const r = await syncAnalyzerContact(analyzerContactArgs(job, job.report), { fetchImpl: opts.ghlFetch });
+    if (r.ok) job.ghlSyncedAt = (opts.now ?? Date.now)();
+    job.ghlSyncError = r.error ?? null;
+    job.updatedAt = (opts.now ?? Date.now)();
+    await store.putJob(job);
+  }
   return job;
+}
+
+/** The verbatim top finding with its consequence, for the follow-up. Falls back to the first move. */
+export function topFindingLine(job: AnalyzerJob, report: Report): string {
+  if (report.headline) return `${report.headline.statement} ${report.headline.consequence}`.trim();
+  const m = report.moves[0];
+  if (m) return `${m.evidence} ${m.consequence}`.trim();
+  return `Nothing failed on the ${report.checksRun} checks that ran.`;
+}
+
+export function analyzerContactArgs(job: AnalyzerJob, report: Report): AnalyzerContactArgs {
+  return {
+    email: job.email!,
+    host: job.host,
+    url: job.url,
+    band: report.band,
+    bandLabel: report.bandLabel,
+    topFinding: topFindingLine(job, report),
+    reportUrl: reportUrlFor(job.token),
+    runAt: job.completedAt ?? job.createdAt,
+    moves: report.moves.map((m) => `${m.jobLabel}: ${m.move}`),
+    costRange: report.cost?.applies ? { low: report.cost.lowMonthly, high: report.cost.highMonthly } : null,
+  };
 }
 
 export function describeFailure(reason: string): string {
