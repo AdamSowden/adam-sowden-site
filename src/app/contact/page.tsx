@@ -7,7 +7,7 @@ import { BOOKING_URL, CALENDAR_WIDGET_URL, OG_DEFAULTS } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact — Adam Sowden",
   description:
-    "Book a 20-minute Quick Chat. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
+    "Book a 20-minute Smart Site Strategy Call. No pitch. A conversation about where AI marketing automation would deliver the biggest lift in your sales right now.",
   alternates: { canonical: "/contact" },
   openGraph: { ...OG_DEFAULTS, url: "/contact" },
 };
@@ -37,7 +37,7 @@ function Hero() {
           Contact
         </p>
         <h1 className="font-serif text-5xl md:text-6xl tracking-tight leading-[1.05] text-[#111111]">
-          Book a Quick Chat.
+          Book a Smart Site Strategy Call.
         </h1>
         <p className="mt-6 text-lg md:text-xl text-[#111111]/75 max-w-2xl mx-auto leading-relaxed">
           20 minutes. No pitch. We look at where AI marketing automation
@@ -58,7 +58,7 @@ function Booking() {
           id="lc-booking-iframe"
           scrolling="no"
           style={{ width: "100%", border: "none", minHeight: 800 }}
-          title="Book a Quick Chat with Adam Sowden"
+          title="Book a Smart Site Strategy Call with Adam Sowden"
         />
         <p className="mt-4 text-center text-sm text-[#111111]/55">
           Trouble with the booking widget?{" "}

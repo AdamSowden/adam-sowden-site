@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 
-// Public booking URL — used everywhere "Book a Quick Chat" CTAs point.
+// Public booking URL — used everywhere the booking CTAs point.
 // Routes through the branded /book page (which embeds the LeadConnector
 // calendar in an iframe) so every booking funnels through the same
 // confirmation + questionnaire flow.
 export const BOOKING_URL = "/book";
+// One name for the call everywhere (Adam, 16 Oct 2026): the Smart Site
+// Strategy Call replaces the "Quick Chat" label on every CTA.
+export const BOOKING_CTA_LABEL = "Book a Smart Site Strategy Call";
+export const CALL_NAME = "Smart Site Strategy Call";
 
 // Smart Site Analyzer: the public front door. Every primary CTA points here
 // (Adam, 15 Oct 2026). The 18-question diagnostic stays live at /diagnostic as

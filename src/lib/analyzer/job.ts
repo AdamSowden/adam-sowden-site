@@ -8,9 +8,9 @@ import { runMeasuredExtractors } from "./extractors";
 import { runAssessedLayer } from "./assess";
 import type { AssessCaller } from "./assess/model";
 import { fetchPsi, isPsiFailure, type PsiResult } from "./psi";
+import { JOB_LABEL } from "./jobs";
 import { buildScoreCard, statementFor, type ScoreCard } from "./scoring";
 import { consequenceFor } from "./consequences";
-import { DIMENSION_LABEL } from "./scoring";
 import { summarisePage, type CrawlResult, type ExtractorResult, type PageSummary } from "./types";
 import { guardUrl, normaliseInput, type Resolver } from "./url-guard";
 import { getStore, LIMITS, todayKey, type AnalyzerStore } from "./store";
@@ -86,7 +86,7 @@ async function step(job: AnalyzerJob, store: AnalyzerStore, label: string, now: 
 function specificsFrom(card: ScoreCard): Specific[] {
   return card.fixes.map((f) => ({
     dimension: f.dimension,
-    label: DIMENSION_LABEL[f.dimension],
+    label: JOB_LABEL[f.job],
     statement: statementFor(f.finding),
     consequence: consequenceFor(f.finding.criterionId),
     status: f.finding.status,
@@ -272,7 +272,9 @@ export function toPublicJob(job: AnalyzerJob) {
     band: card?.band ?? null,
     headline: job.headline,
     specifics: job.specifics,
-    dimensions: card ? card.dimensions.map((d) => ({ dimension: d.dimension, label: d.label, measured: d.score !== null, counts: d.counts })) : [],
+    // Public result shows the five jobs with a verdict word and counts (report decision, 15 Oct 2026). No scores.
+    jobs: card?.jobs ? card.jobs.filter((j) => j.job !== "foundation").map((j) => ({ job: j.job, label: j.label, verdict: j.verdict, measured: j.measured, counts: j.counts })) : [],
+    checksRun: card ? card.dimensions.reduce((n, d) => n + d.counts.pass + d.counts.partial + d.counts.uncertain + d.counts.fail, 0) : 0,
     couldNotCheck: job.couldNotCheck,
     pagesChecked: job.pages.length,
     hasEmail: Boolean(job.email),

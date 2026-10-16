@@ -44,7 +44,7 @@ describe("gates on model prose", () => {
       const slopped = calls === 1;
       expect(user.includes("rejected by the house style check")).toBe(!slopped);
       const line = slopped ? "The form quietly loses people; it has 9 fields." : "The form has 9 fields and loses people at each one.";
-      return { opening: line, fixed: "Done.", pillars: { message: "m", findability: "f", conversion: "c", foundation: "fo" } };
+      return { diagnosis: line, fixed: "Done.", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } };
     };
     const out = await writeNarrative(card, "acme.test", findings, caller);
     expect(calls).toBe(2);
@@ -52,12 +52,12 @@ describe("gates on model prose", () => {
     expect(out.slop.regenerated).toBe(true);
     expect(out.slop.firstPassErrors.length).toBeGreaterThan(0);
     expect(out.slop.finalErrors).toHaveLength(0);
-    expect(out.narrative.opening).not.toMatch(/quietly|;/);
+    expect(out.narrative.diagnosis).not.toMatch(/quietly|;/);
   });
   it("falls back when the rewrite still fails", async () => {
     const results: ExtractorResult[] = [{ dimension: 5, findings: [F(5, "seo-01", "pass", 15)] }];
     const card = buildScoreCard(results);
-    const caller = async () => ({ opening: "Things quietly drift.", fixed: "x", pillars: { message: "a", findability: "b", conversion: "c", foundation: "d" } });
+    const caller = async () => ({ diagnosis: "Things quietly drift.", fixed: "x", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } });
     const out = await writeNarrative(card, "acme.test", results.flatMap((r) => r.findings), caller);
     expect(out.source).toBe("fallback");
     expect(out.slop.regenerated).toBe(true);

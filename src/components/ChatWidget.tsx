@@ -144,7 +144,7 @@ export default function ChatWidget({
               ? {
                   ...m,
                   content:
-                    "Something went wrong with the conversation. Please try again, or book a Quick Chat directly.\n\n" +
+                    "Something went wrong with the conversation. Please try again, or book a Strategy Call directly.\n\n" +
                     BOOK_MARKER,
                 }
               : m
@@ -269,7 +269,7 @@ function ChatBubble({ message }: { message: Message }) {
             href={BOOKING_URL}
             className="inline-flex items-center mt-3 rounded-full bg-[#188bf6] text-white px-4 py-2 text-sm font-medium hover:bg-[#0d78dc] transition"
           >
-            Book a Quick Chat with Adam
+            Book a Smart Site Strategy Call with Adam
           </a>
         )}
       </div>

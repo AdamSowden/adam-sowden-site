@@ -1,24 +1,35 @@
 // Connective prose for the full report, written by the model from findings
 // that are already final (site-analyser-spec.md §11: "writing the narrative
-// from fixed findings, and nowhere else"). Guarded: no number may appear in
-// the narrative that is not in the findings; on any failure the report uses
-// the deterministic fallback text.
+// from fixed findings, and nowhere else"). Framed by the five jobs (report
+// decision, 15 Oct 2026): a diagnosis, one paragraph per job, and what the
+// site looks like fixed. Guarded: no number may appear that is not in the
+// findings; every section must pass the anti-slop scan; on any failure the
+// report uses the deterministic fallback text.
 
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod/v4";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { BRAND_VOICE_RULES } from "../brand-voice";
 import type { ScoreCard } from "./scoring";
-import { PILLAR_LABEL, PILLARS, type Band } from "./scoring";
+import { bandLabelFor, bandMeaningFor, bandSentence } from "./scoring";
 import type { Finding } from "./types";
+import { JOBS, JOB_LABEL, JOB_QUESTION, groupOf, type Job } from "./jobs";
 import { scanForSlop, type SlopFinding } from "./slop-scan";
 
 export const NARRATIVE_MODEL = "claude-opus-5-5";
 
+const JobsSchema = z.object({
+  attract: z.string(),
+  explain: z.string(),
+  engage: z.string(),
+  qualify: z.string(),
+  learn: z.string(),
+});
+
 export const NarrativeSchema = z.object({
-  opening: z.string().describe("Two or three sentences. What was found overall, said plainly to the owner about their site."),
-  pillars: z.object({ message: z.string(), findability: z.string(), conversion: z.string(), foundation: z.string() }).describe("One short paragraph per pillar, each about the findings in that pillar only."),
-  fixed: z.string().describe("Two or three sentences describing the site once the three fixes are done. Concrete, no fantasy."),
+  diagnosis: z.string().describe("Two or three sentences to the owner about what the site does and does not do for the business. Plain, no numbers unless they are in the findings."),
+  jobs: JobsSchema.describe("One short paragraph per job, two to four sentences, about that job's findings only. One short verbatim quote from the site where it carries the point."),
+  fixed: z.string().describe("Two or three sentences describing the site once the three moves are made. Concrete, no fantasy, no claims that the site learns or improves itself."),
 });
 export type Narrative = z.infer<typeof NarrativeSchema>;
 
@@ -31,29 +42,20 @@ export type NarrativeOutcome = {
 };
 
 export function narrativeText(n: Narrative): string {
-  return [n.opening, ...PILLARS.map((p) => n.pillars[p] ?? ""), n.fixed].join("\n");
+  return [n.diagnosis, ...JOBS.map((j) => n.jobs[j] ?? ""), n.fixed].join("\n");
 }
 
-const BAND_LINE: Record<Band, string> = {
-  Leaking: "Enquiries arrive and are being lost between arriving and being answered.",
-  Invisible: "The site works but is not being found, and answer engines cannot read it well.",
-  Static: "The site functions and does nothing on its own.",
-  Working: "The site is performing. What follows are refinements.",
-};
-
 export function fallbackNarrative(card: ScoreCard, host: string): Narrative {
-  const pillarText = (p: keyof Narrative["pillars"]) => {
-    const dims = card.dimensions.filter((d) => d.pillar === p);
-    const measured = dims.filter((d) => d.score !== null);
-    if (!measured.length) return `The ${PILLAR_LABEL[p].toLowerCase()} checks could not run on this site.`;
-    const fails = measured.reduce((n, d) => n + d.counts.fail, 0);
-    const passes = measured.reduce((n, d) => n + d.counts.pass, 0);
-    return `${PILLAR_LABEL[p]}: ${passes} checks passed and ${fails} failed across ${measured.map((d) => d.label.toLowerCase()).join(", ")}. The evidence for each is listed below.`;
+  const jobText = (j: Job) => {
+    const js = card.jobs.find((x) => x.job === j);
+    if (!js || !js.measured) return `The ${JOB_LABEL[j].toLowerCase()} checks could not run on this site.`;
+    const c = js.counts;
+    return `${c.pass} checks passed, ${c.partial + c.uncertain} were partial and ${c.fail} failed. Each one is listed with its evidence in the appendix.`;
   };
   return {
-    opening: `${host} came out as ${card.band}. ${BAND_LINE[card.band]} ${card.headline ? card.headline.consequence : ""}`.trim(),
-    pillars: { message: pillarText("message"), findability: pillarText("findability"), conversion: pillarText("conversion"), foundation: pillarText("foundation") },
-    fixed: card.fixes.length ? `With the three fixes done, the site answers the checks it currently fails: ${card.fixes.map((f) => f.fix.replace(/\.$/, "").toLowerCase()).join("; ")}.` : "Nothing failed on the checks that ran.",
+    diagnosis: `${bandSentence(host, card.band, card.fixes.length > 0)} ${bandMeaningFor(card.band, card.fixes.length > 0)} ${card.headline ? card.headline.consequence : ""}`.trim(),
+    jobs: { attract: jobText("attract"), explain: jobText("explain"), engage: jobText("engage"), qualify: jobText("qualify"), learn: jobText("learn") },
+    fixed: card.fixes.length ? `With the three moves made, the site answers the checks it currently fails: ${card.fixes.map((f) => f.fix.replace(/\.$/, "").toLowerCase()).join(". ")}.` : "Nothing failed on the checks that ran.",
   };
 }
 
@@ -64,8 +66,7 @@ function numbersIn(s: string): string[] {
 /** Any number in the narrative must appear somewhere in the findings or the card. */
 export function narrativeNumbersOk(n: Narrative, findings: Finding[], extra = ""): boolean {
   const allowed = new Set([...numbersIn(findings.map((f) => f.evidence + " " + (f.note ?? "")).join(" ")), ...numbersIn(extra)]);
-  const text = [n.opening, n.fixed, ...Object.values(n.pillars)].join(" ");
-  return numbersIn(text).every((x) => allowed.has(x) || /^[1-3]$/.test(x));
+  return numbersIn(narrativeText(n)).every((x) => allowed.has(x) || /^[1-3]$/.test(x));
 }
 
 export function stripDashes(s: string): string {
@@ -74,10 +75,14 @@ export function stripDashes(s: string): string {
 
 function buildPrompts(card: ScoreCard, host: string, findings: Finding[]): { system: string; user: string } {
   const system = [
-    "You write the connective prose of a website report for the owner of the site. You are not scoring anything; the findings are final and listed below.",
+    "You are Adam, writing the connective prose of a report on a prospect's website, to its owner. You are not scoring anything; the findings are final and listed below, grouped under the five jobs a website can do: Attract, Explain, Engage, Qualify and respond, Learn.",
     "Rules:",
-    "- Findings are about the site, never about the owner. Never gleeful about a fault, never condescending.",
-    "- State the problem once, then its cost, then move on. Do not repeat a threat.",
+    "- Write in the first person as Adam, to the owner as 'you'. Findings are about the site, never about the owner. Never gleeful about a fault, never condescending.",
+    "- The diagnosis says what the site does and does not do for the business, in two or three sentences. It names the biggest gap once. No lists.",
+    "- Each job paragraph stays inside that job's findings. Two to four sentences. Say what was seen, then what it means for a visitor or for the owner. Where a verbatim quote from the site carries the point, use one, short, in double quotes.",
+    "- 'Learn' is about what the owner can see: visits, enquiries, which pages produce them. Never claim the site learns, improves or optimises itself.",
+    "- Foundation findings (platform, speed, technical health) are not a job. Mention them in the diagnosis in one sentence only if told the foundation is weak. Otherwise leave them out.",
+    "- State a problem once, then its cost, then move on. Do not repeat a threat.",
     "- Use only numbers that appear in the findings. Do not invent, estimate or round.",
     "- No jargon without its consequence attached. Nobody outside this industry knows what a canonical tag is.",
     "- Plain, direct, spoken. Short sentences mixed with longer ones. Contractions are fine.",
@@ -86,16 +91,24 @@ function buildPrompts(card: ScoreCard, host: string, findings: Finding[]): { sys
     "- House style, enforced by a scanner after you write: no em dashes or semicolons; no filler qualifiers (genuinely, honestly, actually, really, truly); no personified adverbs (quietly, seamlessly, effortlessly, silently); no AI-tell words (delve, tapestry, multifaceted, resonate, embark, foster, illuminate, paramount, pivotal, holistic, testament, meticulous, intricate, furthermore, moreover, leverage); no 'most people'; no 'here's the thing', 'the truth is', 'at the end of the day', 'let that sink in', 'sound familiar', 'it's worth noting', 'in today's world', 'more than ever', 'needless to say', 'in essence', 'in conclusion', 'in summary'. Avoid robust, comprehensive, nuanced, journey, navigate, unlock, empower, transform, elevate, cutting-edge.",
     BRAND_VOICE_RULES,
   ].join("\n");
-  const lines = findings
-    .filter((f) => f.status !== "na")
-    .map((f) => `[${PILLAR_LABEL[card.dimensions.find((d) => d.dimension === f.dimension)!.pillar]}] ${f.criterionId} ${f.status.toUpperCase()}: ${f.evidence}${f.note ? ` (${f.note})` : ""}`);
+  const foundation = card.jobs.find((j) => j.job === "foundation");
+  const foundationWeak = foundation?.score !== null && foundation !== undefined && (foundation.score as number) < 40;
+  const line = (f: Finding) => `${f.criterionId} ${f.status.toUpperCase()}: ${f.evidence}${f.note ? ` (${f.note})` : ""}`;
+  const sections = JOBS.map((j) => {
+    const js = card.jobs.find((x) => x.job === j)!;
+    const fs = findings.filter((f) => f.status !== "na" && groupOf(f) === j);
+    return [`## ${JOB_LABEL[j]} (${js.verdict}). ${JOB_QUESTION[j]}`, ...(fs.length ? fs.map(line) : ["No checks could run for this job."])].join("\n");
+  });
+  const foundationLines = findings.filter((f) => f.status !== "na" && groupOf(f) === "foundation").map(line);
   const user = [
-    `Site: ${host}. Band: ${card.band}. ${BAND_LINE[card.band]}`,
-    card.headline ? `Headline finding: ${card.headline.statement} Consequence: ${card.headline.consequence}` : "No headline finding: nothing failed.",
-    `The three fixes, in order: ${card.fixes.map((f, i) => `${i + 1}. ${f.fix}`).join(" ")}`,
+    `Site: ${host}. Verdict shown as the title: "${bandSentence(host, card.band, card.fixes.length > 0)}" ${bandMeaningFor(card.band, card.fixes.length > 0)}`,
+    card.headline ? `Biggest gap: ${card.headline.statement} Consequence: ${card.headline.consequence}` : "No headline finding: nothing failed.",
+    `The three moves, in order: ${card.fixes.map((f, i) => `${i + 1}. [${JOB_LABEL[f.job]}] ${f.fix}`).join(" ")}`,
     "",
-    "Findings:",
-    ...lines,
+    ...sections,
+    "",
+    `## Foundation (not a job; ${foundationWeak ? "WEAK, mention in one sentence of the diagnosis" : "do not mention"})`,
+    ...(foundationLines.length ? foundationLines : ["No foundation checks ran."]),
   ].join("\n");
   return { system, user };
 }
@@ -104,7 +117,7 @@ export function makeNarrativeCaller(client = new Anthropic()): NarrativeCaller {
   return async (system, user) => {
     const res = await client.messages.parse({
       model: NARRATIVE_MODEL,
-      max_tokens: 2500,
+      max_tokens: 3000,
       system,
       messages: [{ role: "user", content: user }],
       output_config: { format: zodOutputFormat(NarrativeSchema as unknown as Parameters<typeof zodOutputFormat>[0]), effort: "low" },
@@ -116,14 +129,16 @@ export function makeNarrativeCaller(client = new Anthropic()): NarrativeCaller {
 
 function clean(raw: Narrative): Narrative {
   return {
-    opening: stripDashes(raw.opening ?? ""),
+    diagnosis: stripDashes(raw.diagnosis ?? ""),
     fixed: stripDashes(raw.fixed ?? ""),
-    pillars: Object.fromEntries(PILLARS.map((p) => [p, stripDashes(raw.pillars?.[p] ?? "")])) as Narrative["pillars"],
+    jobs: Object.fromEntries(JOBS.map((j) => [j, stripDashes(raw.jobs?.[j] ?? "")])) as Narrative["jobs"],
   };
 }
 
+const SELF_IMPROVING = /\b(site|website|system|it)\b[^.]{0,40}\b(learns|improves itself|optimi[sz]es itself|gets smarter)\b/i;
+
 function acceptable(n: Narrative, findings: Finding[], extra: string): boolean {
-  return Boolean(n.opening) && PILLARS.every((p) => Boolean(n.pillars[p])) && narrativeNumbersOk(n, findings, extra);
+  return Boolean(n.diagnosis) && Boolean(n.fixed) && JOBS.every((j) => Boolean(n.jobs[j])) && narrativeNumbersOk(n, findings, extra) && !SELF_IMPROVING.test(narrativeText(n));
 }
 
 /**
@@ -133,7 +148,7 @@ function acceptable(n: Narrative, findings: Finding[], extra: string): boolean {
  */
 export async function writeNarrative(card: ScoreCard, host: string, findings: Finding[], caller?: NarrativeCaller): Promise<NarrativeOutcome> {
   const fallback = fallbackNarrative(card, host);
-  const extra = `${card.band} ${card.headline?.statement ?? ""}`;
+  const extra = `${bandLabelFor(card.band, card.fixes.length > 0)} ${card.headline?.statement ?? ""}`;
   const call = caller ?? makeNarrativeCaller();
   const none = { firstPassErrors: [] as SlopFinding[], regenerated: false, finalErrors: [] as SlopFinding[], warnings: [] as SlopFinding[] };
   try {

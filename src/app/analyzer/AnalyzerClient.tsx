@@ -7,6 +7,7 @@
 // Public result shows a band and pass/partial/fail counts only (§6, §15).
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { bandLabelFor, bandMeaningFor } from "@/lib/analyzer/scoring";
 
 type Counts = { pass: number; partial: number; fail: number; uncertain: number; na: number };
 type PublicJob = {
@@ -20,18 +21,13 @@ type PublicJob = {
   band: "Leaking" | "Invisible" | "Static" | "Working" | null;
   headline: { statement: string; consequence: string; dimension: number } | null;
   specifics: { dimension: number; label: string; statement: string; consequence: string; status: string }[];
-  dimensions: { dimension: number; label: string; measured: boolean; counts: Counts }[];
+  jobs: { job: string; label: string; verdict: "Working" | "Partly" | "Not yet"; measured: boolean; counts: Counts }[];
+  checksRun: number;
   couldNotCheck: { scope: string; reason: string }[];
   pagesChecked: number;
   hasEmail: boolean;
 };
 
-const BAND_MEANING: Record<NonNullable<PublicJob["band"]>, string> = {
-  Leaking: "Enquiries reach the site and are being lost between arriving and being answered.",
-  Invisible: "The site works, but it is not being found, and answer engines cannot read it well.",
-  Static: "The site functions. It does nothing on its own.",
-  Working: "The site is performing. The findings below are refinements, not repairs.",
-};
 
 // window.dataLayer is declared globally by the GTM integration.
 function track(event: string, data: Record<string, unknown> = {}) {
@@ -192,8 +188,8 @@ function Result({ job }: { job: PublicJob }) {
           <h2 className="mt-3 font-serif text-2xl md:text-4xl tracking-tight text-[#111111]">Nothing failed on the checks that ran.</h2>
         )}
         <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2 border-t border-black/10 pt-6">
-          <span className="font-serif text-2xl text-[#111111]">{band}</span>
-          <span className="text-[#111111]/75">{BAND_MEANING[band]}</span>
+          <span className="font-serif text-2xl text-[#111111]">Your site is {bandLabelFor(band, job.headline !== null)}.</span>
+          <span className="text-[#111111]/75">{bandMeaningFor(band, job.headline !== null)}</span>
         </div>
         {job.preliminary && job.state !== "failed" && (
           <p className="mt-4 text-sm text-[#188bf6]">Still checking the rest of the site. This result will update as the remaining pages, speed and copy checks finish.</p>
@@ -219,21 +215,21 @@ function Result({ job }: { job: PublicJob }) {
 
 function WhatWasChecked({ job }: { job: PublicJob }) {
   const [open, setOpen] = useState(false);
-  const measured = job.dimensions.filter((d) => d.measured);
-  const unmeasured = job.dimensions.filter((d) => !d.measured);
   return (
     <section className="mt-10">
-      <h3 className="text-sm font-medium uppercase tracking-[0.16em] text-black/55">What was checked</h3>
+      <h3 className="text-sm font-medium uppercase tracking-[0.16em] text-black/55">The five jobs a website can do</h3>
       <p className="mt-2 text-[15px] text-[#111111]/75">
-        {job.pagesChecked} page{job.pagesChecked === 1 ? "" : "s"} read. {measured.length} of {job.dimensions.length} areas measured
-        {unmeasured.length ? `; ${unmeasured.map((d) => d.label.toLowerCase()).join(", ")} could not be measured yet` : ""}.
+        {job.pagesChecked} page{job.pagesChecked === 1 ? "" : "s"} read, {job.checksRun} checks ran. How the site does on each job, with the checks behind it.
       </p>
       <ul className="mt-4 divide-y divide-black/10 border-y border-black/10">
-        {job.dimensions.map((d) => (
-          <li key={d.dimension} className="flex items-baseline justify-between gap-4 py-2.5 text-[15px]">
-            <span className="text-[#111111]">{d.label}</span>
+        {job.jobs.map((j) => (
+          <li key={j.job} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-[15px]">
+            <span className="text-[#111111]">
+              {j.label}.{" "}
+              <span className={`font-medium ${j.verdict === "Working" ? "text-[#0d9488]" : j.verdict === "Not yet" && j.measured ? "text-[#b42318]" : "text-black/60"}`}>{j.measured ? j.verdict : job.preliminary ? "Still checking" : "Could not measure"}</span>
+            </span>
             <span className="text-black/60 text-sm whitespace-nowrap">
-              {d.measured ? `${d.counts.pass} passed, ${d.counts.partial + d.counts.uncertain} partial, ${d.counts.fail} failed` : "not measured"}
+              {j.measured ? `${j.counts.pass} passed, ${j.counts.partial + j.counts.uncertain} partial, ${j.counts.fail} failed` : ""}
             </span>
           </li>
         ))}
@@ -294,7 +290,7 @@ function EmailOffer({ job, onSaved }: { job: PublicJob; onSaved: (j: PublicJob) 
     <section className="mt-14 rounded-2xl bg-[#111111] text-white p-6 md:p-10">
       <h3 className="font-serif text-2xl md:text-3xl tracking-tight">The full report, by email.</h3>
       <p className="mt-3 text-white/75 leading-relaxed">
-        Every finding with its evidence, grouped by area, with the three fixes in order and what the site looks like once they are done. Nothing is sent to anyone but you.
+        Each of the five jobs explained, where to start, what the site looks like fixed, and every check with its evidence. Nothing is sent to anyone but you.
       </p>
       {status === "done" ? (
         <p className="mt-6 text-white font-medium">Done. The full report for {job.host} is on its way to your inbox.</p>

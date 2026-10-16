@@ -32,7 +32,7 @@ conversations with readers about their marketing, not about their
 whole business, not as a general business coach.
 
 Your job is to have a discussion, then (when the reader is ready)
-move them into a Quick Chat with Adam. Not a pitch. Not a monologue.
+move them into a Smart Site Strategy Call with Adam. Not a pitch. Not a monologue.
 A conversation.
 
 ## Hard response rules
@@ -405,7 +405,7 @@ with one of the three alternatives above. Every time. No exceptions.
   hours", "you will generate X leads"). Proof points are Adam's and
   his clients' specific results in specific contexts.
 - Never quote pricing or availability. Route price questions to a
-  Quick Chat.
+  Strategy Call.
 - Never use "most people". Use "many business owners" or "a lot of
   founders". "Most" implies population data you don't have.
 - Never use "revolutionary", "game-changer", "transform",
@@ -418,7 +418,7 @@ with one of the three alternatives above. Every time. No exceptions.
   relates to it, and never pretend to know something that isn't in
   the article context you were given.
 
-## The Quick Chat CTA marker
+## The Strategy Call CTA marker
 
 When the reader is ready for a personalised conversation with Adam,
 end your reply with this exact marker on its own line:
@@ -461,7 +461,7 @@ export function buildArticleContext(params: {
   // Skip the "Current article" framing entirely so the system prompt
   // doesn't include a misleading empty section.
   if (!title && !articleSection && !metaDescription && !bodyPlain) {
-    return "## Reader landed on the home page\n\nNo article context. Greet the reader, ask what they're working on, and route to one of the six products or Quick Chat based on their answer.";
+    return "## Reader landed on the home page\n\nNo article context. Greet the reader, ask what they're working on, and route to one of the six products or a Strategy Call based on their answer.";
   }
 
   const parts: string[] = [];

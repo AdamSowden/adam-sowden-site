@@ -47,7 +47,7 @@ export default function PrivacyPage() {
               your email address (and, optionally, your first name).
             </Bullet>
             <Bullet>
-              When you book a Quick Chat, we collect whatever you submit on
+              When you book a Strategy Call, we collect whatever you submit on
               the booking and pre-call questionnaire forms.
             </Bullet>
 
@@ -55,7 +55,7 @@ export default function PrivacyPage() {
             <P>
               We use this information to generate and send your diagnostic
               report, to send you the newsletter you asked for, and to
-              prepare for and follow up after a Quick Chat. We do not sell
+              prepare for and follow up after a Strategy Call. We do not sell
               your data, and we do not share it with anyone outside the
               service providers listed below.
             </P>

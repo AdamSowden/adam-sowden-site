@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
         console.error("chat api error:", err);
         controller.enqueue(
           encoder.encode(
-            "\n\nSomething went wrong with the conversation. Please try again, or book a Quick Chat directly.\n\n[BOOK_QUICK_CHAT]"
+            "\n\nSomething went wrong with the conversation. Please try again, or book a Strategy Call directly.\n\n[BOOK_QUICK_CHAT]"
           )
         );
         controller.close();

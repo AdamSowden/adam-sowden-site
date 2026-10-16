@@ -59,9 +59,10 @@ describe("headline and fixes", () => {
     expect(card.headline?.finding.criterionId).toBe("m-04");
     expect(card.headline?.consequence).toMatch(/Enquiries are not/);
   });
-  it("returns at most one fix per dimension, worst first, with fix text", () => {
+  it("returns one move per job from the three weakest jobs, worst first, with fix text", () => {
     const fixes = fixesFor(rs, card.dimensions);
     expect(fixes.map((f) => f.dimension)).toEqual([10, 9, 5]);
+    expect(fixes.map((f) => f.job)).toEqual(["learn", "qualify", "attract"]);
     expect(fixes[1].finding.criterionId).toBe("cp-01");
     expect(fixes[1].fix).toMatch(/five fields/);
   });

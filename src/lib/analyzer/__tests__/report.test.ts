@@ -40,23 +40,23 @@ describe("narrative guard", () => {
   const card = buildScoreCard(results);
   const findings = results.flatMap((r) => r.findings);
   it("rejects invented numbers and accepts numbers from the findings", () => {
-    const ok = { opening: "The form has 9 fields.", fixed: "x", pillars: { message: "a", findability: "b", conversion: "c", foundation: "d" } };
+    const ok = { diagnosis: "The form has 9 fields.", fixed: "x", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } };
     expect(narrativeNumbersOk(ok, findings)).toBe(true);
-    const bad = { ...ok, opening: "You lose 47% of enquiries." };
+    const bad = { ...ok, diagnosis: "You lose 47% of enquiries." };
     expect(narrativeNumbersOk(bad, findings)).toBe(false);
   });
   it("falls back when the model invents a number or throws", async () => {
-    const inventing = async () => ({ opening: "Around 83% of visitors leave.", fixed: "x", pillars: { message: "a", findability: "b", conversion: "c", foundation: "d" } });
+    const inventing = async () => ({ diagnosis: "Around 83% of visitors leave.", fixed: "x", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } });
     expect((await writeNarrative(card, "acme.test", findings, inventing)).source).toBe("fallback");
     const throwing = async () => { throw new Error("down"); };
     expect((await writeNarrative(card, "acme.test", findings, throwing)).source).toBe("fallback");
-    const good = async () => ({ opening: "The form asks for 9 fields — too many.", fixed: "Done.", pillars: { message: "a", findability: "b", conversion: "c", foundation: "d" } });
+    const good = async () => ({ diagnosis: "The form asks for 9 fields — too many.", fixed: "Done.", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } });
     const r = await writeNarrative(card, "acme.test", findings, good);
     expect(r.source).toBe("model");
-    expect(r.narrative.opening).not.toContain("—");
+    expect(r.narrative.diagnosis).not.toContain("—");
   });
   it("fallback narrative mentions the band", () => {
-    expect(fallbackNarrative(card, "acme.test").opening).toContain(card.band);
+    expect(fallbackNarrative(card, "acme.test").diagnosis).toMatch(/^acme\.test is (losing enquiries|not being found|just a business card|working, with money left on the table|doing its job)\./);
     expect(stripDashes("a — b")).toBe("a, b");
   });
 });
@@ -71,10 +71,10 @@ describe("report assembly and delivery", () => {
     "https://www.acme.test/": { status: 301, headers: { location: "https://acme.test/" } },
   });
   const fakeAssess = async (system: string): Promise<Assessment> => ({ criteria: [...system.matchAll(/^([a-z]{2}-\d\d) \(/gm)].map((m) => ({ criterionId: m[1], status: "partial" as const, evidence: "", note: "fake", location: "", confidence: "low" as const })) });
-  const fakeNarrative = async () => ({ opening: "Plain opening.", fixed: "Plain fixed.", pillars: { message: "m", findability: "f", conversion: "c", foundation: "fo" } });
+  const fakeNarrative = async () => ({ diagnosis: "Plain opening.", fixed: "Plain fixed.", jobs: { attract: "a", explain: "e", engage: "g", qualify: "q", learn: "l" } });
   const base = { resolver, crawl: { fetchImpl, resolver }, assessCaller: fakeAssess, skipPsi: true, narrativeCaller: fakeNarrative } as const;
 
-  it("builds a report with pillars, fixes and a benchmark column, and sends the email once", async () => {
+  it("builds a report with the five jobs, moves and a benchmark column, and sends the email once", async () => {
     const store = new MemoryStore();
     const bench = await startAnalysis("acme.test", { ...base, store });
     if (!bench.ok) throw new Error("bench start failed");
@@ -95,9 +95,10 @@ describe("report assembly and delivery", () => {
     await store2.putJob(job);
     const done = await runSlowPath(job.token, { ...base, store: store2, emailFetch });
     expect(done?.report).not.toBeNull();
-    expect(done?.report?.pillars.map((p) => p.pillar)).toEqual(["message", "findability", "conversion", "foundation"]);
-    expect(done?.report?.fixes.length).toBeGreaterThan(0);
-    expect(done?.report?.pillars[1].dimensions[0].benchmark).not.toBeNull();
+    expect(done?.report?.jobs.map((j) => j.job)).toEqual(["attract", "explain", "engage", "qualify", "learn", "foundation"]);
+    expect(done?.report?.moves.length).toBeGreaterThan(0);
+    expect(done?.report?.jobs[0].areas[0].benchmark).not.toBeNull();
+    expect(done?.report?.jobs.filter((j) => j.job !== "foundation").every((j) => j.smartSiteLine && j.question)).toBe(true);
     expect(done?.report?.cost).not.toBeNull();
     expect(done?.reportSentAt).not.toBeNull();
     expect(sent).toHaveLength(1);
@@ -108,7 +109,7 @@ describe("report assembly and delivery", () => {
     expect(sent).toHaveLength(1);
   });
 
-  it("renders a short email with the three fixes and the report link", async () => {
+  it("renders a short email with the five verdicts, the moves and the report link", async () => {
     const store = new MemoryStore();
     const r = await startAnalysis("acme.test", { ...base, store });
     if (!r.ok) throw new Error("start failed");
@@ -118,6 +119,8 @@ describe("report assembly and delivery", () => {
     expect(subject).toContain("acme.test");
     expect(html).toContain("/analyzer/r/abc");
     expect(html).not.toMatch(/score/i);
+    expect(html).toContain("Attract");
+    expect(html).toContain("Strategy Call");
     expect(text.split("\n").length).toBeLessThan(25);
   });
 });

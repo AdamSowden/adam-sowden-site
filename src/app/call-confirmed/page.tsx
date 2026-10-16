@@ -4,9 +4,9 @@ import SiteFooter from "@/components/SiteFooter";
 import QuestionnaireForm from "@/components/QuestionnaireForm";
 
 export const metadata: Metadata = {
-  title: "Quick Chat confirmed — Adam Sowden",
+  title: "Strategy Call confirmed — Adam Sowden",
   description:
-    "Your Quick Chat is booked. A short questionnaire helps Adam prepare.",
+    "Your Smart Site Strategy Call is booked. A short questionnaire helps Adam prepare.",
   alternates: { canonical: "/call-confirmed" },
   // Private conversion flow — keep out of search results. GTM still
   // fires on noindex pages, so GA4 tracking is unaffected.
@@ -42,7 +42,7 @@ function Hero() {
           You&apos;re booked
         </p>
         <h1 className="font-serif text-4xl md:text-5xl tracking-tight leading-[1.08] text-[#111111]">
-          Quick Chat confirmed.
+          Strategy Call confirmed.
         </h1>
         <p className="mt-5 text-lg text-[#111111]/75 leading-relaxed">
           Adam will see you at the time you chose. While you&apos;re

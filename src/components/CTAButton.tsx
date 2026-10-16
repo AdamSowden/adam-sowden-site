@@ -1,9 +1,9 @@
-import { BOOKING_URL } from "@/lib/site";
+import { BOOKING_URL, BOOKING_CTA_LABEL } from "@/lib/site";
 
 type Variant = "primary" | "ghost" | "light";
 
 export default function CTAButton({
-  children = "Book a Quick Chat",
+  children = BOOKING_CTA_LABEL,
   variant = "primary",
   href = BOOKING_URL,
   size = "md",

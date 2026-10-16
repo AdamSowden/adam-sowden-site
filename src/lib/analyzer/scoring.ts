@@ -2,9 +2,13 @@
 // equal 25% pillar weights, dimensions equal within a pillar, public result is
 // a band plus pass/partial/fail counts, 0–100 internal only.
 
-import { DIMENSION_PILLAR, type Dimension, type ExtractorResult, type Finding, type FindingStatus, type Pillar } from "./types";
+import { DIMENSION_PILLAR, type Dimension, type ExtractorResult, type Finding, type Pillar } from "./types";
 import { consequenceFor } from "./consequences";
 import { fixFor } from "./fixes";
+import { STATUS_VALUE, countStatuses, weightedScore, type StatusCounts } from "./status";
+import { movesFor, scoreJobs, type Job, type JobScore } from "./jobs";
+
+export { STATUS_VALUE, countStatuses, weightedScore, type StatusCounts };
 
 export const PILLARS: Pillar[] = ["message", "findability", "conversion", "foundation"];
 export const PILLAR_LABEL: Record<Pillar, string> = { message: "Message", findability: "Findability", conversion: "Conversion", foundation: "Foundation" };
@@ -15,10 +19,45 @@ export const DIMENSION_LABEL: Record<Dimension, string> = {
 };
 
 export type Band = "Leaking" | "Invisible" | "Static" | "Working";
+
+/**
+ * Public band words (Adam, 16 Oct 2026). Internal keys stay as the spec named
+ * them; what the owner sees completes the sentence "yoursite.com is ...", so
+ * the title names their pain, not our verdict.
+ */
+export const BAND_LABEL: Record<Band, string> = {
+  Leaking: "losing enquiries",
+  Invisible: "not being found",
+  Static: "just a business card",
+  Working: "working, with money left on the table",
+};
+
+export const BAND_MEANING: Record<Band, string> = {
+  Leaking: "People are getting in touch, or trying to, and nobody can see or answer them in time.",
+  Invisible: "The people searching for what you do are not reaching the site, and AI answer tools cannot read it.",
+  Static: "It says who you are and then stops. A business card floating on the internet, with no phone number on it.",
+  Working: "It attracts, explains and answers on its own. The gaps below are where more of the visitors it already gets would turn into enquiries.",
+};
+
+/**
+ * Public word for the band. A Working site with no failed or partial finding
+ * at all (rare) is "doing its job"; otherwise Working names the opportunity.
+ */
+export function bandLabelFor(band: Band, hasGaps: boolean): string {
+  return band === "Working" && !hasGaps ? "doing its job" : BAND_LABEL[band];
+}
+
+export function bandMeaningFor(band: Band, hasGaps: boolean): string {
+  return band === "Working" && !hasGaps ? "Nothing failed on the checks that ran." : BAND_MEANING[band];
+}
+
+/** "skillshubs.com.au is losing enquiries." */
+export function bandSentence(host: string, band: Band, hasGaps = true): string {
+  return `${host} is ${bandLabelFor(band, hasGaps)}.`;
+}
+
 /** Internal only. Never shown publicly. */
 export type InternalTier = "Brochure site" | "Marketing site" | "Optimised site" | "Smart site";
-
-export type StatusCounts = { pass: number; partial: number; fail: number; uncertain: number; na: number };
 
 export type DimensionScore = {
   dimension: Dimension;
@@ -33,7 +72,7 @@ export type DimensionScore = {
 
 export type Headline = { finding: Finding; dimension: Dimension; statement: string; consequence: string };
 
-export type Fix = { finding: Finding; dimension: Dimension; fix: string; consequence: string };
+export type Fix = { finding: Finding; dimension: Dimension; job: Job; fix: string; consequence: string };
 
 export type ScoreCard = {
   dimensions: DimensionScore[];
@@ -42,27 +81,13 @@ export type ScoreCard = {
   band: Band;
   internalTier: InternalTier | null;
   headline: Headline | null;
+  /** The five jobs plus foundation, criterion-level. Verdicts are public; scores are not. */
+  jobs: JobScore[];
+  /** The three moves: heaviest gap in each of the three weakest jobs. */
   fixes: Fix[];
   couldNotCheck: { criterionId: string; dimension: Dimension; reason: string }[];
   coverage: { measuredDimensions: number; totalDimensions: number };
 };
-
-export const STATUS_VALUE: Record<Exclude<FindingStatus, "na">, number> = { pass: 1, partial: 0.5, uncertain: 0.5, fail: 0 };
-
-export function countStatuses(findings: Finding[]): StatusCounts {
-  const c: StatusCounts = { pass: 0, partial: 0, fail: 0, uncertain: 0, na: 0 };
-  for (const f of findings) c[f.status]++;
-  return c;
-}
-
-/** Weighted 0–100 with na weights redistributed. null when all na. */
-export function weightedScore(findings: Finding[]): number | null {
-  const live = findings.filter((f) => f.status !== "na");
-  const total = live.reduce((n, f) => n + f.weight, 0);
-  if (total === 0) return null;
-  const got = live.reduce((n, f) => n + f.weight * STATUS_VALUE[f.status as Exclude<FindingStatus, "na">], 0);
-  return Math.round((got / total) * 100);
-}
 
 export function scoreDimension(r: ExtractorResult): DimensionScore {
   const counts = countStatuses(r.findings);
@@ -141,27 +166,21 @@ export function headlineFor(results: ExtractorResult[], dims: DimensionScore[]):
   return null;
 }
 
-/** Top fixes by weighted deficit, at most one per dimension, worst first. */
-export function fixesFor(results: ExtractorResult[], dims: DimensionScore[], limit = 3): Fix[] {
-  const deficit = (f: Finding, dimScore: number | null) => f.weight * (1 - STATUS_VALUE[f.status as Exclude<FindingStatus, "na">]) * (1 + (100 - (dimScore ?? 50)) / 100);
-  const all: { f: Finding; d: Dimension; v: number }[] = [];
-  for (const r of results) {
-    const dimScore = dims.find((d) => d.dimension === r.dimension)?.score ?? null;
-    for (const f of r.findings) {
-      if (f.status !== "fail" && f.status !== "partial") continue;
-      all.push({ f, d: r.dimension, v: deficit(f, dimScore) });
-    }
-  }
-  all.sort((a, b) => b.v - a.v);
-  const seen = new Set<Dimension>();
-  const out: Fix[] = [];
-  for (const x of all) {
-    if (seen.has(x.d)) continue;
-    seen.add(x.d);
-    out.push({ finding: x.f, dimension: x.d, fix: fixFor(x.f.criterionId), consequence: consequenceFor(x.f.criterionId) });
-    if (out.length >= limit) break;
-  }
-  return out;
+/**
+ * The three moves (report decision, 15 Oct 2026): the three weakest jobs in
+ * score order, and in each the heaviest failed or partial finding. Replaces
+ * the earlier "one per dimension by deficit" rule, which could leave the cause
+ * of a Leaking band out of the three.
+ */
+export function fixesFor(results: ExtractorResult[], _dims: DimensionScore[], limit = 3): Fix[] {
+  const findings = results.flatMap((r) => r.findings);
+  return movesFor(findings, scoreJobs(findings), limit).map(({ job, finding }) => ({
+    finding,
+    dimension: finding.dimension,
+    job,
+    fix: fixFor(finding.criterionId),
+    consequence: consequenceFor(finding.criterionId),
+  }));
 }
 
 export function buildScoreCard(results: ExtractorResult[], totalDimensions = 13): ScoreCard {
@@ -177,6 +196,7 @@ export function buildScoreCard(results: ExtractorResult[], totalDimensions = 13)
     band,
     internalTier: internalTierFor(overall),
     headline: headlineFor(results, dims),
+    jobs: scoreJobs(results.flatMap((r) => r.findings)),
     fixes: fixesFor(results, dims),
     couldNotCheck,
     coverage: { measuredDimensions: dims.filter((d) => d.score !== null).length, totalDimensions },
