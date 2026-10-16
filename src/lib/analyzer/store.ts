@@ -21,6 +21,8 @@ export const TTL = {
 
 export const LIMITS = {
   concurrent: Number(process.env.ANALYZER_MAX_CONCURRENT ?? 5),
+  /** WP10: full runs (crawl, PSI, two assessed passes) in flight at once. Bounds model spend under a burst. */
+  concurrentSlow: Number(process.env.ANALYZER_MAX_CONCURRENT_SLOW ?? 4),
   dailyFreshRuns: Number(process.env.ANALYZER_DAILY_BUDGET ?? 300),
 };
 
@@ -34,6 +36,9 @@ export interface AnalyzerStore {
   /** Returns true if a slot was acquired. */
   acquire(): Promise<boolean>;
   release(): Promise<void>;
+  /** Slow-path slots, separate from the fast-path ones. */
+  acquireSlow(): Promise<boolean>;
+  releaseSlow(): Promise<void>;
   /** Increments today's fresh-run counter; returns the new count. */
   bumpBudget(day: string): Promise<number>;
   getBenchmark(): Promise<AnalyzerJob | null>;
@@ -51,6 +56,7 @@ const K = {
   domain: (h: string) => `analyzer:domain:${h.toLowerCase()}`,
   psi: (h: string, s: string) => `analyzer:psi:${h.toLowerCase()}:${s}`,
   sem: "analyzer:sem",
+  semSlow: "analyzer:sem:slow",
   budget: (d: string) => `analyzer:budget:${d}`,
   benchmark: "analyzer:benchmark:latest",
   benchmarkHistory: "analyzer:benchmark:history",
@@ -71,6 +77,13 @@ class RedisStore implements AnalyzerStore {
     return true;
   }
   async release() { const n = await this.r.decr(K.sem); if (n < 0) await this.r.set(K.sem, 0, { ex: TTL.semaphore }); }
+  async acquireSlow() {
+    const n = await this.r.incr(K.semSlow);
+    if (n === 1) await this.r.expire(K.semSlow, TTL.semaphore);
+    if (n > LIMITS.concurrentSlow) { await this.r.decr(K.semSlow); return false; }
+    return true;
+  }
+  async releaseSlow() { const n = await this.r.decr(K.semSlow); if (n < 0) await this.r.set(K.semSlow, 0, { ex: TTL.semaphore }); }
   async bumpBudget(d: string) { const n = await this.r.incr(K.budget(d)); if (n === 1) await this.r.expire(K.budget(d), TTL.budget); return n; }
   async getBenchmark() { return (await this.r.get<AnalyzerJob>(K.benchmark)) ?? null; }
   async setBenchmark(j: AnalyzerJob) { await this.r.set(K.benchmark, j, { ex: TTL.benchmark }); }
@@ -81,6 +94,7 @@ class RedisStore implements AnalyzerStore {
 export class MemoryStore implements AnalyzerStore {
   private m = new Map<string, { v: unknown; exp: number }>();
   private sem = 0;
+  private semSlow = 0;
   private get<T>(k: string): T | null { const e = this.m.get(k); if (!e) return null; if (e.exp < Date.now()) { this.m.delete(k); return null; } return e.v as T; }
   private set(k: string, v: unknown, ttl: number) { this.m.set(k, { v, exp: Date.now() + ttl * 1000 }); }
   async getJob(t: string) { return this.get<AnalyzerJob>(K.job(t)); }
@@ -91,12 +105,15 @@ export class MemoryStore implements AnalyzerStore {
   async setPsi(h: string, s: string, p: PsiResult) { this.set(K.psi(h, s), p, TTL.psi); }
   async acquire() { if (this.sem >= LIMITS.concurrent) return false; this.sem++; return true; }
   async release() { this.sem = Math.max(0, this.sem - 1); }
+  async acquireSlow() { if (this.semSlow >= LIMITS.concurrentSlow) return false; this.semSlow++; return true; }
+  async releaseSlow() { this.semSlow = Math.max(0, this.semSlow - 1); }
   async bumpBudget(d: string) { const n = (this.get<number>(K.budget(d)) ?? 0) + 1; this.set(K.budget(d), n, TTL.budget); return n; }
   async getBenchmark() { return this.get<AnalyzerJob>(K.benchmark); }
   async setBenchmark(j: AnalyzerJob) { this.set(K.benchmark, j, TTL.benchmark); }
   async getBenchmarkHistory() { return this.get<BenchmarkEntry[]>(K.benchmarkHistory) ?? []; }
   async pushBenchmarkHistory(e: BenchmarkEntry) { this.set(K.benchmarkHistory, [e, ...(await this.getBenchmarkHistory())].slice(0, BENCHMARK_HISTORY_MAX), TTL.benchmark); }
   get inFlight() { return this.sem; }
+  get slowInFlight() { return this.semSlow; }
 }
 
 let singleton: AnalyzerStore | null = null;

@@ -69,7 +69,8 @@ export function classifyChat(crawl: CrawlResult): ChatClassification {
         perVendorPages.set(v.name, (perVendorPages.get(v.name) ?? 0) + 1);
         if (!perVendorEvidence.has(v.name)) {
           const idx = m.index ?? 0;
-          perVendorEvidence.set(v.name, hay.slice(Math.max(0, idx - 40), idx + m[0].length + 40).replace(/\s+/g, " ").trim());
+          void idx;
+          perVendorEvidence.set(v.name, m[0].replace(/\s+/g, " ").trim().slice(0, 120));
         }
       }
     }
@@ -112,18 +113,39 @@ export async function probeFirstPartyBundles(crawl: CrawlResult, fetchOpts?: Fet
 const CLASS_NAME: Record<ChatClass, string> = { 0: "none (form only)", 1: "capture widget", 2: "scripted bot", 3: "live chat", 4: "conversational agent" };
 const CLASS_MID: Record<ChatClass, number> = { 0: 5, 1: 20, 2: 35, 3: 55, 4: 85 };
 
-export async function runEngagement(ctx: ExtractorContext): Promise<ExtractorResult> {
-  const c = classifyChat(ctx.crawl);
-  const findings: Finding[] = [];
-  let bundleHit: string | null = null;
-  if (c.cls === 0) {
-    const probe = await probeFirstPartyBundles(ctx.crawl, ctx.fetchOpts);
-    if (probe.hit) {
-      bundleHit = probe.hit;
-      c.cls = 4;
-      c.vendors.push({ name: "Custom first-party agent (code signals in site bundle)", cls: 4, evidence: probe.hit, pagesWith: 0 });
+export type FullChatClassification = ChatClassification & { bundleHit: string | null };
+
+const FULL_CACHE = new WeakMap<CrawlResult, Promise<FullChatClassification>>();
+
+/**
+ * The one classification every extractor shares (engagement, conversion path,
+ * agentic build), including the first-party bundle probe, so a site never
+ * reads as "agent detected" in one area and "no chat surface" in another.
+ * Memoised per crawl.
+ */
+export function classifyChatWithProbe(crawl: CrawlResult, fetchOpts?: FetchOptions): Promise<FullChatClassification> {
+  const hit = FULL_CACHE.get(crawl);
+  if (hit) return hit;
+  const p = (async () => {
+    const c: FullChatClassification = { ...classifyChat(crawl), bundleHit: null };
+    if (c.cls === 0) {
+      const probe = await probeFirstPartyBundles(crawl, fetchOpts);
+      if (probe.hit) {
+        c.bundleHit = probe.hit;
+        c.cls = 4;
+        c.vendors.push({ name: "Custom first-party agent (code signals in site bundle)", cls: 4, evidence: probe.hit, pagesWith: 0 });
+      }
     }
-  }
+    return c;
+  })();
+  FULL_CACHE.set(crawl, p);
+  return p;
+}
+
+export async function runEngagement(ctx: ExtractorContext): Promise<ExtractorResult> {
+  const c = await classifyChatWithProbe(ctx.crawl, ctx.fetchOpts);
+  const findings: Finding[] = [];
+  const bundleHit = c.bundleHit;
   const top = c.vendors.filter((v) => v.cls === c.cls)[0];
   const status = c.cls === 4 ? "pass" : c.cls === 3 ? "partial" : "fail";
   const ev = top

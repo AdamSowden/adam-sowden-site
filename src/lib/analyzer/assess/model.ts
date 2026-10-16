@@ -91,7 +91,19 @@ export function verifyEvidence(evidence: string, corpus: string): boolean {
 
 const RANK: Record<FindingStatus, number> = { fail: 0, uncertain: 1, partial: 2, pass: 3, na: 4 };
 
-export function reconcile(a: Assessment, b: Assessment, rubric: Rubric, corpus: string): Finding[] {
+const EVIDENCE_LABEL = /^(?:(?:IMAGE ALT TEXT SAMPLE|TITLE|DESCRIPTION|HEADINGS|OPENING TEXT(?: \(first \d+ words\))?|CTA TEXTS|FORM FIELD COUNTS|LINES WITH NUMBERS OR QUOTES|h[1-6]):\s*)+/i;
+
+/** The model sometimes quotes a window label along with the text. The label is ours, not the site's. */
+export function stripEvidenceLabels(s: string): string {
+  return s.replace(EVIDENCE_LABEL, "").replace(/\n\s*h[1-6]:\s*/gi, " ").trim();
+}
+
+function cleanAssessment(a: Assessment): Assessment {
+  return { ...a, criteria: a.criteria.map((c) => ({ ...c, evidence: stripEvidenceLabels(c.evidence ?? "") })) };
+}
+
+export function reconcile(rawA: Assessment, rawB: Assessment, rubric: Rubric, corpus: string): Finding[] {
+  const a = cleanAssessment(rawA), b = cleanAssessment(rawB);
   const out: Finding[] = [];
   for (const c of rubric.criteria.filter((x) => x.kind === "assessed")) {
     const ra = a.criteria.find((x) => x.criterionId === c.id);

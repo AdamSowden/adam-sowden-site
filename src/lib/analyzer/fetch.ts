@@ -1,8 +1,30 @@
 // Safe fetcher for the Analyzer: identified UA, timeout, body cap, manual
 // redirect following with the SSRF guard re-applied on every hop.
 
+import { isIP } from "node:net";
+import { Agent, fetch as undiciFetch } from "undici";
 import { guardUrl, type Resolver, defaultResolver } from "./url-guard";
 import type { FetchFailure, FetchResult, HttpHeaders } from "./types";
+
+type LookupCb = (err: Error | null, address: string | { address: string; family: number }[], family?: number) => void;
+
+/**
+ * A lookup that only ever answers with the addresses the guard already
+ * checked. Closes the window between "resolved to a public address" and
+ * "connected", which a DNS-rebinding host would otherwise exploit.
+ */
+export function pinnedLookup(addresses: string[]) {
+  return (_host: string, options: unknown, cb: LookupCb) => {
+    const list = addresses.map((address) => ({ address, family: isIP(address) }));
+    const all = typeof options === "object" && options !== null && (options as { all?: boolean }).all;
+    if (all) cb(null, list);
+    else cb(null, list[0].address, list[0].family);
+  };
+}
+
+function pinnedAgent(addresses: string[]): Agent {
+  return new Agent({ connect: { lookup: pinnedLookup(addresses) as unknown as undefined } });
+}
 
 export const ANALYZER_UA =
   "SmartSitesAnalyzer/1.0 (+https://adamsowden.com/analyzer; checks public pages only)";
@@ -80,7 +102,9 @@ export async function safeFetch(input: string, opts: FetchOptions = {}): Promise
   const maxBytes = opts.maxBytes ?? DEFAULTS.maxBytes;
   const maxRedirects = opts.maxRedirects ?? DEFAULTS.maxRedirects;
   const resolver = opts.resolver ?? defaultResolver;
-  const fetchImpl = opts.fetchImpl ?? fetch;
+  // With no injected fetch, go through undici with the lookup pinned to the
+  // guarded addresses. Tests inject their own fetch and bypass this.
+  const fetchImpl = opts.fetchImpl ?? null;
   const started = Date.now();
   const redirects: string[] = [];
   let current = input;
@@ -97,26 +121,32 @@ export async function safeFetch(input: string, opts: FetchOptions = {}): Promise
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     let res: Response;
+    const agent = fetchImpl ? null : pinnedAgent(guard.addresses);
+    const init = {
+      method: "GET",
+      redirect: "manual" as const,
+      signal: controller.signal,
+      headers: {
+        "user-agent": ANALYZER_UA,
+        accept: opts.allowNonHtml
+          ? "text/plain,text/xml,application/xml,text/html;q=0.9,*/*;q=0.5"
+          : "text/html,application/xhtml+xml;q=0.9,*/*;q=0.1",
+        "accept-language": "en-US,en;q=0.8",
+        "accept-encoding": "gzip, deflate, br",
+      },
+    };
     try {
-      res = await fetchImpl(guard.url.toString(), {
-        method: "GET",
-        redirect: "manual",
-        signal: controller.signal,
-        headers: {
-          "user-agent": ANALYZER_UA,
-          accept: opts.allowNonHtml
-            ? "text/plain,text/xml,application/xml,text/html;q=0.9,*/*;q=0.5"
-            : "text/html,application/xhtml+xml;q=0.9,*/*;q=0.1",
-          "accept-language": "en-US,en;q=0.8",
-          "accept-encoding": "gzip, deflate, br",
-        },
-      });
+      res = fetchImpl
+        ? await fetchImpl(guard.url.toString(), init)
+        : ((await undiciFetch(guard.url.toString(), { ...init, dispatcher: agent! } as Parameters<typeof undiciFetch>[1])) as unknown as Response);
     } catch (e) {
       clearTimeout(timer);
+      if (agent) void agent.close().catch(() => undefined);
       const msg = (e as Error).name === "AbortError" ? "timeout" : "network";
       return { requestedUrl: input, reason: msg, detail: (e as Error).message || msg };
     }
     clearTimeout(timer);
+    const closeAgent = () => { if (agent) void agent.close().catch(() => undefined); };
 
     if (res.status >= 300 && res.status < 400) {
       const loc = res.headers.get("location");
@@ -128,6 +158,7 @@ export async function safeFetch(input: string, opts: FetchOptions = {}): Promise
         return { requestedUrl: input, reason: "http-error", status: res.status, detail: `Bad redirect target: ${loc}` };
       }
       redirects.push(next);
+      closeAgent();
       if (hop === maxRedirects) {
         return { requestedUrl: input, reason: "too-many-redirects", detail: `More than ${maxRedirects} redirects.` };
       }
@@ -143,9 +174,11 @@ export async function safeFetch(input: string, opts: FetchOptions = {}): Promise
       } catch {
         /* ignore */
       }
+      closeAgent();
       return { requestedUrl: input, reason: "non-html", status: res.status, detail: `Content type ${contentType || "unknown"}.` };
     }
     const { text, bytes, truncated } = await readCapped(res, maxBytes);
+    closeAgent();
     return {
       requestedUrl: input,
       finalUrl: guard.url.toString(),

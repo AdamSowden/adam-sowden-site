@@ -74,14 +74,16 @@ export function runMessageMeasured(crawl: CrawlResult, w: AssessmentWindows): Fi
   else f.push(finding(3, "tm-07", crawl.pages.some((p) => /\b(for|built for) [a-z]+ (owners|advisers|advisors|firms|practices|businesses)/i.test(p.text)) ? "partial" : "fail", 10, "No audience-specific page or section found; audience mentioned inside general copy at most."));
 
   // of-05 one primary next step
-  const heroCtas = [...new Set(home.links.filter((l) => l.internal && BOOKING_OR_CTA.test(l.text) && l.text.length <= 60).slice(0, 6).map((l) => l.text.toLowerCase().trim()))];
+  // Navigation labels are not CTA wordings; a "Contact" menu item next to "Book a call" is not a second offer.
+  const NAV_LABEL = /^(contact( us)?|about( us| me)?|home|menu|log ?in|sign ?in|blog|products?|services?)$/i;
+  const heroCtas = [...new Set(home.links.filter((l) => l.internal && BOOKING_OR_CTA.test(l.text) && l.text.length <= 60 && !NAV_LABEL.test(l.text.trim())).slice(0, 6).map((l) => l.text.toLowerCase().trim()))];
   f.push(finding(1, "of-05", heroCtas.length === 0 ? "fail" : heroCtas.length <= 2 ? "pass" : heroCtas.length === 3 ? "partial" : "fail", 10, heroCtas.length ? `${heroCtas.length} distinct CTA wording(s) in the first six CTA links: ${heroCtas.map((c) => `"${c}"`).join(", ")}.` : "No call-to-action link text found on the homepage."));
 
   // cq-06 reading grade, cq-07 variety, cq-08 slop, over opening + first 400 words of home
   const sample = `${w.opening}\n${w.pages[0]?.opening ?? ""}`;
   const fk = fleschKincaid(sample);
   if (isNaN(fk.grade)) f.push(na(2, "cq-06", 8, "Not enough prose on the homepage to measure readability."));
-  else f.push(finding(2, "cq-06", fk.grade >= 5 && fk.grade <= 8 ? "pass" : (fk.grade > 8 && fk.grade <= 10) || (fk.grade >= 4 && fk.grade < 5) ? "partial" : "fail", 8, `Flesch-Kincaid grade ${fk.grade} over ${fk.words} words.`));
+  else f.push(finding(2, "cq-06", fk.grade >= 5 && fk.grade <= 9 ? "pass" : (fk.grade > 9 && fk.grade <= 12) || (fk.grade >= 4 && fk.grade < 5) ? "partial" : "fail", 8, `Flesch-Kincaid grade ${fk.grade} over ${fk.words} words.`));
   const cv = sentenceVariation(sample);
   if (isNaN(cv)) f.push(na(2, "cq-07", 5, "Not enough sentences to measure variety."));
   else f.push(finding(2, "cq-07", cv >= 0.45 ? "pass" : cv >= 0.3 ? "partial" : "fail", 5, `Sentence-length variation ${cv} (coefficient of variation).`));

@@ -79,7 +79,7 @@ export const TRUST_RUBRIC: Rubric = {
     { id: "tr-05", weight: 10, kind: "assessed", title: "Credentials, tenure, track record", pass: "Years in practice, certifications, affiliations, or a quantified track record stated plainly.", partial: "Vague, for example 'experienced team'.", fail: "None." },
     { id: "tr-06", weight: 10, kind: "measured", title: "A contactable, real business", pass: "", partial: "", fail: "" },
     { id: "tr-07", weight: 10, kind: "measured", title: "Third-party hosted proof", pass: "", partial: "", fail: "" },
-    { id: "tr-08", weight: 10, kind: "assessed", title: "Statistics are sourced", pass: "Every statistic in the windows has a source named or linked.", partial: "Some sourced.", fail: "Confident numbers with no source.", naAllowed: true },
+    { id: "tr-08", weight: 10, kind: "assessed", title: "Statistics are sourced", pass: "Every third-party statistic in the windows (industry figures, research findings, market or benchmark claims) has a source named or linked. The business's own results, client figures, prices and targets are not statistics and need no source; if the only numbers are the business's own, this is na.", partial: "Some third-party statistics sourced, some not.", fail: "Confident third-party numbers with no source.", naAllowed: true },
     { id: "tr-09", weight: 5, kind: "assessed", title: "No fabricated-looking proof", pass: "No stock-looking team imagery presented as clients, no initials-only quotes, no generic five-star widgets without a platform.", partial: "One of these.", fail: "More than one. This is a flag from text and alt text only, not an accusation." },
   ],
 };

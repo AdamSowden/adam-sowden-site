@@ -3,7 +3,7 @@
 // "signals consistent with", never "run by agents".
 
 import type { CrawlResult, ExtractorResult, Finding } from "../types";
-import { classifyChat } from "./engagement";
+import { classifyChatWithProbe } from "./engagement";
 import { contentMonthsActive } from "./content-depth";
 import { ARTICLE_PATH, allHtml, allScriptSrcs, daysAgo, finding, hasType, hostOf, jsonLdObjects, parseDate, type ExtractorContext } from "./common";
 
@@ -170,7 +170,7 @@ export async function runAgenticBuild(ctx: ExtractorContext): Promise<ExtractorR
   const feed = /rel=["']alternate["'][^>]+type=["']application\/(rss|atom)\+xml/i.test(home.html) || crawl.sitemap.urls.some((u) => /\/feed\/?$/.test(u.loc));
   add("ab-feed", 2, feed, "RSS or Atom feed advertised.", "No feed advertised.");
 
-  const chat = classifyChat(crawl);
+  const chat = await classifyChatWithProbe(crawl, ctx.fetchOpts);
   add("ab-agent", 10, chat.cls === 4, `Conversational agent detected (${chat.vendors.find((v) => v.cls === 4)?.name}).`, chat.cls ? `Chat surface is a ${["none", "capture widget", "scripted bot", "live chat"][chat.cls]}, not an agent.` : "No conversational agent.");
 
   const diag = crawl.pages.some((p) => p.links.some((l) => l.internal && /diagnostic|questionnaire|scorecard|assessment|quiz|calculator|analy[sz]er/i.test(l.href)));

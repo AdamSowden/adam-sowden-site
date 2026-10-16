@@ -60,7 +60,7 @@ export async function runTechnical(ctx: ExtractorContext): Promise<ExtractorResu
   else f.push(finding(13, "tech-06", "pass", 5, "One main landmark per page."));
 
   // tech-07 broken internal links (same source as seo-09, lighter weight here)
-  const broken = crawl.failures.filter((x) => x.reason === "http-error");
+  const broken = crawl.failures.filter((x) => x.reason === "http-error" && !/\/cdn-cgi\//.test(x.requestedUrl));
   f.push(finding(13, "tech-07", broken.length === 0 ? "pass" : broken.length <= 1 ? "partial" : "fail", 8, broken.length ? `${broken.length} linked page(s) returned errors.` : "No linked pages returned errors."));
 
   // tech-08 Lighthouse accessibility

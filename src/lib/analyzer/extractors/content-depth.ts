@@ -51,7 +51,8 @@ export async function runContentDepth(ctx: ExtractorContext): Promise<ExtractorR
   }
 
   // cd-04 near-duplicate pages
-  const comm = commercialPages(crawl).filter((p) => p.wordCount >= 150);
+  const seenPath = new Set<string>();
+  const comm = commercialPages(crawl).filter((p) => p.wordCount >= 150).filter((p) => { const k = pathOf(p.finalUrl).toLowerCase().replace(/\/+$/, "") || "/"; if (seenPath.has(k)) return false; seenPath.add(k); return true; });
   let worst = 0, pair = "";
   for (let i = 0; i < comm.length; i++) for (let j = i + 1; j < comm.length; j++) {
     const s = textSimilarity(comm[i].text, comm[j].text);

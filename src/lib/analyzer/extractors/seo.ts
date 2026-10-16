@@ -37,7 +37,8 @@ export async function runSeo(ctx: ExtractorContext): Promise<ExtractorResult> {
   const badLen = pages.filter((p) => p.meta.title.length < 15 || p.meta.title.length > 60);
   const dupTitles = titles.filter((t, i) => t && titles.indexOf(t) !== i);
   const titleIssues = badLen.length + dupTitles.length;
-  f.push(finding(5, "seo-04", titleIssues === 0 ? "pass" : titleIssues <= 2 ? "partial" : "fail", 10,
+  const titleStatus = titleIssues === 0 ? "pass" : dupTitles.length > 2 ? "fail" : "partial";
+  f.push(finding(5, "seo-04", titleStatus, 10,
     titleIssues === 0 ? "Every crawled page has a unique title of 15 to 60 characters." : `${badLen.length} title(s) outside 15–60 chars (${paths(badLen).join(", ") || "none"}); ${dupTitles.length} duplicate(s).`));
 
   // seo-05 descriptions
@@ -46,7 +47,8 @@ export async function runSeo(ctx: ExtractorContext): Promise<ExtractorResult> {
   const descs = pages.map((p) => p.meta.description).filter(Boolean);
   const dupDesc = descs.filter((d, i) => descs.indexOf(d) !== i).length;
   const descIssues = noDesc.length + badDesc.length + dupDesc;
-  f.push(finding(5, "seo-05", descIssues === 0 ? "pass" : descIssues <= 2 ? "partial" : "fail", 8,
+  const descStatus = descIssues === 0 ? "pass" : noDesc.length + dupDesc > 2 ? "fail" : "partial";
+  f.push(finding(5, "seo-05", descStatus, 8,
     descIssues === 0 ? "Every crawled page has a unique meta description of 50 to 160 characters." : `${noDesc.length} missing (${paths(noDesc).join(", ") || "none"}), ${badDesc.length} outside 50–160 chars, ${dupDesc} duplicate(s).`));
 
   // seo-06 one H1
@@ -66,7 +68,7 @@ export async function runSeo(ctx: ExtractorContext): Promise<ExtractorResult> {
   f.push(finding(5, "seo-08", noVp.length === 0 ? "pass" : noVp.length < pages.length ? "partial" : "fail", 8, noVp.length ? `Viewport meta missing on: ${paths(noVp).join(", ")}.` : "Mobile viewport meta on every crawled page."));
 
   // seo-09 broken links among crawled candidates
-  const broken = crawl.failures.filter((x) => x.reason === "http-error" && (x.status ?? 0) >= 400);
+  const broken = crawl.failures.filter((x) => x.reason === "http-error" && (x.status ?? 0) >= 400 && !/\/cdn-cgi\//.test(x.requestedUrl));
   f.push(finding(5, "seo-09", broken.length === 0 ? "pass" : broken.length === 1 ? "partial" : "fail", 8, broken.length ? `Linked pages returning errors: ${broken.map((b) => `${pathOf(b.requestedUrl)} (${b.status})`).join(", ")}.` : "No linked pages returned errors."));
 
   // seo-10 redirect hygiene: from the crawl's home fetch we only know the final URL; use host difference as proxy

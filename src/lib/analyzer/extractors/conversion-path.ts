@@ -2,7 +2,7 @@
 // checks) plus CRO items 3, 4, 17.
 
 import type { ExtractorResult, Finding } from "../types";
-import { classifyChat } from "./engagement";
+import { classifyChatWithProbe } from "./engagement";
 import { finding, hostOf, na, pathOf, type ExtractorContext } from "./common";
 
 const BOOKING_RE = /calendly\.com|cal\.com\/|leadconnectorhq\.com\/widget\/booking|msgsndr\.com\/widget\/booking|meetings\.hubspot\.com|acuityscheduling\.com|tidycal\.com|zcal\.co|savvycal\.com|oncehub\.com|youcanbook\.me|appointlet|book(ing|-a-call|-call|now)?(\/|$)/i;
@@ -15,7 +15,7 @@ export async function runConversionPath(ctx: ExtractorContext): Promise<Extracto
   const f: Finding[] = [];
   const pages = crawl.pages;
   const home = crawl.home!;
-  const chat = classifyChat(crawl);
+  const chat = await classifyChatWithProbe(crawl, ctx.fetchOpts);
   const allLinks = pages.flatMap((p) => p.links.map((l) => l.href));
   const allIframes = pages.flatMap((p) => p.iframes);
   const allText = pages.map((p) => p.text).join("\n");

@@ -73,7 +73,12 @@ export type RunnerOptions = {
   skipPsi?: boolean;
   /** WP9: bypass the per-domain cache and the daily public budget. Benchmark runs only. */
   fresh?: boolean;
+  /** WP10: how long the slow path waits for a slot before giving up (ms). */
+  slowWaitMs?: number;
+  sleep?: (ms: number) => Promise<void>;
 };
+
+export const BUSY_REASON = "The analyzer was busy, so the remaining checks did not run. Run it again in a few minutes.";
 
 function newJob(url: string, host: string, now: number): AnalyzerJob {
   return {
@@ -179,6 +184,22 @@ export async function runSlowPath(token: string, opts: RunnerOptions = {}): Prom
   const now = opts.now ?? Date.now;
   const job = await store.getJob(token);
   if (!job || job.state === "failed" || job.state === "done") return job;
+  // WP10: bounded wait for a slow-path slot, so a burst of starts cannot run
+  // an unbounded number of crawls and model passes at once.
+  const sleep = opts.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
+  const deadline = now() + (opts.slowWaitMs ?? 60_000);
+  let slot = await store.acquireSlow();
+  while (!slot && now() < deadline) {
+    await sleep(3_000);
+    slot = await store.acquireSlow();
+  }
+  if (!slot) {
+    job.state = "partial";
+    job.couldNotCheck = [...job.couldNotCheck, { scope: "all", reason: BUSY_REASON }];
+    job.completedAt = now();
+    await step(job, store, "The analyzer was busy; the remaining checks did not run", now);
+    return job;
+  }
   job.state = "slow";
   const fetchOpts = { ...opts.crawl, resolver: opts.resolver };
   const extra: { scope: string; reason: string }[] = [];
@@ -227,6 +248,8 @@ export async function runSlowPath(token: string, opts: RunnerOptions = {}): Prom
     job.error = (e as Error).message;
     job.completedAt = now();
     await step(job, store, "Some checks could not run", now);
+  } finally {
+    await store.releaseSlow();
   }
   return job;
 }
