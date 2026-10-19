@@ -8,6 +8,7 @@ import type { Assessment } from "../assess/model";
 
 const args: AnalyzerContactArgs = {
   email: "owner@example.com",
+  firstName: "Robin",
   host: "acme.test",
   url: "https://acme.test/",
   band: "Leaking",
@@ -53,6 +54,7 @@ describe("analyzer contact sync", () => {
     expect(calls.map((c) => c.method + " " + c.url.replace("https://services.leadconnectorhq.com", ""))).toEqual(["POST /contacts/upsert", "PUT /contacts/c_1", "POST /contacts/c_1/notes"]);
     expect(calls[0].body.tags).toEqual(["sl-lead", "sl-analyzer-run", "analyzer-run"]);
     expect(calls[0].body.source).toBe("adamsowden.com/analyzer");
+    expect(calls[0].body.firstName).toBe("Robin");
     expect((calls[1].body.customFields as { key: string }[]).map((f) => f.key)).toContain("analyzer_top_finding");
   });
   it("still succeeds when the fields do not exist yet, and reports it", async () => {
@@ -95,12 +97,14 @@ describe("delivery syncs the contact once", () => {
     if (!r.ok) throw new Error("start failed");
     const job = (await store.getJob(r.job.token))!;
     job.email = "owner@example.com";
+    job.firstName = "Robin";
     await store.putJob(job);
     const done = (await runSlowPath(job.token, base))!;
     expect(done.reportSentAt).not.toBeNull();
     expect(done.ghlSyncedAt).not.toBeNull();
     const upsert = ghl.calls.find((c) => c.url.endsWith("/contacts/upsert"))!;
     expect(upsert.body.email).toBe("owner@example.com");
+    expect(upsert.body.firstName).toBe("Robin");
     const fields = ghl.calls.find((c) => c.method === "PUT")!.body.customFields as { key: string; field_value: string }[];
     const top = fields.find((f) => f.key === "analyzer_top_finding")!.field_value;
     expect(top).toBe(topFindingLine(done, done.report!));

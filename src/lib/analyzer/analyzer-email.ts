@@ -12,7 +12,8 @@ function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-export function renderReportEmail(report: Report, reportUrl: string, bookingUrl: string): { subject: string; html: string; text: string } {
+export function renderReportEmail(report: Report, reportUrl: string, bookingUrl: string, firstName?: string | null): { subject: string; html: string; text: string } {
+  const greeting = firstName ? `Hi ${firstName}.` : "";
   const title = `${report.host} is ${bandLabelFor(report.band as Band, report.moves.length > 0)}.`;
   const subject = `Your site report: ${title}`;
   const jobs = report.jobs.filter((j) => j.job !== "foundation");
@@ -23,7 +24,7 @@ export function renderReportEmail(report: Report, reportUrl: string, bookingUrl:
 <div style="max-width:600px;margin:0 auto;padding:32px 24px;font-size:16px;line-height:1.55;">
 <p style="margin:0 0 6px 0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#777;">Smart Site Analyzer</p>
 <h1 style="font-size:24px;line-height:1.25;margin:0 0 18px 0;">${esc(title)}</h1>
-<p style="margin:0 0 18px 0;">${esc(report.narrative.diagnosis)}</p>
+${greeting ? `<p style="margin:0 0 12px 0;">${esc(greeting)}</p>` : ""}<p style="margin:0 0 18px 0;">${esc(report.narrative.diagnosis)}</p>
 <p style="margin:0 0 8px 0;"><strong>The five jobs a website can do, and how yours does on each.</strong></p>
 <table style="width:100%;border-collapse:collapse;margin:0 0 18px 0;font-size:15px;">${jobRows}</table>
 ${moves ? `<p style="margin:0 0 8px 0;"><strong>Where to start.</strong></p><ol style="margin:0 0 18px 20px;padding:0;">${moves}</ol>` : ""}
@@ -35,7 +36,7 @@ ${cost}
 <p style="margin:32px 0 0 0;font-size:13px;color:#777;">Checked ${report.pagesChecked} page${report.pagesChecked === 1 ? "" : "s"}, ${report.checksRun} checks. Public pages only; nothing was submitted to the site.</p>
 </div></body></html>`;
   const text = [
-    title, report.narrative.diagnosis, "",
+    title, ...(greeting ? [greeting] : []), report.narrative.diagnosis, "",
     "The five jobs:", ...jobs.map((j) => `${j.label}: ${j.measured ? j.verdict : "Could not measure"}`),
     "", ...(report.moves.length ? ["Where to start:", ...report.moves.map((m) => `${m.order}. ${m.jobLabel}. ${m.move} ${m.consequence}`)] : []),
     "", `Full report: ${reportUrl}`, `${BOOKING_CTA_LABEL}: ${bookingUrl}`,
@@ -43,13 +44,13 @@ ${cost}
   return { subject, html, text };
 }
 
-export async function sendReportEmail(args: { to: string; report: Report; reportUrl: string; bookingUrl: string; fetchImpl?: typeof fetch }): Promise<{ ok: boolean; error?: string; id?: string }> {
+export async function sendReportEmail(args: { to: string; firstName?: string | null; report: Report; reportUrl: string; bookingUrl: string; fetchImpl?: typeof fetch }): Promise<{ ok: boolean; error?: string; id?: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM;
   const replyTo = process.env.RESEND_REPLY_TO;
   const bcc = (process.env.ANALYZER_BCC ?? process.env.DIAGNOSTIC_BCC ?? process.env.RESEND_REPLY_TO ?? "").split(",").map((s) => s.trim()).filter(Boolean);
   if (!apiKey || !from) return { ok: false, error: "Resend not configured (RESEND_API_KEY or RESEND_FROM missing)." };
-  const { subject, html, text } = renderReportEmail(args.report, args.reportUrl, args.bookingUrl);
+  const { subject, html, text } = renderReportEmail(args.report, args.reportUrl, args.bookingUrl, args.firstName);
   const body: Record<string, unknown> = { from, to: [args.to], subject, html, text };
   if (replyTo) body.reply_to = replyTo;
   if (bcc.length) body.bcc = bcc;

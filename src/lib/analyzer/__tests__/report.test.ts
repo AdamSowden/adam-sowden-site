@@ -115,7 +115,9 @@ describe("report assembly and delivery", () => {
     if (!r.ok) throw new Error("start failed");
     const done = await runSlowPath(r.job.token, { ...base, store });
     const report = await buildReport(done!, null, { narrativeCaller: fakeNarrative });
-    const { subject, html, text } = renderReportEmail(report, "https://adamsowden.com/analyzer/r/abc", "https://adamsowden.com/book");
+    const { subject, html, text } = renderReportEmail(report, "https://adamsowden.com/analyzer/r/abc", "https://adamsowden.com/book", "Robin");
+    expect(html).toContain("Hi Robin.");
+    expect(renderReportEmail(report, "https://x.test/r/abc", "https://x.test/book").html).not.toContain("Hi ");
     expect(subject).toContain("acme.test");
     expect(html).toContain("/analyzer/r/abc");
     expect(html).not.toMatch(/score/i);

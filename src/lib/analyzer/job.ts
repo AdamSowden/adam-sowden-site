@@ -39,6 +39,8 @@ export type AnalyzerJob = {
   couldNotCheck: { scope: string; reason: string }[];
   error: string | null;
   email: string | null;
+  /** Given on the report form; used for the GHL contact and the email greeting. */
+  firstName: string | null;
   costInputs: { enquiries: number; value: number; closeRate: number } | null;
   report: Report | null;
   reportSentAt: number | null;
@@ -84,7 +86,7 @@ function newJob(url: string, host: string, now: number): AnalyzerJob {
   return {
     token: randomUUID().replace(/-/g, ""),
     url, host, state: "queued", preliminary: true, steps: [], pages: [], results: [], card: null, headline: null,
-    specifics: [], couldNotCheck: [], error: null, email: null, costInputs: null,
+    specifics: [], couldNotCheck: [], error: null, email: null, firstName: null, costInputs: null,
     report: null, reportSentAt: null, reportSendError: null, ghlSyncedAt: null, ghlSyncError: null,
     createdAt: now, updatedAt: now, completedAt: null, cachedFrom: null,
   };
@@ -269,7 +271,7 @@ export async function deliverReport(job: AnalyzerJob, store: AnalyzerStore, opts
     await store.putJob(job);
   }
   if (job.email && !job.reportSentAt) {
-    const res = await sendReportEmail({ to: job.email, report: job.report, reportUrl: reportUrlFor(job.token), bookingUrl: `${SITE_URL}${BOOKING_URL}?src=analyzer-email`, fetchImpl: opts.emailFetch });
+    const res = await sendReportEmail({ to: job.email, firstName: job.firstName, report: job.report, reportUrl: reportUrlFor(job.token), bookingUrl: `${SITE_URL}${BOOKING_URL}?src=analyzer-email`, fetchImpl: opts.emailFetch });
     if (res.ok) job.reportSentAt = (opts.now ?? Date.now)();
     else job.reportSendError = res.error ?? "send failed";
     job.updatedAt = (opts.now ?? Date.now)();
@@ -298,6 +300,7 @@ export function topFindingLine(job: AnalyzerJob, report: Report): string {
 export function analyzerContactArgs(job: AnalyzerJob, report: Report): AnalyzerContactArgs {
   return {
     email: job.email!,
+    firstName: job.firstName,
     host: job.host,
     url: job.url,
     band: report.band,

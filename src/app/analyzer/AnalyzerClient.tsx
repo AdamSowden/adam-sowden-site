@@ -254,6 +254,7 @@ function WhatWasChecked({ job }: { job: PublicJob }) {
 
 function EmailOffer({ job, onSaved }: { job: PublicJob; onSaved: (j: PublicJob) => void }) {
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [showNumbers, setShowNumbers] = useState(false);
   const [enquiries, setEnquiries] = useState("");
   const [value, setValue] = useState("");
@@ -269,7 +270,7 @@ function EmailOffer({ job, onSaved }: { job: PublicJob; onSaved: (j: PublicJob) 
       const res = await fetch("/api/analyzer/email", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token: job.token, email, costInputs: showNumbers && enquiries && value && closeRate ? { enquiries, value, closeRate } : null }),
+        body: JSON.stringify({ token: job.token, email, firstName, costInputs: showNumbers && enquiries && value && closeRate ? { enquiries, value, closeRate } : null }),
       });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       if (res.ok && data.ok) {
@@ -297,6 +298,7 @@ function EmailOffer({ job, onSaved }: { job: PublicJob; onSaved: (j: PublicJob) 
       ) : (
         <form onSubmit={submit} className="mt-6">
           <div className="flex flex-col sm:flex-row gap-3">
+            <input type="text" required maxLength={60} autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" aria-label="First name" className="sm:w-40 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-[15px] text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition" />
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your email" aria-label="Email address" className="flex-1 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-[15px] text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition" />
             <button type="submit" disabled={status === "loading"} className="rounded-full bg-white text-[#111111] px-6 py-3 text-sm font-medium hover:bg-white/90 transition disabled:opacity-50 whitespace-nowrap">
               {status === "loading" ? "Saving…" : "Send me the full report"}

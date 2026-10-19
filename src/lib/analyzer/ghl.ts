@@ -21,6 +21,7 @@ import { GHL_FIELD, GHL_TAG, addNote, updateContactFields, upsertContact, type G
 
 export type AnalyzerContactArgs = {
   email: string;
+  firstName?: string | null;
   host: string;
   url: string;
   /** Internal band key, e.g. "Leaking". */
@@ -70,7 +71,7 @@ export async function syncAnalyzerContact(a: AnalyzerContactArgs, callOpts: GhlC
   // has contacts write scope. The speed-to-lead PIT is scoped for
   // conversations and returned 401 on /contacts/upsert (checked 16 Oct 2026).
   const opts: GhlCallOptions = { ...callOpts, token: callOpts.token || process.env.GHL_API_KEY || undefined };
-  const up = await upsertContact({ email: a.email, source: "analyzer", tags: [GHL_TAG.lead, GHL_TAG.analyzerState, GHL_TAG.analyzerRun] }, opts);
+  const up = await upsertContact({ email: a.email, firstName: a.firstName ?? null, source: "analyzer", tags: [GHL_TAG.lead, GHL_TAG.analyzerState, GHL_TAG.analyzerRun] }, opts);
   if (!up.ok) return { ok: false, fieldsWritten: false, error: up.error };
   const contactId = up.data.contactId;
   if (!contactId) return { ok: true, contactId: null, fieldsWritten: false, error: "Upsert returned no contact id." };

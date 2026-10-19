@@ -17,7 +17,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
-type Body = { token?: unknown; email?: unknown; costInputs?: { enquiries?: unknown; value?: unknown; closeRate?: unknown } | null };
+type Body = { token?: unknown; email?: unknown; firstName?: unknown; costInputs?: { enquiries?: unknown; value?: unknown; closeRate?: unknown } | null };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
   }
   const token = typeof body.token === "string" ? body.token : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  // First name: letters, spaces, hyphens and apostrophes only, so a pasted URL or script never becomes a merge field in GHL.
+  const firstName = typeof body.firstName === "string" ? body.firstName.trim().replace(/[^\p{L}\p{M} '\-]/gu, "").slice(0, 60) : "";
   if (!/^[a-f0-9]{32}$/.test(token)) return Response.json({ error: "Not found." }, { status: 404 });
   if (!EMAIL_RE.test(email) || email.length > 254) return Response.json({ error: "Enter a valid email address." }, { status: 400 });
 
@@ -53,6 +55,7 @@ export async function POST(req: NextRequest) {
   }
 
   job.email = email;
+  job.firstName = firstName || job.firstName;
   job.costInputs = costInputs ?? job.costInputs;
   job.reportSentAt = null;
   job.updatedAt = Date.now();
