@@ -65,8 +65,13 @@
     accentColorHover: "#0d78dc",
     bookingUrl: origin + "/book",
     ctaMarker: "[BOOK_QUICK_CHAT]",
-    ctaLabel: "Book a chat",
+    ctaLabel: "Book a chat with Adam",
     ctaScrollToId: null,
+    // Adam's default prompt offers two next steps under the marker: the
+    // free Smart Site Analyzer and the booking link. A per-client `cta`
+    // override turns the analyzer link off.
+    analyzerUrl: origin + "/analyzer",
+    analyzerLabel: "Analyze my site",
   };
 
   // ── DOM scaffolding ───────────────────────────────────────────────────
@@ -208,6 +213,7 @@
         if (data.accentColor) config.accentColor = data.accentColor;
         if (data.bookingUrl) config.bookingUrl = data.bookingUrl;
         if (data.cta) {
+          config.analyzerUrl = null;
           if (data.cta.marker) config.ctaMarker = data.cta.marker;
           if (data.cta.label) config.ctaLabel = data.cta.label;
           if (data.cta.scrollToId) config.ctaScrollToId = data.cta.scrollToId;
@@ -239,6 +245,15 @@
       if (hasCta) {
         var ctaRow = document.createElement("div");
         ctaRow.className = "cta-row";
+        if (config.analyzerUrl) {
+          var analyze = document.createElement("a");
+          analyze.className = "cta";
+          analyze.textContent = config.analyzerLabel;
+          analyze.href = config.analyzerUrl;
+          analyze.target = "_blank";
+          analyze.rel = "noopener";
+          ctaRow.appendChild(analyze);
+        }
         var cta = document.createElement("a");
         cta.className = "cta";
         cta.textContent = config.ctaLabel;
