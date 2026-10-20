@@ -24,7 +24,8 @@ type ArticleContext = {
 
 const BOOK_MARKER = "[BOOK_QUICK_CHAT]";
 
-const OPENING_ASSISTANT_MESSAGE = "What can I help you with today?";
+const OPENING_ASSISTANT_MESSAGE =
+  "Welcome to my site.\nHow can I help you today?";
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);
@@ -38,6 +39,7 @@ export default function ChatWidget({
   sectionId,
   wide = false,
   bare = false,
+  panel = false,
   chips = [],
 }: {
   article: ArticleContext;
@@ -47,6 +49,9 @@ export default function ChatWidget({
   sectionId?: string;
   wide?: boolean;
   bare?: boolean;
+  /** Fill the parent (used inside the floating SiteAgent panel). Hides the
+   *  heading block, lets the message list take the remaining height. */
+  panel?: boolean;
   chips?: string[];
 }) {
   const [messages, setMessages] = useState<Message[]>([
@@ -168,10 +173,15 @@ export default function ChatWidget({
       // Analyzer's engagement check reads it; Rubric 08 Part A).
       data-conversation-agent="first-party"
       data-agent-capabilities="answers-from-site-content,qualifies,books"
-      className={`bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden ${
-        wide && !bare ? "max-w-3xl" : ""
-      }`}
+      className={
+        panel
+          ? "h-full flex flex-col bg-[#F9FAFB]"
+          : `bg-[#F9FAFB] border border-black/10 rounded-2xl overflow-hidden ${
+              wide && !bare ? "max-w-3xl" : ""
+            }`
+      }
     >
+      {!panel && (
       <div className="px-6 md:px-8 pt-8 pb-2">
         <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-3">
           {eyebrow}
@@ -181,6 +191,7 @@ export default function ChatWidget({
         </h2>
         <p className="mt-3 text-[#111111]/70 leading-relaxed">{intro}</p>
       </div>
+      )}
       {chips.length > 0 && !messages.some((m) => m.role === "user") && (
         <div className="px-4 md:px-6 pt-3 flex flex-wrap gap-2">
           {chips.map((chip) => (
@@ -198,7 +209,11 @@ export default function ChatWidget({
       )}
       <div
         className={`px-4 md:px-6 py-6 space-y-4 ${
-          bare ? "max-h-[360px] md:max-h-[400px] overflow-y-auto" : ""
+          panel
+            ? "flex-1 min-h-0 overflow-y-auto"
+            : bare
+              ? "max-h-[360px] md:max-h-[400px] overflow-y-auto"
+              : ""
         }`}
       >
         {messages.map((m) => (
@@ -233,7 +248,7 @@ export default function ChatWidget({
     </div>
   );
 
-  if (bare) return card;
+  if (bare || panel) return card;
 
   return (
     <section id={sectionId} className="bg-white scroll-mt-24">

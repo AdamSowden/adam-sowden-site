@@ -176,7 +176,7 @@ function ProofBar() {
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid sm:grid-cols-3 gap-10">
           {stats.map((s) => (
-            <div key={s.value} className="text-center sm:text-left">
+            <div key={s.value} className="text-center">
               <div className="font-serif text-4xl md:text-5xl tracking-tight text-[#111111]">
                 {s.value}
               </div>
@@ -184,7 +184,7 @@ function ProofBar() {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-xs text-black/45 max-w-3xl">
+        <p className="mt-8 text-xs text-black/45 max-w-3xl mx-auto text-center">
           *Combined investable assets of the prospects who booked appointments
           with one financial advisor client. Not assets under management,
           sales or revenue.
@@ -198,13 +198,13 @@ function TheProblem() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
           Old versus new
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
           Old websites are mindless. They need people to run them.
         </h2>
-        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed text-center">
           Your website does what it was last programmed to do, and then it
           waits. A visitor has to find the form. The reply comes when someone
           in the office gets to it, and the content gets written when the
@@ -212,7 +212,7 @@ function TheProblem() {
           nobody has looked at it since. And the people already in your
           database only hear from you when there is time, which is rarely.
         </p>
-        <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+        <p className="mt-5 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed text-center">
           None of that is anyone&apos;s fault. That&apos;s just what old
           technology is. It can&apos;t decide anything, so the work only
           happens when a person is working. And no person can compete with a
@@ -221,8 +221,8 @@ function TheProblem() {
           ready buyer lands on your site.
         </p>
 
-        <div className="mt-14 grid md:grid-cols-2 gap-10 md:gap-16">
-          <div>
+        <div className="mt-14 grid md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8">
             <h3 className="text-xl font-semibold mb-4">
               People have hours. Your site doesn&apos;t.
             </h3>
@@ -233,7 +233,7 @@ function TheProblem() {
               doing those jobs after everyone&apos;s gone home.
             </p>
           </div>
-          <div>
+          <div className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8">
             <h3 className="text-xl font-semibold mb-4">Mindless versus trained.</h3>
             <p className="text-[#111111]/70 leading-relaxed">
               An old website can&apos;t tell a ready buyer from someone
@@ -278,13 +278,13 @@ function WhatItDoes() {
   return (
     <section className="bg-[#F9FAFB]">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
           The Smart Site
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
           One website doing the work of your sales and marketing team.
         </h2>
-        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed text-center">
           A Smart Site does four jobs you&apos;re paying people to do part
           time, and it does them around the clock.
         </p>
@@ -304,9 +304,11 @@ function WhatItDoes() {
           ))}
         </div>
 
-        <div className="mt-10 bg-white border border-black/10 rounded-2xl p-8">
-          <h3 className="text-xl font-semibold">What makes it smart.</h3>
-          <p className="mt-3 text-[#111111]/70 leading-relaxed max-w-3xl">
+        <div className="mt-8 rounded-2xl bg-[#eff6ff] p-8 md:p-12 max-w-4xl mx-auto text-center">
+          <h3 className="font-serif text-2xl md:text-3xl tracking-tight text-[#111111]">
+            What makes it smart.
+          </h3>
+          <p className="mt-4 text-lg text-[#111111]/75 leading-relaxed">
             It has a brain: before anything is built, it learns your services,
             your customers and how you sell. It&apos;s trained on best-practice
             marketing, sales and technology. And it has one mission, which is
@@ -316,7 +318,7 @@ function WhatItDoes() {
           </p>
         </div>
 
-        <p className="mt-10 text-lg md:text-xl font-medium text-[#111111] max-w-2xl">
+        <p className="mt-10 text-lg md:text-xl font-medium text-[#111111] max-w-2xl mx-auto text-center">
           More sales from the people already finding you, and nothing for you
           to run.
         </p>
@@ -346,21 +348,24 @@ function YourPart() {
   return (
     <section className="bg-white">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
           Your part
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
           Your part takes about two hours.
         </h2>
-        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed text-center">
           You tell me how you sell and who you sell to. I build the Smart Site
           around that. If your current site already ranks well, you
           don&apos;t have to start again: we move it onto a Smart Site with
           every page redirected, so the rankings you&apos;ve built carry over.
         </p>
-        <div className="mt-14 grid md:grid-cols-3 gap-10 md:gap-12">
+        <div className="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
           {items.map((it) => (
-            <div key={it.title}>
+            <div
+              key={it.title}
+              className="bg-[#F9FAFB] border border-black/10 rounded-2xl p-8"
+            >
               <h3 className="text-xl font-semibold mb-3">{it.title}</h3>
               <p className="text-[#111111]/70 leading-relaxed">{it.body}</p>
             </div>
@@ -380,27 +385,27 @@ function Proof() {
   return (
     <section className="bg-[#F9FAFB] border-y border-black/5">
       <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium mb-4 text-center">
           Results
         </p>
-        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl leading-[1.1] text-[#111111]">
+        <h2 className="font-serif text-4xl md:text-5xl tracking-tight max-w-3xl mx-auto leading-[1.1] text-[#111111] text-center">
           My own website is the proof.
         </h2>
-        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-lg text-[#111111]/75 max-w-2xl mx-auto leading-relaxed text-center">
           Since June 30, every appointment in my calendar has been booked by
           my website. Not by people finding a booking form: the site started
           the conversation, answered their questions, worked out whether they
           were a fit and booked them in. Over the same months, every blog post
           and every email I sent was written and published by the site.
         </p>
-        <h3 className="mt-12 text-sm uppercase tracking-[0.18em] text-black/50 font-medium">
+        <h3 className="mt-14 text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium text-center">
           Client results
         </h3>
-        <ul className="mt-5 grid md:grid-cols-3 gap-8">
+        <ul className="mt-6 grid md:grid-cols-3 gap-6 md:gap-8">
           {results.map((r) => (
             <li
               key={r}
-              className="bg-white border border-black/10 rounded-2xl p-7 text-[#111111]/80 leading-relaxed"
+              className="bg-white border border-black/10 rounded-2xl p-8 text-[#111111]/80 leading-relaxed"
             >
               {r}
             </li>
@@ -473,13 +478,13 @@ function HomeFAQ() {
   return (
     <section className="bg-[#F9FAFB] border-y border-black/5">
       <div className="mx-auto max-w-3xl px-6 py-20 md:py-24">
-        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4">
+        <p className="text-[#188bf6] text-xs font-medium uppercase tracking-[0.18em] mb-4 text-center">
           Common questions
         </p>
-        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-[#111111] mb-4">
+        <h2 className="font-serif text-3xl md:text-4xl tracking-tight leading-tight text-[#111111] mb-4 text-center">
           Answers to what you&apos;re probably thinking right now.
         </h2>
-        <p className="text-base md:text-lg text-[#111111]/70 leading-relaxed mb-10">
+        <p className="text-base md:text-lg text-[#111111]/70 leading-relaxed mb-10 text-center">
           These are the questions every business owner asks before starting.
           Read them before deciding.
         </p>
