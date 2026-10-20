@@ -23,6 +23,9 @@ type ArticleContext = {
 };
 
 const BOOK_MARKER = "[BOOK_QUICK_CHAT]";
+// The marker renders a choice of two next steps: run the free Smart Site
+// Analyzer, or book a chat with Adam to get the site fixed.
+const ANALYZER_URL = "/analyzer";
 
 const OPENING_ASSISTANT_MESSAGE =
   "Welcome to my site.\nHow can I help you today?";
@@ -285,12 +288,20 @@ function ChatBubble({ message }: { message: Message }) {
           {cleaned || <span className="text-black/30">…</span>}
         </div>
         {showBookCTA && (
-          <a
-            href={BOOKING_URL}
-            className="inline-flex items-center mt-3 rounded-full bg-[#188bf6] text-white px-4 py-2 text-sm font-medium hover:bg-[#0d78dc] transition"
-          >
-            Book a Smart Site Strategy Call with Adam
-          </a>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              href={ANALYZER_URL}
+              className="inline-flex items-center rounded-full border border-[#188bf6] text-[#188bf6] px-4 py-2 text-sm font-medium hover:bg-[#188bf6]/5 transition"
+            >
+              Analyze my site
+            </a>
+            <a
+              href={BOOKING_URL}
+              className="inline-flex items-center rounded-full bg-[#188bf6] text-white px-4 py-2 text-sm font-medium hover:bg-[#0d78dc] transition"
+            >
+              Book a chat with Adam
+            </a>
+          </div>
         )}
       </div>
     </div>
