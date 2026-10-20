@@ -10,6 +10,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import ChatWidget from "@/components/ChatWidget";
+import AgentPageContext from "@/components/AgentPageContext";
 import JumpToChat from "@/components/JumpToChat";
 import RelatedPosts from "@/components/RelatedPosts";
 import { client } from "@/lib/sanity";
@@ -334,6 +335,14 @@ export default async function BlogPostPage({
           )}
           {/* Anchor target for JumpToChat. scroll-mt-24 keeps the widget
               clear of the sticky SiteNav when scrolled to via #ask-adam. */}
+          <AgentPageContext
+            article={{
+              title: post.title,
+              articleSection: post.articleSection,
+              metaDescription: post.metaDescription,
+              bodyPlain: plainBody,
+            }}
+          />
           <section id="ask-adam" className="scroll-mt-24">
             <ChatWidget
               article={{

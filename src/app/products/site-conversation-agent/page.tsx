@@ -4,6 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
 import ChatWidget from "@/components/ChatWidget";
+import AgentPageContext from "@/components/AgentPageContext";
 import { SITE_URL, OG_DEFAULTS, PERSON_REF } from "@/lib/site";
 
 const PAGE_PATH = "/products/site-conversation-agent";
@@ -136,6 +137,7 @@ export default function SiteConversationAgentPage() {
       <SiteNav />
       <main className="flex-1">
         <Hero />
+        <AgentPageContext article={DEMO_CONTEXT} />
         <ChatWidget
           article={DEMO_CONTEXT}
           eyebrow="Live demo. You are talking to the product."

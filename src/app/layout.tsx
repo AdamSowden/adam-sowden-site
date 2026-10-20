@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { GoogleTagManager } from "@next/third-parties/google";
 import { SITE_URL, SITE_NAME, OG_DEFAULTS } from "@/lib/site";
+import SiteAgent from "@/components/SiteAgent";
 import "./globals.css";
 
 const GTM_ID = "GTM-5TMDLDKZ";
@@ -81,6 +82,7 @@ export default function RootLayout({
           </noscript>
         )}
         {children}
+        <SiteAgent />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
