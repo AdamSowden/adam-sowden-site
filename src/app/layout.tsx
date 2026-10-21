@@ -67,10 +67,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      // overflow-x-clip on html and body: no sideways scroll on phones from
+      // anything that pokes past the viewport (the off-screen agent panel,
+      // wide footers). `clip`, not `hidden`, so the sticky header keeps working.
+      className={`${inter.variable} ${playfair.variable} h-full antialiased overflow-x-clip`}
     >
       {IS_PRODUCTION && <GoogleTagManager gtmId={GTM_ID} />}
-      <body className="min-h-full flex flex-col bg-white text-[#111111]">
+      <body className="min-h-full flex flex-col bg-white text-[#111111] overflow-x-clip">
         {IS_PRODUCTION && (
           <noscript>
             <iframe

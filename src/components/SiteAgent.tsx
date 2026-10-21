@@ -88,7 +88,7 @@ export default function SiteAgent() {
         onClick={close}
         aria-hidden="true"
         className={`fixed inset-0 z-50 bg-black/20 transition-opacity ${
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
+          open ? "opacity-100" : "opacity-0 pointer-events-none invisible"
         }`}
       />
 
@@ -100,8 +100,15 @@ export default function SiteAgent() {
         // Inline transform rather than translate-x-* utilities: the dev
         // build was not applying the open-state class, and an inline style
         // cannot be lost to a class scan.
-        style={{ transform: open ? "translateX(0)" : "translateX(100%)" }}
-        className="fixed z-[60] inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col transition-transform duration-300"
+        style={{
+          transform: open ? "translateX(0)" : "translateX(100%)",
+          // Hidden when closed so the off-screen panel can never widen the
+          // page on phones (iOS extends the scrollable area for transformed
+          // fixed elements). visibility flips after the slide-out finishes.
+          visibility: open ? "visible" : "hidden",
+          transition: "transform 300ms ease, visibility 0s linear 300ms",
+        }}
+        className="fixed z-[60] inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl border-l border-black/10 flex flex-col"
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-black/5">
           <div>
