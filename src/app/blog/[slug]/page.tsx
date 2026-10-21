@@ -9,7 +9,6 @@ import type {
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import CTAButton from "@/components/CTAButton";
-import ChatWidget from "@/components/ChatWidget";
 import AgentPageContext from "@/components/AgentPageContext";
 import JumpToChat from "@/components/JumpToChat";
 import RelatedPosts from "@/components/RelatedPosts";
@@ -317,8 +316,8 @@ export default async function BlogPostPage({
               alt={post.heroImage?.alt || post.title}
             />
           )}
-          {/* Top-of-article CTA that scrolls to the AI ChatWidget below.
-              See src/components/JumpToChat.tsx. */}
+          {/* Top-of-article CTA that opens the floating site agent (the
+              inline chat was removed once the agent went site-wide). */}
           <div className="mx-auto max-w-3xl px-6 pt-8 pb-2 md:pt-10 md:pb-4">
             <JumpToChat />
           </div>
@@ -343,16 +342,6 @@ export default async function BlogPostPage({
               bodyPlain: plainBody,
             }}
           />
-          <section id="ask-adam" className="scroll-mt-24">
-            <ChatWidget
-              article={{
-                title: post.title,
-                articleSection: post.articleSection,
-                metaDescription: post.metaDescription,
-                bodyPlain: plainBody,
-              }}
-            />
-          </section>
           <RelatedPosts currentSlug={post.slug.current} />
           <PostCTA />
         </article>
