@@ -3,12 +3,19 @@ import Image from "next/image";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import AnalyzerUrlForm from "@/components/AnalyzerUrlForm";
+import VideoTestimonial from "@/components/VideoTestimonial";
+import { getFeaturedTestimonial, type SanityVideo } from "@/lib/video";
 
 // Home page, Smart Site version. Copy source:
 // ai-marketing-agency/clients/adam-sowden/drafts/home-page-smart-site-v7.md
 // Written to Persona 4 (The Besieged Owner). US spelling. The analyzer is
 // the front door; the dashboard it mentions is being built before traffic
 // runs to this page.
+
+// The Results section pulls the featured video testimonial from Sanity.
+// Revalidated hourly: a new testimonial shows within the hour, and a Sanity
+// outage serves the last good page.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -85,7 +92,8 @@ const faqJsonLd = {
   })),
 };
 
-export default function Home() {
+export default async function Home() {
+  const testimonial = await getFeaturedTestimonial();
   return (
     <>
       <SiteNav />
@@ -95,7 +103,7 @@ export default function Home() {
         <TheProblem />
         <WhatItDoes />
         <YourPart />
-        <Proof />
+        <Proof testimonial={testimonial} />
         <TrustCluster />
         <HomeFAQ />
         <FinalCTA />
@@ -376,7 +384,7 @@ function YourPart() {
   );
 }
 
-function Proof() {
+function Proof({ testimonial }: { testimonial: SanityVideo | null }) {
   const results = [
     "Clients who depended on an agency for content, copy and strategy now run their marketing without one.",
     "Website updates that took two or three days now happen on command.",
@@ -401,6 +409,9 @@ function Proof() {
         <h3 className="mt-14 text-xs uppercase tracking-[0.18em] text-[#188bf6] font-medium text-center">
           Client results
         </h3>
+        {testimonial && (
+          <VideoTestimonial video={testimonial} className="mt-6" />
+        )}
         <ul className="mt-6 grid md:grid-cols-3 gap-6 md:gap-8">
           {results.map((r) => (
             <li

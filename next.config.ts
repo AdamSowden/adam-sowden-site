@@ -4,6 +4,9 @@ import type { NextConfig } from "next";
 // The safe set: none affect script/style/image loading, so they cannot break
 // rendering. A full script-src CSP is NOT enforced yet (needs report-only
 // staging against GTM, the Sanity CDN and the GHL iframe first).
+// When it lands, video needs: frame-src https://fast.wistia.net and
+// img-src https://embed-ssl.wistia.com (see lib/wistia.ts). Nothing from
+// Wistia loads until a visitor presses play, so script-src is unaffected.
 const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -48,6 +51,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.sanity.io",
         pathname: "/images/**",
+      },
+      // Wistia auto-thumbnails, used as the video poster when no poster
+      // frame is set in Sanity.
+      {
+        protocol: "https",
+        hostname: "embed-ssl.wistia.com",
+        pathname: "/deliveries/**",
       },
     ],
   },

@@ -12,8 +12,10 @@ import CTAButton from "@/components/CTAButton";
 import AgentPageContext from "@/components/AgentPageContext";
 import JumpToChat from "@/components/JumpToChat";
 import RelatedPosts from "@/components/RelatedPosts";
+import WistiaVideo from "@/components/WistiaVideo";
 import { client } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanity-image";
+import { posterFromSanity, videoProjection, type SanityVideo } from "@/lib/video";
 import { portableTextToPlain } from "@/lib/portable-text-plain";
 import { SITE_URL, SITE_NAME, PERSON_REF } from "@/lib/site";
 import { modifiedAt, isRevised } from "@/lib/post-dates";
@@ -48,9 +50,12 @@ type BlogPost = {
   _updatedAt?: string;
 };
 
+// Video blocks hold a reference; dereference it here so the body renders
+// without a second round trip per video.
 const postQuery = `*[_type == "blogPost" && slug.current == $slug && complianceApproved == true][0] {
   _id, title, slug, publishedAt, heroImage, midImage, socialImage,
-  body, metaDescription, primaryKeyword, articleSection, faqItems, authorName,
+  body[]{ ..., _type == "videoEmbed" => { ..., video->${videoProjection} } },
+  metaDescription, primaryKeyword, articleSection, faqItems, authorName,
   _updatedAt
 }`;
 
@@ -200,6 +205,33 @@ const components: PortableTextComponents = {
             </figcaption>
           )}
         </figure>
+      );
+    },
+    // Click-to-play Wistia video (see components/WistiaVideo.tsx). A block
+    // whose reference was deleted renders nothing rather than a broken box.
+    videoEmbed: ({ value }) => {
+      const video = value?.video as SanityVideo | undefined;
+      if (!video?.wistiaId) return null;
+      return (
+        <div className="my-10">
+          <WistiaVideo
+            mediaId={video.wistiaId}
+            title={video.title}
+            kind={video.kind ?? "explainer"}
+            description={video.description}
+            uploadDate={video.uploadDate}
+            poster={posterFromSanity(video)}
+            orientation={video.orientation}
+            transcript={video.transcript}
+            sizes="(min-width: 768px) 768px, 100vw"
+            className={video.orientation === "portrait" ? "mx-auto max-w-sm" : undefined}
+          />
+          {value?.caption && (
+            <p className="mt-3 text-sm text-black/55 text-center">
+              {value.caption}
+            </p>
+          )}
+        </div>
       );
     },
   },

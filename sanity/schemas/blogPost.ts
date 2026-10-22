@@ -62,7 +62,11 @@ export default defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [{ type: 'block' }, { type: 'image', fields: [altField] }],
+      of: [
+        { type: 'block' },
+        { type: 'image', fields: [altField] },
+        { type: 'videoEmbed' },
+      ],
     }),
     defineField({
       name: 'metaDescription',
