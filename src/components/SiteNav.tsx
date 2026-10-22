@@ -17,6 +17,7 @@ export default function SiteNav() {
             width={1200}
             height={805}
             priority
+            sizes="120px"
             className="h-20 w-auto"
           />
         </Link>

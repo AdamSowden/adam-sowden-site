@@ -96,37 +96,40 @@ export default function SiteFooter({
           <div className="mx-auto max-w-6xl px-6 pb-14">
             <div className="border-t border-black/10 pt-8 flex flex-wrap items-center justify-center md:justify-start gap-6">
               {showAiToolHuntBadge && (
-                // eslint-disable-next-line @next/next/no-img-element
                 <a
                   href="https://aitoolhunt.co/item/site-conversation-agent"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Listed on AIToolHunt"
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://aitoolhunt.co/badge-listed-light.svg"
+                    loading="lazy"
+                    decoding="async"
                     alt="Listed on AIToolHunt"
                     style={{ height: "58px", width: "auto" }}
                   />
                 </a>
               )}
               {showToolPilotBadge && (
-                // eslint-disable-next-line @next/next/no-img-element
                 <a
                   href="https://www.toolpilot.ai"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Featured on ToolPilot"
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://www.toolpilot.ai/cdn/shop/files/f-w_690x151_crop_center.png"
+                    loading="lazy"
+                    decoding="async"
                     alt="Featured on ToolPilot"
                     style={{ height: "58px", width: "auto" }}
                   />
                 </a>
               )}
               {showLaunchpadlyBadge && (
-                // eslint-disable-next-line @next/next/no-img-element
                 <a
                   href="https://launchpadly.co/startup/site-conversation-agent?ref=badge"
                   target="_blank"
@@ -135,8 +138,11 @@ export default function SiteFooter({
                   data-launchpadly-badge-variant="light"
                   aria-label="Launchpadly Startup Directory"
                 >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="https://launchpadly.co/embed/badges/startup/site-conversation-agent.svg?variant=light"
+                    loading="lazy"
+                    decoding="async"
                     alt="Launchpadly Startup Directory"
                     style={{ height: "58px", width: "auto" }}
                   />
