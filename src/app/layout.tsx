@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 import { SITE_URL, SITE_NAME, OG_DEFAULTS } from "@/lib/site";
 import SiteAgent from "@/components/SiteAgent";
 import "./globals.css";
@@ -72,7 +72,19 @@ export default function RootLayout({
       // wide footers). `clip`, not `hidden`, so the sticky header keeps working.
       className={`${inter.variable} ${playfair.variable} h-full antialiased overflow-x-clip`}
     >
-      {IS_PRODUCTION && <GoogleTagManager gtmId={GTM_ID} />}
+      {/*
+        GTM loads after the window load event, not after hydration. Its two
+        scripts (gtm.js plus the GA4 tag it pulls in) are about 340 KB and a
+        third of the main-thread work before the headline could paint on a
+        slow phone; Lighthouse put the mobile LCP at 6 s with them in the
+        critical path. Events pushed before it loads queue in dataLayer and
+        are processed when it arrives, so nothing is lost.
+      */}
+      {IS_PRODUCTION && (
+        <Script id="gtm-loader" strategy="lazyOnload">
+          {`window.dataLayer=window.dataLayer||[];window.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtm.js?id=${GTM_ID}';document.head.appendChild(s);`}
+        </Script>
+      )}
       <body className="min-h-full flex flex-col bg-white text-[#111111] overflow-x-clip">
         {IS_PRODUCTION && (
           <noscript>
