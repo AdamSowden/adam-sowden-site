@@ -9,6 +9,10 @@ import {
 // words and attribution. Everything the diagnostic's trust check reads
 // (first name, role, business or location, a specific result) is plain text
 // next to the player, so the proof stands without pressing play.
+//
+// The transcript is not shown here (Adam, 22 Oct 2026: not on the home
+// page). It still travels in the VideoObject structured data, and blog
+// embeds keep the visible "Read the transcript" disclosure.
 
 export default function VideoTestimonial({
   video,
@@ -43,6 +47,7 @@ export default function VideoTestimonial({
           poster={posterFromSanity(video)}
           orientation={video.orientation}
           transcript={video.transcript}
+          hideTranscript
           sizes={
             portrait
               ? "(min-width: 768px) 320px, 80vw"
